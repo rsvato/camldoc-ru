@@ -1,0 +1,364 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<chapter name="Система времени выполнения (ocamlrun)" number="10">
+  <abstract>
+    <para>Команда <command>ocamlrun</command> выполняет файлы с
+      байткодом, созданные на этапе компоновки командой
+      <command>ocamlc</command>.</para>
+  </abstract>
+  <main-matters>
+    <section name="Обзор">
+      <para>Команда <command>ocamlrun</command> состоит из трех
+	основных частей - интерпретатор байткода, который собственно и
+	выполняет файлы с байкодом, система выделения памяти и сборщик
+	мусора; кроме того, в ее состав входит набор функций C для
+	реализации примитивных операция типа ввода/вывода.</para>
+      <para><command>ocamlrun</command> используется так:</para>
+      <listing>ocamlrun options bytecode-executable arg1 ... argn</listing>
+      <para>Первый неопциональный аргемент считается именем файла,
+	содержащим исполняемый байткод. (Файл ищется в текущей
+	директории и в пути исполняемых файлов.) Следующие аргументы
+	передаются программе Caml в строком массиве
+	<keyword>Sys.argv</keyword>. Нулевой элемент в этом массиве
+	содержит имя исполняемого файла, элементы от 1 до n -
+	аргументы от <command>arg</command><sub>1</sub> до
+	<command>arg</command><sub>n</sub>.</para>
+      <para>Как упоминалось в главе 8, файлы с байткодом уже считаются
+	исполняемыми, поэтому команда <command>ocamlrun</command> для
+	них вызывается автоматически. Таким образом, если
+	<command>caml.out</command> - исполняемый файл с байткодом,
+	то</para>
+      <listing>caml.out arg1 ... argn</listing>
+      <para>работает точно так же, как </para>
+      <listing>ocamlrun caml.out arg1 ... argn</listing>
+      <para>Однако при непосредственном вызове
+	<command>caml.out</command> передавать параметры
+	<command>ocamlrun</command> невозможно.</para>
+      <dict>
+	<dict-term>Windows:</dict-term>
+	<dict-art>
+	  <para>Во многих версиях Windows файлы с байкодом считаются
+	    исполняемыми только в том случае, если их имя
+	    заканчивается на <command>.exe</command>. Поэтому файлам с
+	    байткодом всегда рекомендуется давать такие имена, то есть
+	    компилировать программы как <command>ocamlc -o myprog.exe
+	      ... </command>, а не <command>ocamlc -o
+	      myprog</command>.</para>
+	</dict-art>
+      </dict>
+    </section>
+    <section name="Параметры">
+      <para><command>ocamlrun</command> принимает следующие параметры
+	командной строки:</para>
+      <command-option-group>
+	<command-option>
+	  <c-option>
+	    <mc-option>-b</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Если программа прерывается из-за непредусмотренного
+	      исключения, этот параметр позволяет вывести подробную
+	      трассировчную информацию, которая показывает, где
+	      возникло исключение, и какие функции не выполнились к
+	      моменту завершения. Трассировка выпоняется только в том
+	      случае, если исполняемый файл содержал отладочную
+	      информацию, то есть был скомпилирован и скомпонован с
+	      параметром <command>-g</command>. Того же результата
+	      помогает добится установка флага <command>b</command> в
+	      переменной среды <command>OCAMLRUNPARAM</command> (см.
+	      ниже).</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-I</mc-option>
+	    <c-param>dir</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>В дополнение к стандартному пути поиска искать
+	      динамически загружаемые библиотеки в каталоге
+	      <emph>dir</emph>.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-v</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Менеджер памяти выводит некоторые сообщения о ходе
+	      исполнения в стандарный поток сообщений об ошибках. Этот
+	      параметр эквивалентен флагу <command>v=63</command> в
+	      переменной среды <command>OCAMLRUNPARAM</command> (см.
+	      ниже).</para>
+	  </option-description>
+	</command-option>
+      </command-option-group>
+      <para>Проверяются также следующие переменные среды:</para>
+      <dict>
+	<dict-term>CAML_LD_LIBRARY_PATH</dict-term>
+	<dict-art>
+	  <para>Дополнительные каталоги для поиска динамически
+	    загружаемых библиотек (см. раздел 10.3).</para>
+	</dict-art>
+	<dict-term>OCAMLLIB</dict-term>
+	<dict-art>
+	  <para>Каталог, содержащий стандарную библиотеку Objective
+	    Caml (если эта переменная не установлена, будет
+	    использоваться <command>CAMLLIB</command>). Обычно в нем
+	    ищется файл <command>ld.conf</command> для конфигурации
+	    библиотек динамической загрузки (см. раздел 10.3). Если
+	    переменная не установлена, по умолчанию используется
+	    каталог, заданный при компиляции Objective Caml.</para>
+	</dict-art>
+	<dict-term>OCAMLRUNPARAM</dict-term>
+	<dict-art>
+	  <para>Устанавливает параметры системы времени исполнения, а
+	    также сборщика мусора (если эта переменная не установлена,
+	    используется <command>CAMLRUNPARAM</command>). Перемення
+	    должна включать последовательность спецификаций
+	    параметров, то есть букву, представляющую паораметр, знак
+	    <keyword>=</keyword>, десятичное число и необязательный
+	    множитель. Параметров определено восемь, причем шесть из
+	    них соотвествуют полям записи <keyword>control</keyword>,
+	    документированной в модуле <keyword>Gc</keyword>.</para>
+	  <dict>
+	    <dict-term>b</dict-term>
+	    <dict-art>
+	      <para>(трассировка) Переключает вывод трассировки стека
+		в случаях остановки программы из-за непредусмотренного
+		исключения. Этот параметр не принимает
+		аргументов.</para>
+	    </dict-art>
+	    <dict-term>p</dict-term>
+	    <dict-art>
+	      <para>(трассировка синтаксического анализатора) Включает
+		возможность отладки для синтаксических анализаторов,
+		сгененированных <command>ocamlyacc</command>. При
+		включении этого параметра автомат с магазинной
+		памятью, исполняющий анализатор, выводит трассировку
+		своих действий. Этот параметр не принимает
+		аргументов.</para>
+	    </dict-art>
+	    <dict-term>s</dict-term>
+	    <dict-art>
+	      <para>(<keyword>minor_heap_size</keyword>) Размер малой
+		кучи.</para>
+	    </dict-art>
+	    <dict-term>i</dict-term>
+	    <dict-art>
+	      <para>(<keyword>major_heap_increment</keyword>)
+		Минимальный размер, добавляемый к главной куче.</para>
+	    </dict-art>
+	    <dict-term>o</dict-term>
+	    <dict-art>
+	      <para>(<keyword>space_overhead</keyword>) Установка
+		скорости основного сборщика мусора.</para>
+	    </dict-art>
+	    <dict-term>O</dict-term>
+	    <dict-art>
+	      <para>(<keyword>max_overhead</keyword>) Переключение
+		параметра сжатия кучи.</para>
+	    </dict-art>
+	    <dict-term>v</dict-term>
+	    <dict-art>
+	      <para>(<keyword>verbose</keyword>) Устанавливает, какие
+		сообщения сборщика мусора должны выводится. Значение -
+		сумма следующих значений:</para>
+	      <dict>
+		<dict-term>1 (=0b0000000001)</dict-term>
+		<dict-art>
+		  <para>Начало главного цикла сборщика мусора.</para>
+		</dict-art>
+		<dict-term>2 (=0b0000000010)</dict-term>
+		<dict-art>
+		  <para>Малая сборка и главный срез сборщика мусора.</para>
+		</dict-art>
+		<dict-term>4 (=0b0000000100)</dict-term>
+		<dict-art>
+		  <para>Рост и уменьшение кучи.</para>
+		</dict-art>
+		<dict-term>8 (=0b0000001000)</dict-term>
+		<dict-art>
+		  <para>Изменение размеров стеков и таблиц менеджера
+		    памяти.</para>
+		</dict-art>
+		<dict-term>16 (=0b0000010000)</dict-term>
+		<dict-art>
+		  <para>Сжатие кучи</para>
+		</dict-art>
+		<dict-term>32 (=0b0000100000)</dict-term>
+		<dict-art>
+		  <para>Изменение параметров сборщика мусора</para>
+		</dict-art>
+		<dict-term>64 (=0b0001000000)</dict-term>
+		<dict-art>
+		  <para>Вычисление размера главного среза сборщика
+		    мусора.</para>
+		</dict-art>
+		<dict-term>128 (=0b0010000000)</dict-term>
+		<dict-art>
+		  <para>Вызов финализаторов.</para>
+		</dict-art>
+		<dict-term>256 (=0b0100000000)</dict-term>
+		<dict-art>
+		  <para>Сообщения при запуске (загрузка исполняемого
+		    файла, поиск библиотек динамеческой загруки).</para>
+		</dict-art>
+	      </dict>
+	    </dict-art>
+	    <dict-term>I</dict-term>
+	    <dict-art>
+	      <para>(<keyword>(stack limit)</keyword>) Лимит стека (в
+		словах).</para>
+	    </dict-art>
+	    <dict-term>h</dict-term>
+	    <dict-art>
+	      <para>Начальный размер главной кучи (в словах).</para>
+	    </dict-art>
+	  </dict>
+	  <para>Множитель может быть <keyword>k</keyword>,
+	    <keyword>M</keyword> или <keyword>G</keyword> для
+	    умножения на <power pow="10">2</power>, <power
+	      pow="20">2</power> или <power pow="30">2</power>,
+	    соответственно. Например, на 32-битной машине, в оболочке
+	    <command>bash</command> команда</para>
+	  <listing>export OCAMLRUNPARAM='b,s=256k,v=1'</listing>
+	  <para>приведет к тому, что при последующих вызовах
+	    <command>ocamlrun</command> непредусмотренные исключения
+	    будут трассироваться, начальный размер малой кучи будет
+	    установлен в 1 мегабайт, а старт каждого главного цикла
+	    сборщика мусора будет сопровождаться выводом
+	    сообщения.</para>
+	</dict-art>
+	<dict-term>PATH</dict-term>
+	<dict-art>
+	  <para>Список каталогов для поиска исполняемых файлов с
+	    байткодом.</para>
+	</dict-art>
+      </dict>
+    </section>
+    <section name="Динамическая загрузка библиотек">
+      <para>На платформах, поддерживающих динамическую загрузку,
+	<command>ocamlrun</command> может динамически компоновать с
+	разделяемыми библиотеками С (DLL), дополняя примитивы,
+	доступные стандартной системе времени выполнения новыми
+	функциями С. Имена таких библиотек указываются во время
+	компоновки (см. раздел 18.1.14) и записываются в исполняемом
+	файле с байткодом. Затем <command>ocamlrun</command> находит
+	их и разрешает ссылки на соответствующе примитивы при старте
+	программы.</para>
+      <para>Команда <command>ocamlrun</command> ищет разделяемые
+	библиотеки в следующем порядке:</para>
+      <list type="ordered">
+	<item>
+	  <para>В каталогах, указанных в командной строке
+	    <command>ocamlrun</command> параметром
+	    <command>-I</command>.</para>
+	</item>
+	<item>
+	  <para>В каталогах, перечисленных в переменной среды
+	    <command>CAML_LD_LIBRARY_PATH</command>.</para>
+	</item>
+	<item>
+	  <para>В каталогах, заданных параметром
+	    <command>-dllpath</command> во время компоновки
+	    <command>ocamlc</command> (каталоги в этом случае
+	    записываются в исполняемом файле).</para>
+	</item>
+	<item>
+	  <para>В каталогах, записанных в файле
+	    <command>ld.conf</command>. Он находится в каталоге
+	    стандартной библиотеки Objective Caml и состоит из списка
+	    каталогов поиска (по одному на строку). Обычно он содержит
+	    всего одну строку - <command>stublibs</command> -
+	    подкаталог стандартной библиотеки Objective Caml.
+	    Поользоватли могут добавлять свои записи, ссылающиеся на
+	    каталоги с часто используемыми разделяемыми библиотеками,
+	    однако ради целостности инсталляции такие библиотеки все
+	    же лучше просто помещать непосредственно в каталог
+	    <command>stublibs</command>.</para>
+	</item>
+	<item>
+	  <para>В каталогах по умолчанию для системного динамического загрузчика. В среде Unix это обычно <command>/lib</command>, <command>/usr/lib</command>, каталоги, перечисленные в файле <command>/etc/ld.so.conf</command> и переменной среды <command>LD_LIBRARY_CONF</command>, под Windows - системные каталоги и каталоги, записанные в переменной среды <command>PATH</command>.</para>
+	</item>
+      </list>
+    </section>
+    <section name="Распространенные ошибки">
+      <para>В этом разделе описывются наиболее распространенные
+	сообщения об ошибках.</para>
+      <dict>
+	<dict-term><emph>filename</emph>: no such file or directory</dict-term>
+	<dict-art>
+	  <para>Если <emph>filename</emph> - имя исполняемого файла,
+	    это сообщение означает, что либо файл не существует, либо
+	    он не может вызвать интерпретатор байткода
+	    <command>ocamlrun</command>. Во втором случае Objective
+	    Caml скорее всего установлен неправильно.</para>
+	</dict-art>
+	<dict-term>Cannot exec ocamlrun</dict-term>
+	<dict-art>
+	  <para>(При запуске исполняемого файла с байткодом). Команда <command>ocamlrun</command> не найдена в списке каталогов с исполняемыми файлам. Проверьте правильность установки Objective Caml.</para>
+	</dict-art>
+	<dict-term>Cannot find bytecode file</dict-term>
+	<dict-art>
+	  <para>Файл, который пытается запустить
+	    <command>ocamlrun</command> либо не существует, либо не
+	    является корректным исполняемым файлом с байткодом.</para>
+	</dict-art>
+	<dict-term>Truncated bytecode file</dict-term>
+	<dict-art>
+	  <para>Файл, который пытается запустить
+	    <command>ocamlrun</command> не является корректным
+	    исполняемым файлом с байткодом. Возможно он был испорчен
+	    или усечен после создания. Сотрите файл и создайте его
+	    заново.</para>
+	</dict-art>
+	<dict-term>Uncaught exception</dict-term>
+	<dict-art>
+	  <para>Исполняемая программа содержит непредусмотренное
+	    исключение. То есть, в некоторый момент возбуждается
+	    исключение, которое не перехватывается. В результате
+	    выполнение программы останавливается, и выводится имя
+	    исключения, а также его строковый и целочисленные
+	    аргументы (аргуменые более сложных типов не выводятся
+	    правильно). Чтобы обнаружить контекст искоючения,
+	    программу надо скомпилировать с ключом
+	    <command>-g</command> и либо запустить ее в отладчике
+	    <command>ocamldebug</command> (см. гл. 16), либо в
+	    <command>ocamlrun -b</command>, или же установить
+	    переменную среды <command>OCAMLRUNPARAM</command> в
+	    Б<command>b=1</command>.</para>
+	</dict-art>
+	<dict-term>Out of memory</dict-term>
+	<dict-art>
+	  <para>Исполняемая программа требует памяти больше, чем
+	    доступно. Возможно, она строит слишком тяжелые структуры
+	    данных, или содержит много вложенных вызовов функций, что
+	    приводит к переполнению стека. В некоторых случаях
+	    совершенно правильная программа может действительно
+	    требовать больше памяти, чем содержит компьютер, в других
+	    такое сообщение указывает на ошибки в программе - функции
+	    с неограниченной рекурсией, выделение слишком большого
+	    массива или строки, попытка построить бесконечный список
+	    или другую структуру данных.</para>
+	  <para>Чтобы распознать конкретную ошибку, следует запустить
+	    программу, передав <command>ocamlrun</command> параметр
+	    <command>-v</command>, или установив переменную среды
+	    <command>OCAMLRUNPARAM</command> в
+	    <command>v=63</command>. Если в результате вы видите массу
+	    сообщений <command>Growing stack...</command>, вероятно,
+	    дело в циклической рекурсивной функции. Если часто
+	    появляются сообщения <command>Growing heap..</command>, но
+	    размер кучи растет медленно, скорее всего, предпринята
+	    попытка создать структуру данных со слишком большим
+	    (бесконечно большим?) количеством ячеек. Если же теких
+	    сообщений мало, но куча увеличивается на большие значения,
+	    то программа пытается построить громоздкий массив или
+	    строку.
+	  </para>
+	</dict-art>
+      </dict>
+    </section>
+  </main-matters>
+</chapter>

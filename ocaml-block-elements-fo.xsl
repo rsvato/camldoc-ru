@@ -20,6 +20,7 @@
 				margin-right="6pt"
 				background-color="#efefef"
 				space-before.optimum="12pt"
+				space-before="12pt"
 				space-before.minimum="6pt"
 				space-after.optimum="12pt"
 				font-size="8pt"
@@ -94,6 +95,7 @@
 				font-weight="normal"
 				font-family="Times"
 				line-height="12pt"
+				keep-together="auto"
 				language="ru" orphans="2" widows="1">
 			<xsl:apply-templates/>
 		</fo:block>

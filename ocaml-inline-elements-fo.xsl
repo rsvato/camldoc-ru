@@ -14,9 +14,7 @@
 		</fo:inline>
 	</xsl:template>
 	<xsl:template match="power">
-		<fo:inline font-size="6pt" baseline-shift="super">
-			<xsl:apply-templates/>
-		</fo:inline>
+			<xsl:apply-templates/><fo:inline font-size="6pt" baseline-shift="super"><xsl:value-of select="@pow"/></fo:inline>
 	</xsl:template>
 	<xsl:template match="sub">
 		<fo:inline font-size="6pt" baseline-shift="sub">
@@ -32,6 +30,6 @@
 		<fo:block/>
 	</xsl:template>
 	<xsl:template match="index">
-		<xsl:apply-templates/><fo:inline baseline-shift="super" font-size="6pt"><xsl:value-of select="@ind"/></fo:inline>
+		<xsl:apply-templates/><fo:inline baseline-shift="sub" font-size="6pt"><xsl:value-of select="@ind"/></fo:inline>
 	</xsl:template>
 </xsl:stylesheet>

@@ -10,7 +10,7 @@
 				<meta name="keywords" content="Ocaml, Objective Caml, Caml, functional programming, функциональное программирование"/>
 				<link rel="stylesheet" type="text/css" href="./ocaml-html.css"/>
 				<title>
-					<xsl:value-of select="/chapter/@number"/>. <xsl:value-of select="/chapter/@name"/>
+					<xsl:value-of select="@number"/>. <xsl:value-of select="@name"/>
 				</title>
 			</head>
 			<body>

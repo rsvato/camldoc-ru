@@ -14,6 +14,7 @@
       line-height="24pt"
       language="ru"
 			text-align-last="left"
+			keep-with-next="always"
       >
 			<xsl:attribute name="id">
 				<xsl:value-of select="generate-id(.)"/>
@@ -43,6 +44,7 @@
       font-weight="bold"
       line-height="16pt"
 			text-align-last="left"
+			keep-with-next="always"
      >
       <xsl:value-of select="ancestor::node()/@number"/>.<xsl:call-template name="NumberSection"/>
       <xsl:text>&#160;</xsl:text>
@@ -67,6 +69,7 @@
       font-weight="bold"
       line-height="16pt"
 			text-align-last="left"
+			keep-with-next="always"
       >
       <xsl:value-of select="@name"/>
     </fo:block>
@@ -81,6 +84,7 @@
       font-weight="bold"
       line-height="16pt"
 			text-align-last="left"
+			keep-with-next="always"
      >
       <xsl:value-of select="@name"/>
     </fo:block>
@@ -88,8 +92,9 @@
   </xsl:template>
    <xsl:template match="chapter">
     <fo:block
-      space-before.optimum="48pt"
+			space-before="4em"
       space-after.optimum="24pt"
+			space-before.conditionality="retain"
       font-size="18pt"
       font-family="Helvetica"
       font-weight="bold"
@@ -101,10 +106,6 @@
 			<xsl:attribute name="id">
 				<xsl:value-of select="generate-id(.)"/>
 			</xsl:attribute>
-			<!-- <fo:marker marker-class-name="chap-head">
-					<xsl:value-of select="@number"/>.
-					<xsl:value-of select="@name"/>
-			</fo:marker> -->
       Глава<xsl:text>&#160;</xsl:text>
       <xsl:value-of select="@number"/>.
       <xsl:value-of select="@name"/>
