@@ -5,7 +5,7 @@
 <subtitle>Документация и руководство пользователя</subtitle>
 <authors>
 <main-author>Ксавье Лерой</main-author>
-<sec-author>Дамье Долигез</sec-author>
+<sec-author>Дамье Долигеc</sec-author>
 <sec-author>Жак Гарриг</sec-author>
 <sec-author>Дидье Реми</sec-author>
 <sec-author>Жером Вуйон</sec-author>
@@ -15,14 +15,14 @@
 </legal>
 <part>
 <title>Введение в Objective Caml</title>
-<chapter file="./chapter01.html">&chap01;</chapter>
-<chapter file="./chapter01.html">&chap02;</chapter>
-<chapter file="./chapter03.html">&chap03;</chapter>
-<chapter file="./chapter04.html">&chap04;</chapter>
-<chapter file="./chapter05.html">&chap05;</chapter>
+<chap file="./chapter01.html">&chap01;</chap>
+<chap file="./chapter01.html">&chap02;</chap>
+<chap file="./chapter03.html">&chap03;</chap>
+<chap file="./chapter04.html">&chap04;</chap>
+<chap file="./chapter05.html">&chap05;</chap>
 </part>
 <part>
 	<title>Язык Оbjective Caml</title>
-	<chapter file="./chapter06.html">&chap06;</chapter>
+	<chap file="./chapter06.html">&chap06;</chap>
 </part>
 </bookinfo>

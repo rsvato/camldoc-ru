@@ -746,7 +746,7 @@
   end]]></system-response>
         </eval-step>
       </session>
-      <para>и привязать несколько обсерверов к одному субъекту:</para>
+      <para>и привязать несколько наблюдателей к одному субъекту:</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#let window = new richer_window_subject;;]]></user-input>

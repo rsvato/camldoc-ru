@@ -1,4 +1,6 @@
 <!ENTITY % bnf-content "term | value">
+<!ENTITY % para-stuff "#PCDATA|command|keyword|mdash|term|sub|%bnf-content;|power|index">
+<!ENTITY % section-stuff "para|session|listing|command-session|list|table|bnf">
 <!ELEMENT abstract (para)>
 <!ELEMENT chapter (abstract?,main-matters)>
 <!ATTLIST chapter
@@ -11,16 +13,18 @@
 <!ELEMENT lb EMPTY>
 <!ELEMENT power (#PCDATA)>
 <!ATTLIST power pow CDATA #REQUIRED>
+<!ELEMENT index (#PCDATA)>
+<!ATTLIST index ind CDATA #REQUIRED>
 <!ELEMENT main-matters (section+)>
 <!ELEMENT mdash EMPTY>
-<!ELEMENT para (#PCDATA|command|keyword|mdash|term|sub|%bnf-content;|power)*>
-<!ELEMENT section (subsection|subsection-nonumber|para|session|listing|command-session|list|table|bnf)*>
+<!ELEMENT para (%para-stuff;)*>
+<!ELEMENT section (subsection|subsection-nonumber|%section-stuff;)*>
 <!ATTLIST section name CDATA #REQUIRED>
-<!ELEMENT subsection (para|session|listing|command-session|list|table|bnf|subsubsection)*>
-<!ELEMENT subsection-nonumber (para|session|listing|command-session|list|table|bnf)*>
+<!ELEMENT subsection (%section-stuff;|subsubsection)*>
+<!ELEMENT subsection-nonumber (%section-stuff;)*>
 <!ATTLIST subsection name CDATA #REQUIRED
 		     neednumber NMTOKEN #REQUIRED>
-<!ELEMENT subsubsection (para|session|listing|command-session|list|table|bnf)*>
+<!ELEMENT subsubsection (%section-stuff;)*>
 <!ATTLIST subsubsection name CDATA #REQUIRED>
 <!ELEMENT session (eval-step+)>
 <!ELEMENT command-session (command-line+)>

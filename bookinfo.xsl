@@ -10,17 +10,29 @@
 				<style type="text/css">
 					<![CDATA[<!--
 						body{
-							background:#fff;
+							background-color:#fff;
 							font-family:verdana,arial,sans-serif,*;
 							font-size:10px;
+						}
+						a{
+							color:black;
+							text-decoration:none;
+						}
+						a:visited{
+							color:black;
+						}
+						a:hover{
+							color:#00e;
 						}
 					-->]]>
 				</style>
 			</head>
 			<body>
+				<div style="margin-top:90px;margin-left:15px;margin-right:15px;background-color:#eee;padding-left:10px;">
 				<xsl:apply-templates select="title"/>
 				<xsl:apply-templates select="subtitle"/>
 				<xsl:apply-templates/>
+				</div>
 			</body>
 		</html>
 	</xsl:template>
@@ -59,9 +71,9 @@
 			Часть <xsl:call-template name="NumberParts"/>.
 			<xsl:value-of select="title"/>
 		</h1>
-		<xsl:apply-templates select="chapter"/>
+		<xsl:apply-templates select="chap"/>
 	</xsl:template>
-	<xsl:template match="chapter">
+	<xsl:template match="chap">
 		<a>
 			<xsl:attribute name="href">
 				<xsl:value-of select="@file"/>
@@ -69,11 +81,16 @@
 			<h2>Глава <xsl:call-template name="NumberChaps"/>.
 			<xsl:value-of select="chapter/@name"/></h2>
 		</a>
+		<ul>
+			<xsl:for-each select="./chapter/main-matters/section">
+				<li><xsl:value-of select="@name"/></li>
+			</xsl:for-each>
+		</ul>
 	</xsl:template>
 	<xsl:template name="NumberParts">
 		<xsl:number count="part"/>
 	</xsl:template>
 	<xsl:template name="NumberChaps">
-		<xsl:number level="any" count="//part/chapter"/>
+		<xsl:number level="any" count="//part/chap"/>
 	</xsl:template>
 </xsl:stylesheet>

@@ -114,6 +114,7 @@
 			</body>
 		</html>
 	</xsl:template>
+<!-- TOPLEVEL ELEMENT -->
 	<xsl:template match="chapter">
 		<div id="main-matters">
 		<a>
@@ -136,6 +137,7 @@
 		<xsl:call-template name="toc"/>
 	</div>
 	</xsl:template>
+<!-- PARA -->
 	<xsl:template match="para">
 		<p><xsl:apply-templates/></p>
 	</xsl:template>
@@ -286,6 +288,9 @@
 	</xsl:template>
 	<xsl:template match="power">
 		<xsl:apply-templates/><sup><span style="font-size:-2"><xsl:value-of select="@pow"/></span></sup>
+	</xsl:template>
+	<xsl:template match="index">
+		<xsl:apply-templates/><sub><span style="font-size:-2"><xsl:value-of select="@ind"/></span></sub>
 	</xsl:template>
 	<xsl:template match="table">
 		<table style="width:80%" align="center">

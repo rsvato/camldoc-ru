@@ -421,7 +421,8 @@
 			<para>Следующие идентификаторы считаются ключевыми словами и не могут использоваться
 			в другом качестве:</para>
 			<listing>
-				<![CDATA[	and         as          assert      asr         begin       class
+				<![CDATA[
+      and         as          assert      asr         begin       class
       closed      constraint  do          done        downto      else
       end         exception   external    false       for         fun
       function    functor     if          in          include     inherit
@@ -503,6 +504,106 @@
 				поддерживает строки, содержащие до <power pow="24">2</power> - 6 (то есть, 16777210)
 				символов.</para>
 			</subsubsection>
+		</subsection>
+		<subsection name="Кортежи" neednumber="1">
+			<para>Кортежи значений записываются как <keyword>(<index ind="1">v</index>, ...,
+			<index ind="n">v</index>)</keyword>, что соотвествует n-кортежу из 
+			значений от <index ind="1">v</index> до <index ind="n">v</index>. Текущая
+			реализация поддерживает кортежи из максимум <power pow="22">2</power> - 1 (то есть
+			4194303) элементов.
+			</para>
+		</subsection>
+		<subsection name="Записи" neednumber="1">
+			<para>Записи являются кортежами именованных значений. Запись 
+			<keyword>{<index ind="1">field</index>=<index ind="1">v</index>; ... ;
+			<index ind="n">field</index>=<index ind="n">v</index>}</keyword>
+			связывает значение <index ind="i">v</index> с полем записи <index ind="i">field</index>
+			для i=1 ... n. Текущая
+			реализация поддерживает записи из максимум <power pow="22">2</power> - 1 (то есть
+			4194303) элементов.
+			</para>
+		</subsection>
+		<subsection name="Массивы" neednumber="1">
+			<para>Массивы - это конечные, переменного размера последовательности значений одного типа.
+			Текущая	реализация поддерживает массивы из максимум <power pow="22">2</power> - 1 (то есть
+			4194303) элементов.
+			</para>
+		</subsection>
+		<subsection name="Вариантные значения" neednumber="1">
+			<para>
+				Вариантные значения являются либо константными конструкторами, либо парой из
+				неконстантного конструктора и значения. Первый случай записывается как
+				<keyword>cconstr</keyword>, второй - как <keyword>ncconstr(v)</keyword>, где
+				<keyword>v</keyword> - аргумент для неконстантного конструктора
+				<keyword>ncconstr</keyword>.
+			</para>
+			<para>
+				Следующие константы считаются встроенными константными конструкторами:
+			</para>
+			<table>
+				<thead>
+					<trow>
+						<tcell>
+							<para>Константа</para>
+						</tcell>
+						<tcell>
+							<para>Конструктор</para>
+						</tcell>
+					</trow>
+				</thead>
+				<tbody>
+					<trow>
+						<tcell>
+							<para><keyword>false</keyword></para>
+						</tcell>
+						<tcell>
+							<para>булево значение false</para>
+						</tcell>
+					</trow>
+					<trow>
+						<tcell>
+							<para><keyword>true</keyword></para>
+						</tcell>
+						<tcell>
+							<para>булево значение true</para>
+						</tcell>
+					</trow>
+					<trow>
+						<tcell>
+							<para><keyword>()</keyword></para>
+						</tcell>
+						<tcell>
+							<para>значение "unit"</para>
+						</tcell>
+					</trow>
+					<trow>
+						<tcell>
+							<para><keyword>[]</keyword></para>
+						</tcell>
+						<tcell>
+							<para>пустой список</para>
+						</tcell>
+					</trow>
+				</tbody>
+			</table>
+			<para>Текущая реализация ограничивает число конструкторов для данного
+			вариантного типа числом 249.</para>
+		</subsection>
+		<subsection name="Полиморфные варианты" neednumber="1">
+			<para>Полиморфные варианты - это альтернативная форма вариантного типа. Они не 
+			принадлежат явно к предопределенному вариантному типу и подчиняются особым правилам
+			типизации. Они могут записываться либо как константы - <keyword>`tag-name</keyword>,
+			либо, в случае не константы, как <keyword>`tag-name(n)</keyword>.</para>
+		</subsection>
+		<subsection name="Функции" neednumber="1">
+			<para>Функции являются отображением значений на значения.</para>
+		</subsection>
+		<subsection name="Объекты" neednumber="1">
+			<para>
+				Объекты включают скрытое внутреннее состояние, выражаемое как переменные экземпляра,
+				и набор методов, предназначенных для доступа к этом переменным и их изменения.
+				Структура объекта описывается в порождающем его классе.
+			</para>
 		</subsection>
 	</section>
 	</main-matters>
