@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- <!DOCTYPE chapter SYSTEM "core.dtd">-->
+<!DOCTYPE chapter SYSTEM "core.dtd">
 <chapter name="Язык Objective Caml" number="6">
 	<main-matters>
 	<section name="Введение">
@@ -487,9 +487,22 @@
 				на 64-разрядных платформах поддерживаются целые от <power pow="62">-2</power>
 				до <power pow="62">2</power> - 1</para>
 			</subsubsection>
-			<!-- <subsubsection name="Числа с плавающей точкой">
-				<para>Значениями с плавающей точкой считаются числа</para> 
-			</subsubsection>-->
+			<subsubsection name="Числа с плавающей точкой">
+				<para>Значениями с плавающей точкой считаются числа в одноименном представлении.
+				Текущая реализация использует числа с плавающей точкой с двойной точностью согласно
+				стандарту ISO 754 c мантиссой 53 бита и экспонентой от -1024 до 1024.
+				</para> 
+			</subsubsection>
+			<subsubsection name="Символы">
+				<para>Символы представлены как 8-битные целые числа от 0 до 255. Коды символов от 0 до
+				127 интерпретируются по стандарту ASCII. Текущая реализация интерпретирует коды 
+				символов от 127 до 255 по стандарту ISO 8859-1.</para>
+			</subsubsection>
+			<subsubsection name="Символьные строки">
+				<para>Символьная строка - это конечная последовательность символов. Текущая реализация
+				поддерживает строки, содержащие до <power pow="24">2</power> - 6 (то есть, 16777210)
+				символов.</para>
+			</subsubsection>
 		</subsection>
 	</section>
 	</main-matters>
