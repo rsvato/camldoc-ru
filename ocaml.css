@@ -1,0 +1,136 @@
+listing    {
+	background-color: #ccc;
+	display: block;
+	font-family: monospace;
+	margin: 15 15 15 15;
+}
+
+thead > tcell > para    {
+	font-weight: bolder;
+}
+
+tcell > para    {
+	display: inline;
+}
+
+item    {
+	list-style: square;
+	list-style-type: square;
+}
+
+list    {
+	display: block;
+	list-style: square;
+}
+
+table    {
+	display: table;
+	border: black solid thin;
+	width: 80%;
+	text-align: center;
+}
+
+thead, tbody    {
+	display: table-row-group;
+	border: maroon solid thin;
+}
+
+trow    {
+	display: table-row;
+	border: black solid thin;
+}
+
+tcell    {
+	border: black solid thin;
+	background-color: Silver;
+	display: table-cell;
+}
+
+subsection:before    {
+	content: attr(name);
+	color: maroon;
+	font-weight: bolder;
+	font-size: x-large;
+}
+
+subsection    {
+	display: block;
+	margin-left: 12px;
+	border: black dashed thin;
+}
+
+term    {
+	display: inline;
+	font-style: italic;
+}
+
+chapter:before    {
+	font-size: 36px;
+	content: attr(name);
+	font-weight: bold;
+	color: navy;
+	font-style: italic;
+}
+
+section:before    {
+	content: attr(name);
+	font-size: xx-large;
+	font-weight: 800;
+	background-color: gray;
+	color: maroon;
+}
+
+@media morphon {
+}
+keyword    {
+	font-family: monospace;
+}
+
+system-response    {
+	background-color: #FFDDDF;
+	margin-bottom: 10;
+}
+
+user-input    {
+	background-color: #DDFFDD;
+	margin-top: 10;
+}
+
+@media morphon {
+}
+chapter, section, para    {
+	display: block;
+	font-family: sans-serif;
+}
+
+main-matters    {
+	display: block;
+}
+
+session    {
+	display: block;
+	margin-top: 10px;
+	margin-bottom: 10px;
+	border-top: black solid thin;
+	border-bottom: black solid thin;
+	margin-left: 10px;
+}
+
+user-input, system-response, eval-step    {
+	display: block;
+	font-family: monospace;
+}
+
+section    {
+	font-family: sans-serif;
+	font-size: medium;
+	border: black solid thin;
+	margin-top: 10px;
+}
+
+section:title    {
+	font-size: 14px;
+	font-weight: bold;
+	display: block;
+}
+

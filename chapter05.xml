@@ -1,0 +1,779 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="file://localhost/C:/ocaml/ocaml.css" type="text/css"?>
+<!DOCTYPE chapter SYSTEM "file://localhost/C:/ocaml/core.dtd">
+<chapter name="Дополнительные примеры классов и модулей" number="5">
+  <abstract>
+    <para>В этой главе приведены более крупные примеры использования классов, объектов и модулей. Многие возможности объектов одновременно используются в одном и том же примере банковского счета. В главе показано, как модули стандартной библиотеки могут использоваться в качестве классов. В конце главы на примере оконных менеджеров описывается шаблон проектирования, известный как <term>виртуальные типы</term>.</para>
+  </abstract>
+  <main-matters>
+    <section name="Банковский счет">
+      <para>В этом разделе иллюстрируются особенности объектов и наследования на примере уточнения, отладки и специализации первоначального грубого определения банковского счета (здесь повторно используется модуль <keyword>Euro</keyword>, разработанный в конце главы 3).</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#let euro = new Euro.c;;]]></user-input>
+          <system-response><![CDATA[val euro : float -> Euro.c = <fun>]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#let zero = euro 0.;;]]></user-input>
+          <system-response><![CDATA[val zero : Euro.c = <obj>]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#let neg x = x#times (-1.);;]]></user-input>
+          <system-response><![CDATA[val neg : < times : float -> 'a; .. > -> 'a = <fun>]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#class account =
+   object 
+     val mutable balance = zero
+     method balance = balance
+     method deposit x = balance <- balance # plus x
+     method withdraw x =
+       if x#leq balance then (balance <- balance # plus (neg x); x) else zero
+   end;;]]></user-input>
+          <system-response><![CDATA[class account :
+  object
+    val mutable balance : Euro.c
+    method balance : Euro.c
+    method deposit : Euro.c -> unit
+    method withdraw : Euro.c -> Euro.c
+  end]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#let c = new account in c # deposit (euro 100.); c # withdraw (euro 50.);;]]></user-input>
+          <system-response><![CDATA[- : Euro.c = <obj>]]></system-response>
+        </eval-step>
+      </session>
+      <para>Теперь мы расширим класс, добавив метод для вычисления процентов.</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#class account_with_interests =
+   object (self)
+     inherit account
+     method private interest = self # deposit (self # balance # times 0.03)
+   end;;]]></user-input>
+          <system-response><![CDATA[class account_with_interests :
+  object
+    val mutable balance : Euro.c
+    method balance : Euro.c
+    method deposit : Euro.c -> unit
+    method private interest : unit
+    method withdraw : Euro.c -> Euro.c
+  end]]></system-response>
+        </eval-step>
+      </session>
+      <para>Метод <keyword>interest</keyword> объявлен как приватный, поскольку он, очевидно, не должен вызываться извне. Таким образом он доступен лишь для субклассов, которые ежмесячно или ежегодно будут обновлять счет.</para>
+      <para>Кроме того, стоит исправить ошибку в текущем определении: методом <keyword>deposit</keyword> можно снимать деньги, положив на счет отрицательную. сумму. Это исправляется достаточно просто:</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#class safe_account =
+   object
+     inherit account
+     method deposit x = if zero#leq x then balance <- balance#plus x
+   end;;]]></user-input>
+          <system-response><![CDATA[class safe_account :
+  object
+    val mutable balance : Euro.c
+    method balance : Euro.c
+    method deposit : Euro.c -> unit
+    method withdraw : Euro.c -> Euro.c
+  end]]></system-response>
+        </eval-step>
+      </session>
+      <para>Однако есть и более тонкий способ исправить ошибку:</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#class safe_account =
+   object
+     inherit account as unsafe
+     method deposit x =
+       if zero#leq x then unsafe # deposit x
+       else raise (Invalid_argument "deposit")
+   end;;]]></user-input>
+          <system-response><![CDATA[class safe_account :
+  object
+    val mutable balance : Euro.c
+    method balance : Euro.c
+    method deposit : Euro.c -> unit
+    method withdraw : Euro.c -> Euro.c
+  end]]></system-response>
+        </eval-step>
+      </session>
+      <para>В этом случае не требуеся знать реализацию метода <keyword>deposit</keyword>.</para>
+      <para>Ради возможности отслеживать операции со счетом, в класс добавляется изменяемая переменная <keyword>history</keyword> и приватный метод <keyword>trace</keyword>, добавляющий в журнал запись об операции. Кроме того, все журналируемые методы переопределяются.</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#type 'a operation = Deposit of 'a | Retrieval of 'a;;]]></user-input>
+          <system-response><![CDATA[type 'a operation = Deposit of 'a | Retrieval of 'a]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#class account_with_history =
+   object (self) 
+     inherit safe_account as super  
+     val mutable history = []
+     method private trace x = history <- x :: history
+     method deposit x = self#trace (Deposit x);  super#deposit x
+     method withdraw x = self#trace (Retrieval x); super#withdraw x
+     method history = List.rev history
+   end;;]]></user-input>
+          <system-response><![CDATA[class account_with_history :
+  object
+    val mutable balance : Euro.c
+    val mutable history : Euro.c operation list
+    method balance : Euro.c
+    method deposit : Euro.c -> unit
+    method history : Euro.c operation list
+    method private trace : Euro.c operation -> unit
+    method withdraw : Euro.c -> Euro.c
+  end]]></system-response>
+        </eval-step>
+      </session>
+      <para>Может возникнуть потребность открыть счет и одновременно перевести на него некоторую сумму. Первоначальное определение не позволяет это делать, но проблема решается с помощью инициализатора:</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#class account_with_deposit x =
+   object 
+     inherit account_with_history 
+     initializer balance <- x 
+   end;;]]></user-input>
+          <system-response><![CDATA[class account_with_deposit :
+  Euro.c ->
+  object
+    val mutable balance : Euro.c
+    val mutable history : Euro.c operation list
+    method balance : Euro.c
+    method deposit : Euro.c -> unit
+    method history : Euro.c operation list
+    method private trace : Euro.c operation -> unit
+    method withdraw : Euro.c -> Euro.c
+  end]]></system-response>
+        </eval-step>
+      </session>
+      <para>Есть решение лучше:</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#class account_with_deposit x =
+   object (self)
+     inherit account_with_history 
+     initializer self#deposit x
+   end;;]]></user-input>
+          <system-response><![CDATA[class account_with_deposit :
+  Euro.c ->
+  object
+    val mutable balance : Euro.c
+    val mutable history : Euro.c operation list
+    method balance : Euro.c
+    method deposit : Euro.c -> unit
+    method history : Euro.c operation list
+    method private trace : Euro.c operation -> unit
+    method withdraw : Euro.c -> Euro.c
+  end]]></system-response>
+        </eval-step>
+      </session>
+      <para>Второе решение безопаснее, так как вызов метода <keyword>deposit</keyword> автоаматически влечет за собой проверку значения и запись о событии в журнал. Проверим:</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#let ccp = new account_with_deposit (euro 100.) in 
+ let balance = ccp#withdraw (euro 50.) in
+ ccp#history;;]]></user-input>
+          <system-response><![CDATA[- : Euro.c operation list = [Deposit <obj>; Retrieval <obj>]]]></system-response>
+        </eval-step>
+      </session>
+      <para>Закрытие счета осуществляется следующей полиморфной функцией:</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#let close c = c#withdraw (c#balance);;]]></user-input>
+          <system-response><![CDATA[val close : < balance : 'a; withdraw : 'a -> 'b; .. > -> 'b = <fun>]]></system-response>
+        </eval-step>
+      </session>
+      <para>Разумеется, эта функция рабоает для всех типов счетов.</para>
+      <para>Наконец, несколько версий счета собираются в модуль <keyword>Account</keyword>, абстрагированный от типа валюты:</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#let today () = (01,01,2000) (* приблизительно *)
+ module Account (M:MONEY) =
+   struct
+     type m = M.c
+     let m = new M.c
+     let zero = m 0. 
+         
+     class bank =
+       object (self) 
+         val mutable balance = zero
+         method balance = balance
+         val mutable history = []
+         method private trace x = history <- x::history
+         method deposit x =
+           self#trace (Deposit x);
+           if zero#leq x then balance <- balance # plus x
+           else raise (Invalid_argument "deposit")
+         method withdraw x =
+           if x#leq balance then
+             (balance <- balance # plus (neg x); self#trace (Retrieval x); x)
+           else zero
+         method history = List.rev history
+       end
+         
+     class type client_view = 
+       object
+         method deposit : m -> unit
+         method history : m operation list
+         method withdraw : m -> m
+         method balance : m
+       end
+           
+     class virtual check_client x = 
+       let y = if (m 100.)#leq x then x
+       else raise (Failure "Insufficient initial deposit") in
+       object (self) initializer self#deposit y end
+         
+     module Client (B : sig class bank : client_view end) =
+       struct
+         class account x : client_view =
+           object
+             inherit B.bank
+             inherit check_client x
+           end
+             
+         let discount x =
+           let c = new account x in
+           if today() < (1998,10,30) then c # deposit (m 100.); c
+       end
+   end;;]]></user-input>
+        </eval-step>
+      </session>
+      <para>Таким образом, модули помогают группировать определения классов, которые в результате могут рассматриваться как единое целое. Подобный модуль предоставляется банком как для внешнего, так и для внутреннего использования. Он реализован как функтор, абстрагированный от кокретной валюты, поэтому один и тот же код подходит для работы со счетами, ведущимися в разных денежных единицах.</para>
+      <para>Класс <keyword>bank</keyword> является <term>полной</term> реализацией банковского счета (его можно встраивать). Он пригоден для дальнешего расширения, уточнения и т.д. Клиент же, напротив, увидит только <keyword>client_view</keyword>.</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#module Euro_account = Account(Euro);;
+ 
+ module Client = Euro_account.Client (Euro_account);;
+ 
+ new Client.account (new Euro.c 100.);;]]></user-input>
+        </eval-step>
+      </session>
+      <para>Клиенты не имеют прямого доступа ни к методу <keyword>balance</keyword>, ни к <keyword>history</keyword>. Единственный для них способ изменить состояние счета - это положить или снять деньги. Необходимо предоставить клиентам именно класс, а не просто возможность создавать счета (типа поощрительного счета <keyword>discount</keyword>), чтобы они могли персонализовать счета. Например, клиент может расширить методы <keyword>deposit</keyword> и <keyword>withdraw</keyword>, чтобы вести собственную финансовую историю. С другой стороны, функция <keyword>discount</keyword> определена так, что ее персонализация невозможна.</para>
+      <para>Клиентская часть должна быть построена как функтор <keyword>Client</keyword>, тогда даже после специализации класса <keyword>bank</keyword> создание клиентских счетов останется возможным. Функтор в этом случае может остаться неизменным и даже в новом определении будет создавать клиентскую часть. </para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#module Investment_account (M : MONEY) = 
+   struct
+     type m = M.c
+     module A = Account(M)
+         
+     class bank =
+       object
+         inherit A.bank as super
+         method deposit x =
+           if (new M.c 1000.)#leq x then
+             print_string "Would you like to invest?";
+           super#deposit x
+       end
+         
+     module Client = A.Client
+   end;;]]></user-input>
+        </eval-step>
+      </session>
+      <para>Точно так же можно переопределить функтор <keyword>Client</keyword>, дополнив его новыми возможностями, доступными клиенту.</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#module Internet_account (M : MONEY) = 
+   struct
+     type m = M.c
+     module A = Account(M)
+
+     class bank =
+       object
+         inherit A.bank 
+         method mail s = print_string s
+       end
+         
+     class type client_view = 
+       object
+         method deposit : m -> unit
+         method history : m operation list
+         method withdraw : m -> m
+         method balance : m
+         method mail : string -> unit
+       end
+           
+     module Client (B : sig class bank : client_view end) =
+       struct
+         class account x : client_view =
+           object
+             inherit B.bank
+             inherit A.check_client x
+           end
+       end
+   end;;]]></user-input>
+        </eval-step>
+      </session>
+    </section>
+    <section name="Простые модули как классы">
+      <para>Может возникнуть вопрос, возможно ли рассматривать как объекты примитивные типы, такие как целые числа или строки. Для строк или целых чисел в этом особого смысла обычно нет, но в некоторых ситуациях подобные вещи полезны. Пример тому - класс money. Ниже показано, как это сделать для строк.</para>
+      <subsection name="Строки" neednumber="1">
+        <para>Наивное определение строки может быть таким:</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#class ostring s =
+   object
+      method get n = String.get n
+      method set n c = String.set n c
+      method print = print_string s
+      method copy = new ostring (String.copy s)
+   end;;]]></user-input>
+            <system-response><![CDATA[class ostring :
+  string ->
+  object
+    method copy : ostring
+    method get : string -> int -> char
+    method print : unit
+    method set : string -> int -> char -> unit
+  end]]></system-response>
+          </eval-step>
+        </session>
+        <para>Однако метод <keyword>copy</keyword> возвращает объект класса <keyword>string</keyword>, а не текущего класса. Поэтому при дальнейшем расширении <keyword>copy</keyword> будет возвращать только объект родительского класса:</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#class sub_string s =
+   object
+      inherit ostring s
+      method sub start len = new sub_string (String.sub s  start len)
+   end;;]]></user-input>
+            <system-response><![CDATA[class sub_string :
+  string ->
+  object
+    method copy : ostring
+    method get : string -> int -> char
+    method print : unit
+    method set : string -> int -> char -> unit
+    method sub : int -> int -> sub_string
+  end]]></system-response>
+          </eval-step>
+        </session>
+        <para>Как мы видели в разделе 3.15, выходом может быть использование функционального обновления. Надо создать переменную экземпляра, хранящую значение <keyword>s</keyword>. </para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#class better_string s =
+   object
+      val repr = s
+      method get n = String.get n
+      method set n c = String.set n c
+      method print = print_string repr
+      method copy = {< repr = String.copy repr >}
+      method sub start len = {< repr = String.sub s  start len >}
+   end;;]]></user-input>
+            <system-response><![CDATA[class better_string :
+  string ->
+  object ('a)
+    val repr : string
+    method copy : 'a
+    method get : string -> int -> char
+    method print : unit
+    method set : string -> int -> char -> unit
+    method sub : int -> int -> 'a
+  end]]></system-response>
+          </eval-step>
+        </session>
+        <para>Как видно из сокращения, методы <keyword>copy</keyword> и <keyword>sub</keyword> теперь возвращают объекты того же типа, что и сам класс.</para>
+        <para>Еще одно затруднение проявляется в реализации метода <keyword>concat</keyword>. Чтобы объединить две строки, надо получить доступ извне к переменной экземпляра. Поэтому появляется метод <keyword>repr</keyword>, возвращающий <keyword>s</keyword>. Вот правильное определение строки:</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#class ostring s =
+   object (self : 'mytype)
+      val repr = s
+      method repr = repr
+      method get n = String.get n
+      method set n c = String.set n c
+      method print = print_string repr
+      method copy = {< repr = String.copy repr >}
+      method sub start len = {< repr = String.sub s start len >}
+      method concat (t : 'mytype) = {< repr = repr ^ t#repr >}
+   end;;]]></user-input>
+            <system-response><![CDATA[class ostring :
+  string ->
+  object ('a)
+    val repr : string
+    method concat : 'a -> 'a
+    method copy : 'a
+    method get : string -> int -> char
+    method print : unit
+    method repr : string
+    method set : string -> int -> char -> unit
+    method sub : int -> int -> 'a
+  end]]></system-response>
+          </eval-step>
+        </session>
+        <para>Можно определить еще один конструктор класса, возвращающий неинициализированную строку заданнной длины:</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#class cstring n = ostring (String.create n);;]]></user-input>
+            <system-response><![CDATA[class cstring : int -> ostring]]></system-response>
+          </eval-step>
+        </session>
+        <para>Доступ к реализации строки вероятно безопасен. Однако, можно и скрыть реализацию, как это делалось для валюты в классе <keyword>money</keyword> в разделе 3.16.</para>
+      </subsection>
+      <subsection name="Стеки" neednumber="1">
+        <para>Для параметризовнных типов данных иногда бывает альтернатива между использованием модулей или классов. Действительно, в некоторых ситуациях оба подхода дают примерно один результат. Стек, например, можеть реализован непосредственно как класс.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#exception Empty;;]]></user-input>
+            <system-response><![CDATA[exception Empty]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#class ['a] stack =
+   object 
+     val mutable l = ([] : 'a list)
+     method push x = l <- x::l
+     method pop = match l with [] -> raise Empty | a::l' -> l <- l'; a
+     method clear = l <- []
+     method length = List.length l
+   end;;]]></user-input>
+            <system-response><![CDATA[class ['a] stack :
+  object
+    val mutable l : 'a list
+    method clear : unit
+    method length : int
+    method pop : 'a
+    method push : 'a -> unit
+  end]]></system-response>
+          </eval-step>
+        </session>
+        <para>Однако написать метод для итерации по стеку гораздо сложнее. Метод <keyword>fold</keyword> будет иметь тип <keyword>('b -&gt; 'a -&gt; 'b) -&gt; 'b -&gt; 'b</keyword>. <keyword>'a</keyword> здесь является параметром стека. Параметр <keyword>'b</keyword> относится не к классу <keyword>'a stack</keyword>, а к параметру метода <keyword>fold</keyword>. Проще всего сделать <keyword>'b</keyword> дополнительным параметром класса <keyword>stack</keyword>.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#class ['a, 'b] stack2 =
+   object
+     inherit ['a] stack
+     method fold f (x : 'b) = List.fold_left f x l
+   end;;]]></user-input>
+            <system-response><![CDATA[class ['a, 'b] stack2 :
+  object
+    val mutable l : 'a list
+    method clear : unit
+    method fold : ('b -> 'a -> 'b) -> 'b -> 'b
+    method length : int
+    method pop : 'a
+    method push : 'a -> unit
+  end]]></system-response>
+          </eval-step>
+        </session>
+        <para>Но в этом случае метод <keyword>fold</keyword> данного объекта применим только к функциям, имеющим тот же тип:</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#let s = new stack2;;]]></user-input>
+            <system-response><![CDATA[val s : ('_a, '_b) stack2 = <obj>]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#s#fold (+) 0;;]]></user-input>
+            <system-response><![CDATA[- : int = 0]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#s;;]]></user-input>
+            <system-response><![CDATA[- : (int, int) stack2 = <obj>]]></system-response>
+          </eval-step>
+        </session>
+        <para>Лучше использовать полиморфные методы, появшиеся в Objective Caml с версии 3.05. Они позволяют считать переменную <keyword>'b</keyword> универсально квантифицируемой, так что метод <keyword>fold</keyword> получает тип <keyword>Forall 'b. ('b -&gt; 'a -&gt; 'b) -&gt; 'b -&gt; 'b</keyword>. В данном случае требуется явное объявление типа метода, поскольку механизм проверки типов не может сам определить полиморфный тип.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#class ['a] stack3 =
+   object
+     inherit ['a] stack
+     method fold : 'b. ('b -> 'a -> 'b) -> 'b -> 'b
+                 = fun f x -> List.fold_left f x l
+   end;;]]></user-input>
+            <system-response><![CDATA[class ['a] stack3 :
+  object
+    val mutable l : 'a list
+    method clear : unit
+    method fold : ('b -> 'a -> 'b) -> 'b -> 'b
+    method length : int
+    method pop : 'a
+    method push : 'a -> unit
+  end]]></system-response>
+          </eval-step>
+        </session>
+      </subsection>
+      <subsection name="Хэш-таблицы" neednumber="1">
+        <para>Упрощенная версия объектно-ориентированной хэш-таблицы может иметь следующий тип класса:</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#class type ['a, 'b] hash_table =
+   object 
+     method find : 'a -> 'b
+     method add : 'a -> 'b -> unit
+   end;;]]></user-input>
+            <system-response><![CDATA[class type ['a, 'b] hash_table =
+  object method add : 'a -> 'b -> unit method find : 'a -> 'b end]]></system-response>
+          </eval-step>
+        </session>
+        <para>Для небольших хэш-таблиц подходит реализация с использованием ассоциативного списка:</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#class ['a, 'b] small_hashtbl : ['a, 'b] hash_table =
+   object
+     val mutable table = []
+     method find key = List.assoc key table
+     method add key valeur = table <- (key, valeur) :: table
+   end;;]]></user-input>
+            <system-response><![CDATA[class ['a, 'b] small_hashtbl : ['a, 'b] hash_table]]></system-response>
+          </eval-step>
+        </session>
+        <para>Реализация, обеспечивающая лучшую масштабируемость, базируется на настоящих хэш-таблицах, элементы которых... также являюются маленькими хэш-таблицами!</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#class ['a, 'b] hashtbl size : ['a, 'b] hash_table =
+   object (self)
+     val table = Array.init size (fun i -> new small_hashtbl) 
+     method private hash key =
+       (Hashtbl.hash key) mod (Array.length table)
+     method find key = table.(self#hash key) # find key
+     method add key = table.(self#hash key) # add key
+   end;;]]></user-input>
+            <system-response><![CDATA[class ['a, 'b] hashtbl : int -> ['a, 'b] hash_table]]></system-response>
+          </eval-step>
+        </session>
+      </subsection>
+      <subsection name="Наборы" neednumber="1">
+        <para>Реализация наборов связана с очерелной трудностью. Дело в том, что метод <keyword>union</keyword> должен иметь доступ к внутреннему представлению другого объекта того же класса.</para>
+        <para>Это второе появление дружественных функций (первое было в разделе 3.16). Действительно, <keyword>Set</keyword> тоже реализуется как модуль без объектов.</para>
+        <para>В объектно-ориентированной версии наборов требуется только добавить метод <keyword>tag</keyword>, возвращающий представление набора. Поскольку набор параметризуется типом элементов, этот метод имеет парамертический тип <keyword>'a tag</keyword>, конкретный в определении модуля, но абстрактный в сигнатуре. Таким образом, два объекта с методом <keyword>tag</keyword> одного типа гарантировано будут иметь общее представление извне.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#module type SET =
+   sig
+     type 'a tag
+     class ['a] c :
+       object ('b)
+         method is_empty : bool
+         method mem : 'a -> bool
+         method add : 'a -> 'b
+         method union : 'b -> 'b
+         method iter : ('a -> unit) -> unit
+         method tag : 'a tag
+       end
+   end;;
+ 
+ module Set : SET =
+   struct
+     let rec merge l1 l2 =
+       match l1 with
+         [] -> l2
+       | h1 :: t1 ->
+           match l2 with
+             [] -> l1
+           | h2 :: t2 ->
+               if h1 < h2 then h1 :: merge t1 l2
+               else if h1 > h2 then h2 :: merge l1 t2
+               else merge t1 l2
+     type 'a tag = 'a list
+     class ['a] c =
+       object (_ : 'b)
+         val repr = ([] : 'a list)
+         method is_empty = (repr = [])
+         method mem x = List.exists ((=) x) repr
+         method add x = {< repr = merge [x] repr >}
+         method union (s : 'b) = {< repr = merge repr s#tag >}
+         method iter (f : 'a -> unit) = List.iter f repr
+         method tag = repr
+       end
+   end;;]]></user-input>
+          </eval-step>
+        </session>
+      </subsection>
+    </section>
+    <section name="Шаблон субъект/наблюдатель">
+      <para>Следующий пример, известный как шаблон субъект/наблюдатель, часто связывается в литературе со сложной проблемой наследования классов, объединенных внутренними отношениями. Общий подход заключается в определении двух классов, рекурсивно взаимодействующих друг с другом.</para>
+      <para>Класс <keyword>observer</keyword> включает характерный метод <keyword>notify</keyword>, принимающий два аргумента - субъект и событие, требующее действия.</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#class virtual ['subject, 'event] observer =
+   object
+     method virtual notify : 'subject ->  'event -> unit
+   end;;]]></user-input>
+          <system-response><![CDATA[class virtual ['a, 'b] observer :
+  object method virtual notify : 'a -> 'b -> unit end]]></system-response>
+        </eval-step>
+      </session>
+      <para>Класс <keyword>subject</keyword> записывает наблюдателей в переменной экземпляра и с помощью метода <keyword>notify_observers</keyword> рассылает всем им сообщения <keyword>notify</keyword> с событием <keyword>e</keyword>.</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#class ['observer, 'event] subject =
+   object (self)
+     val mutable observers = ([]:'observer list)
+     method add_observer obs = observers <- (obs :: observers)
+     method notify_observers (e : 'event) = 
+         List.iter (fun x -> x#notify self e) observers
+   end;;]]></user-input>
+          <system-response><![CDATA[class ['a, 'b] subject :
+  object ('c)
+    constraint 'a = < notify : 'c -> 'b -> unit; .. >
+    val mutable observers : 'a list
+    method add_observer : 'a -> unit
+    method notify_observers : 'b -> unit
+  end]]></system-response>
+        </eval-step>
+      </session>
+      <para>Сложности обычно связаны с определением классов по этому шаблону с помощью наследования. В OCaml подобные проблемы решаются естественным и очевидным способом, как показано ниже в примере с окнами.</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#type event = Raise | Resize | Move;;]]></user-input>
+          <system-response><![CDATA[type event = Raise | Resize | Move]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#let string_of_event = function
+     Raise -> "Raise" | Resize -> "Resize" | Move -> "Move";;]]></user-input>
+          <system-response><![CDATA[val string_of_event : event -> string = <fun>]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#let count = ref 0;;]]></user-input>
+          <system-response><![CDATA[val count : int ref = {contents = 0}]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#class ['observer] window_subject =
+   let id = count := succ !count; !count in
+   object (self)
+     inherit ['observer, event] subject
+     val mutable position = 0
+     method identity = id
+     method move x = position <- position + x; self#notify_observers Move
+     method draw = Printf.printf "{Position = %d}\n"  position;
+   end;;]]></user-input>
+          <system-response><![CDATA[class ['a] window_subject :
+  object ('b)
+    constraint 'a = < notify : 'b -> event -> unit; .. >
+    val mutable observers : 'a list
+    val mutable position : int
+    method add_observer : 'a -> unit
+    method draw : unit
+    method identity : int
+    method move : int -> unit
+    method notify_observers : event -> unit
+  end]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#class ['subject] window_observer =
+   object
+     inherit ['subject, event] observer
+     method notify s e = s#draw
+   end;;]]></user-input>
+          <system-response><![CDATA[class ['a] window_observer :
+  object
+    constraint 'a = < draw : unit; .. >
+    method notify : 'a -> event -> unit
+  end]]></system-response>
+        </eval-step>
+      </session>
+      <para>Неудивительно, что тип <keyword>window</keyword> рекурсивен.</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#let window = new window_subject;;]]></user-input>
+          <system-response><![CDATA[val window : < notify : 'a -> event -> unit; _.. > window_subject as 'a =
+  <obj>]]></system-response>
+        </eval-step>
+      </session>
+      <para>Однако классы <keyword>window_subject</keyword> и <keyword>window_observer</keyword> не рекурсивны взаимно:</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#let window_observer = new window_observer;;]]></user-input>
+          <system-response><![CDATA[val window_observer : < draw : unit; _.. > window_observer = <obj>]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#window#add_observer window_observer;;]]></user-input>
+          <system-response><![CDATA[- : unit = ()]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#window#move 1;;]]></user-input>
+          <system-response><![CDATA[{Position = 1}
+- : unit = ()]]></system-response>
+        </eval-step>
+      </session>
+      <para>Классы window_subject и window_observer могут быть расширены через наследование. Например, <keyword>subject</keyword> может получить новые функции, а функции наблюдателя могут быть переопределены:</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#class ['observer] richer_window_subject =
+   object (self)
+     inherit ['observer] window_subject
+     val mutable size = 1
+     method resize x = size <- size + x; self#notify_observers Resize
+     val mutable top = false
+     method raise = top <- true; self#notify_observers Raise
+     method draw = Printf.printf "{Position = %d; Size = %d}\n"  position size;
+   end;;]]></user-input>
+          <system-response><![CDATA[class ['a] richer_window_subject :
+  object ('b)
+    constraint 'a = < notify : 'b -> event -> unit; .. >
+    val mutable observers : 'a list
+    val mutable position : int
+    val mutable size : int
+    val mutable top : bool
+    method add_observer : 'a -> unit
+    method draw : unit
+    method identity : int
+    method move : int -> unit
+    method notify_observers : event -> unit
+    method raise : unit
+    method resize : int -> unit
+  end]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#class ['subject] richer_window_observer =
+   object 
+     inherit ['subject] window_observer as super
+     method notify s e = if e <> Raise then s#raise; super#notify s e
+   end;;]]></user-input>
+          <system-response><![CDATA[class ['a] richer_window_observer :
+  object
+    constraint 'a = < draw : unit; raise : unit; .. >
+    method notify : 'a -> event -> unit
+  end]]></system-response>
+        </eval-step>
+      </session>
+      <para>Можно даже создать новый тип наблюдателя:</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#class ['subject] trace_observer = 
+   object 
+     inherit ['subject, event] observer
+     method notify s e =
+       Printf.printf
+         "<Window %d <== %s>\n" s#identity (string_of_event e)
+   end;;]]></user-input>
+          <system-response><![CDATA[class ['a] trace_observer :
+  object
+    constraint 'a = < identity : int; .. >
+    method notify : 'a -> event -> unit
+  end]]></system-response>
+        </eval-step>
+      </session>
+      <para>и привязать несколько обсерверов к одному субъекту:</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#let window = new richer_window_subject;;]]></user-input>
+          <system-response><![CDATA[val window :
+  < notify : 'a -> event -> unit; _.. > richer_window_subject as 'a = <obj>]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#window#add_observer (new richer_window_observer);;]]></user-input>
+          <system-response><![CDATA[- : unit = ()]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#window#add_observer (new trace_observer);;]]></user-input>
+          <system-response><![CDATA[- : unit = ()]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#window#move 1; window#resize 2;;]]></user-input>
+          <system-response><![CDATA[<Window 2 <== Move>
+<Window 2 <== Raise>
+{Position = 1; Size = 1}
+{Position = 1; Size = 1}
+<Window 2 <== Resize>
+<Window 2 <== Raise>
+{Position = 1; Size = 3}
+{Position = 1; Size = 3}
+- : unit = ()]]></system-response>
+        </eval-step>
+      </session>
+    </section>
+  </main-matters>
+</chapter>

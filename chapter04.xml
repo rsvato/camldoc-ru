@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet href="file://localhost/C:/ocaml/ocaml.css" type="text/css"?>
+<?xmlspysps C:\ocaml\ocaml.sps?>
+<!DOCTYPE chapter SYSTEM "core.dtd">
+<chapter name="Метки и варианты" number="4">
+  <abstract>
+    <para>В этой главе содержится обзор новых возможностей Objective Caml 3 - меток и полиморфных вариантов.</para>
+  </abstract>
+  <main-matters>
+    <section name="Метки">
+      <para>Если посмотреть модуль <keyword>Labels</keyword> из стандартной библиотеки, можно заметить, что типы функций снабжаются аннотациями, которых нет у пользовательских функций. </para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#ListLabels.map;;]]></user-input>
+          <system-response><![CDATA[- : f:('a -> 'b) -> 'a list -> 'b list = <fun>]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#StringLabels.sub;;]]></user-input>
+          <system-response><![CDATA[- : string -> pos:int -> len:int -> string = <fun>]]></system-response>
+        </eval-step>
+      </session>
+      <para>Подобные элементы в форме <keyword>имя:</keyword> называются <term>метками</term>. Они предназначены для документирования кода, дополнительных проверок, а кроме того, обеспечивают большую гибкость в применении функций. Чтобы использовать такие имена в аргументах, надо предварять их знаком тильды (<keyword>~</keyword>).</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#let f ~x ~y = x - y;;]]></user-input>
+          <system-response><![CDATA[val f : x:int -> y:int -> int = <fun>]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#let x = 3 and y = 2 in f ~x ~y;;]]></user-input>
+          <system-response><![CDATA[- : int = 1]]></system-response>
+        </eval-step>
+      </session>
+      <para>Если переменные и метки для них должны иметь разные имена, в определении следует использовать форму <keyword>~имя:</keyword>. То же самое справедливо, когда аргумент не является переменной.</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#let f ~x:x1 ~y:y1 = x1 - y1;;]]></user-input>
+          <system-response><![CDATA[val f : x:int -> y:int -> int = <fun>]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#f ~x:3 ~y:2;;]]></user-input>
+          <system-response><![CDATA[- : int = 1]]></system-response>
+        </eval-step>
+      </session>
+      <para>Имена меток следуют тем же правилам, что и имена остальных идентификаторов в OCaml, то есть для них нельзя использовать зарезервированные слова (<keyword>in</keyword>, <keyword>to</keyword> и т.д.).</para>
+      <para>Формальные аргументы и параметры сопоставляются соответвующим меткам, причем отсуствие метки рассматривается как пустая метка. Аргументы в вызовах могут коммутироваться. Можно, например, применить функцию к любому аргументу, что создаст для остальных функцию:</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#ListLabels.fold_left;;]]></user-input>
+          <system-response><![CDATA[- : f:('a -> 'b -> 'a) -> init:'a -> 'b list -> 'a = <fun>]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#ListLabels.fold_left [1;2;3] ~init:0 ~f:(+);;]]></user-input>
+          <system-response><![CDATA[- : int = 6]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#ListLabels.fold_left ~init:0;;]]></user-input>
+          <system-response><![CDATA[- : f:(int -> 'a -> int) -> 'a list -> int = <fun>]]></system-response>
+        </eval-step>
+      </session>
+      <para>Если несколько аргументов функции связаны с одной меткой (или метка отсутствует), они не будут коммутироваться между собой, и их порядок будет важен. Однако коммутацяи с другими аргументами возможна.</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#let hline ~x:x1 ~x:x2 ~y = (x1, x2, y);;]]></user-input>
+          <system-response><![CDATA[val hline : x:'a -> x:'b -> y:'c -> 'a * 'b * 'c = <fun>]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#hline ~x:3 ~y:2 ~x:5;;]]></user-input>
+          <system-response><![CDATA[- : int * int * int = (3, 5, 2)]]></system-response>
+        </eval-step>
+      </session>
+      <para>Если функция вызывается со всеми аргументами, метки можно опустить. На практике так обычно и бывает, поэтому метки указываются редко.</para>
+      <session>
+        <eval-step>
+          <user-input>#f 3 2;;</user-input>
+          <system-response><![CDATA[- : int = 1]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input>#ListLabels.map succ [1;2;3];;</user-input>
+          <system-response><![CDATA[- : int list = [2; 3; 4]]]></system-response>
+        </eval-step>
+      </session>
+      <para>Однако вызов функций типа <keyword>ListLabels.fold</keyword>, результатом которых является переменная типа, никогда не считается полным: </para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#ListLabels.fold_left (+) 0 [1;2;3];;]]></user-input>
+          <system-response><![CDATA[This expression has type int -> int -> int but is here used with type 'a list]]></system-response>
+        </eval-step>
+      </session>
+      <para>Когда функция передается аргументом функции высшего порядка, метки должны совпадать для обоих типов. Добавление или удаление меток запрещены.</para>
+      <session>
+        <eval-step>
+          <user-input><![CDATA[#let h g = g ~x:3 ~y:2;;]]></user-input>
+          <system-response><![CDATA[val h : (x:int -> y:int -> 'a) -> 'a = <fun>]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#h f;;]]></user-input>
+          <system-response><![CDATA[- : int = 1]]></system-response>
+        </eval-step>
+        <eval-step>
+          <user-input><![CDATA[#h (+);;]]></user-input>
+          <system-response><![CDATA[This expression has type int -> int -> int but is here used with type
+  x:int -> y:int -> 'a]]></system-response>
+        </eval-step>
+      </session>
+      <subsection name="Необязательные аргументы" neednumber="1">
+        <para>Аргументы с метками имеют интересную особенность: они могут быть необязательными. В этом случае тильда заменяется вопросительным знаком, а в типе функции метка также предваряется вопросительным знаком. Для необязательных параметров могут назначаться значения по умолчанию.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#let bump ?(step = 1) x = x + step;;]]></user-input>
+            <system-response><![CDATA[val bump : ?step:int -> int -> int = <fun>]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#bump 2;;]]></user-input>
+            <system-response><![CDATA[- : int = 3]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#bump ~step:3 2;;]]></user-input>
+            <system-response><![CDATA[- : int = 5]]></system-response>
+          </eval-step>
+        </session>
+        <para>Функция с необязательными аргументами должна также принимать по крайней мере один аргумент без метки. Причина в том, что критерием решения о возможности пропуска необязательного аргумента является применение аргумента без метки, который появляется в типе функции после необязательного аргумента.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#let test ?(x = 0) ?(y = 0) () ?(z = 0) () = (x, y, z);;]]></user-input>
+            <system-response><![CDATA[val test : ?x:int -> ?y:int -> unit -> ?z:int -> unit -> int * int * int =
+  <fun>]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#test ();;]]></user-input>
+            <system-response>- : ?z:int -&gt; unit -&gt; int * int * int = &lt;fun&gt;</system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#test ~x:2 () ~z:3 ();;]]></user-input>
+            <system-response>- : int * int * int = (2, 0, 3)</system-response>
+          </eval-step>
+        </session>
+        <para>Необязательные параметры могут коммутироваться с обязательными и параметрами без меток, пока применяются они одновременно. Естественно, необязательные параметры не коммутируются с параметрами без меток, применяющимися независимо.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#test ~y:2 ~x:3 () ();;]]></user-input>
+            <system-response><![CDATA[- : int * int * int = (3, 2, 0)]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#test () () ~z:1 ~y:2 ~x:3;;]]></user-input>
+            <system-response><![CDATA[- : int * int * int = (3, 2, 1)]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#(test () ()) ~z:1;;]]></user-input>
+            <system-response><![CDATA[This expression is not a function, it cannot be applied]]></system-response>
+          </eval-step>
+        </session>
+        <para>Выражение <keyword>(test () ())</keyword> в данном случае является <keyword>(0, 0, 0)</keyword> и в дальнейшем применяться не может.</para>
+        <para>Необязательные аргументы реализованы как типы по выбору. Если значение по умолчанию не задано, программист получает доступ к их внутреннему представлению <keyword>'a option = None | Some of 'a</keyword>. Поэтому можно задать разное поведение в зависимости от того, задан ли аргумент.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#let bump ?step x =
+   match step with
+   | None -> x * 2
+   | Some y -> x + y
+ ;;]]></user-input>
+            <system-response><![CDATA[val bump : ?step:int -> int -> int = <fun>]]></system-response>
+          </eval-step>
+        </session>
+        <para>Бывает полезно передать аргумент от одного вызова функции другому. Для этого его следует предварить вопросительным знаком, что предотвращает работу с ним как с типом по выбору.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#let test2 ?x ?y () = test ?x ?y () ();;]]></user-input>
+            <system-response><![CDATA[val test2 : ?x:int -> ?y:int -> unit -> int * int * int = <fun>]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#test2 ?x:None;;]]></user-input>
+            <system-response><![CDATA[- : ?y:int -> unit -> int * int * int = <fun>]]></system-response>
+          </eval-step>
+        </session>
+      </subsection>
+      <subsection name="Метки и определение типов" neednumber="1">
+        <para>Несмотря на удобство в применении функций, метки и необязательные аргументы могут привести к ошибкам, поскольку их тип далеко не всегда может быть определен так легко, как в остальной части языка.</para>
+        <para>Это видно из примеров ниже:</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#let h' g = g ~y:2 ~x:3;;]]></user-input>
+            <system-response><![CDATA[val h' : (y:int -> x:int -> 'a) -> 'a = <fun>]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#h' f;;]]></user-input>
+            <system-response><![CDATA[This expression has type x:int -> y:int -> int but is here used with type
+  y:int -> x:int -> 'a]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#let bump_it bump x =
+   bump ~step:2 x;;]]></user-input>
+            <system-response><![CDATA[val bump_it : (step:int -> 'a -> 'b) -> 'a -> 'b = <fun>]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#bump_it bump 1;;]]></user-input>
+            <system-response><![CDATA[This expression has type ?step:int -> int -> int but is here used with type
+  step:int -> 'a -> 'b]]></system-response>
+          </eval-step>
+        </session>
+        <para>Первый случай прост: <keyword>g</keyword> передается <keyword>~y</keyword>, затем <keyword>~x</keyword>, а <keyword>f</keyword> ожидает аргументы в обратном порядке. Если заранее знать, что тип <keyword>g</keyword> - <keyword>x:int -&gt; y:int -&gt; int</keyword>, ошибки не будет. Но простейший выход здесь - передавать формальные аргументы в стандартном порядке.</para>
+        <para>Второй случай сложнее: мы полагаем, что тип <keyword>bump</keyword> - <keyword>?step:int -&gt; int -&gt; int</keyword>, но определяется он как <keyword>step:int -&gt; int -&gt; 'a</keyword>. Эти типы несовместимы (внутренее обычные и необязательные аргументы различаются), поэтому когда <keyword>bump_it</keyword> применяется к <keyword>bump</keyword>, возбуждается ошибка.</para>
+        <para>Мы не будем объяснять здесь, как работает механизм определения типов. Нужно просто понять, что в коде выше не содержится информации, достаточной для того, чтобы правильно вывести тип <keyword>g</keyword> или <keyword>bump</keyword>. Поэтому из одного того, как применяется функция, нет возможности узнать, является ли аргумент необязательным, или каков правильный порядок приложения аргументов. Компилятор обычно предполагает, что необязательных аргументов нет, и все аргументы применяются в правильном порядке.</para>
+        <para>Проблема с необязательными аргументами решается добавлением аннотации типа к аргументу <keyword>bump</keyword>.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#let bump_it (bump : ?step:int -> int -> int) x =
+   bump ~step:2 x;;]]></user-input>
+            <system-response>val bump_it : (?step:int -&gt; int -&gt; int) -&gt; int -&gt; int = &lt;fun&gt;</system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#bump_it bump 1;;]]></user-input>
+            <system-response><![CDATA[- : int = 3]]></system-response>
+          </eval-step>
+        </session>
+        <para>На практике подобные проблемы чаще всего появляются при использовании объектов, методы которых имеют необязательные аргументы, поэтому обычно стоит указывать тип таких аргументов.</para>
+        <para>Как правило, компилятор выдает ошибку типа, когда функции передается параметр типа, отличного от ожидаемого. Однако в случае, когда ожидаемый тип является типом функции без метки, а аргумент - функцией с необязательным параметром, компилятор пытается преобразовать аргумент к ожидаемому типу, а для всех необязательных параметров передает <keyword>None</keyword>.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#let twice f (x : int) = f(f x);;]]></user-input>
+            <system-response><![CDATA[val twice : (int -> int) -> int -> int = <fun>]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#twice bump 2;;]]></user-input>
+            <system-response><![CDATA[- : int = 8]]></system-response>
+          </eval-step>
+        </session>
+        <para>Такое преобразование не противоречит семантике кода, включая и побочные эффекты. То есть, если применение необязательного аргумента должно вести к ним, то они откладываются до окончательного приложения функции.</para>
+      </subsection>
+      <subsection name="Имена меток" neednumber="1">
+        <para>Как и в случае имен, выбрать функцию для метки непросто. Хорошая метка:</para>
+        <list type="plain">
+          <item>
+            <para>облегчает чтение программы</para>
+          </item>
+          <item>
+            <para>легко запоминается</para>
+          </item>
+          <item>
+            <para>когда это возможно, обеспечивают разумное частичное применение функции.</para>
+          </item>
+        </list>
+        <para>Ниже объясняются правила, которые использовались при добавлении меток в функции стандартной библиотеки Objective Caml.</para>
+        <para>Говоря на объектно-ориентированном языке, можно сказать, что любая функция имеет главный агумент, или <term>объект</term>, и дополнительные, связанные с ее действием, <term>параметры</term>. Ради связывания функций через функционалы в перестановочном режиме с метками, объекты используются без меток. Их роль ясна из самой функции. Метки для параметров выбираются исходя из роли или природы последних. Самые удачные метки сочетают и то, и другое. По возможности, предпочтение оказывается роли, поскольку природа часто следует из типа. Непонятных сокращений следует избегать.</para>
+        <listing><![CDATA[ListLabels.map : f:('a -> 'b) -> 'a list -> 'b list
+UnixLabels.write : file_descr -> buf:string -> pos:int -> len:int -> unit]]></listing>
+        <para>Когда встречаются сразу несколько объектов одной и той же природы и роли, метки не используются.</para>
+        <listing>ListLabels.iter2 : f:('a -&gt; 'b -&gt; 'c) -&gt; 'a list -&gt; 'b list -&gt; unit</listing>
+        <para>Когда ни один из аргументов не подходит на роль объекта, метки используются для всех аргументов.</para>
+        <listing><![CDATA[StringLabels.blit :
+  src:string -> src_pos:int -> dst:string -> dst_pos:int -> len:int -> unit]]></listing>
+        <para>Однако единственный аргумент часто остается без метки.</para>
+        <listing><![CDATA[StringLabels.create : int -> string]]></listing>
+        <para>Этот же принцип применяется для функций с несколькими аргументами, возвращающих переменную типа, поскольку роль каждого аргумента и так понятна. Метки для таких функций могут привести к трудноотслеживаемым ошибкам в ситуациях, когда метки опускаются (как это было с <keyword>ListLabels.fold_left</keyword>).</para>
+        <para>Вот некорые имена меток из стандартной библиотеки:</para>
+        <table>
+          <thead>
+            <trow>
+              <tcell>
+                <para>Метка</para>
+              </tcell>
+              <tcell>
+                <para>Значение</para>
+              </tcell>
+            </trow>
+          </thead>
+          <tbody>
+            <trow>
+              <tcell>
+                <para><keyword>f:</keyword></para>
+              </tcell>
+              <tcell>
+                <para>Применяемая функция</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para><keyword>pos:</keyword></para>
+              </tcell>
+              <tcell>
+                <para>Положение в строке или массиве</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para><keyword>len:</keyword></para>
+              </tcell>
+              <tcell>
+                <para>Длина</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para><keyword>buf:</keyword></para>
+              </tcell>
+              <tcell>
+                <para>Строка в роли буфера</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para><keyword>src:</keyword></para>
+              </tcell>
+              <tcell>
+                <para>Источник операции</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para><keyword>dst:</keyword></para>
+              </tcell>
+              <tcell>
+                <para>Назначение операции</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para><keyword>init:</keyword></para>
+              </tcell>
+              <tcell>
+                <para>Начальное значение итератора</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para><keyword>cmp:</keyword></para>
+              </tcell>
+              <tcell>
+                <para>Функция сравнения (например, <keyword>Pervasives.compare</keyword>)</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para><keyword>mode:</keyword></para>
+              </tcell>
+              <tcell>
+                <para>Режим операции или список флагов</para>
+              </tcell>
+            </trow>
+          </tbody>
+        </table>
+        <para>Это только рекомендации, но следует помнить, что выбор меток сильно влияет на читаемость кода. Необычные решения в этом вопросе затрудняют поддержку программы.</para>
+        <para>В идеале смысл функции должны быть понятен из ее имени и меток. Поскольку эта информация доступна в OCamlBrowser и интерактивной системе, документация должна использоваться лишь когда требуется более подробная спецификация.</para>
+      </subsection>
+    </section>
+    <section name="Полиморфные варианты">
+      <para>Варианты, о которых рассказывалось в разделе 1.4, весьма полезны для построения структур данных и алгоритмов. Однако при использовании в модульном программировании им иногда не хватает гибкости. Дело в том, что любой конструктор связывает имя с уникальным типом. Одно и то же имя нельзя использовать с другим типом, и точно так же нельзя приписывать значение некоторого типа другому типу с помощью нескольких конструкторов.</para>
+      <para>Полиморфные варианты позволяют обойти это затруднение. Тег варианта не связывается ни с каким конкретным типом, а система проверки типов просто проверяет допустимость значения, исходя из контекста использования. Указывать тип перед использованием тега варианта в этом случае не надо. Тип будет определен непосредственно в каждом случае применения варианта.</para>
+      <subsection name="Простое использование" neednumber="0">
+        <para>Полиморфные варианты в программах работают как обычные варианты. Просто перед их именем ставится обратная кавычка <keyword>`</keyword>.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#[`On; `Off];;]]></user-input>
+            <system-response><![CDATA[- : [> `Off | `On] list = [`On; `Off]]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#`Number 1;;]]></user-input>
+            <system-response><![CDATA[- : [> `Number of int] = `Number 1]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#let f = function `On -> 1 | `Off -> 0 | `Number n -> n;;]]></user-input>
+            <system-response><![CDATA[val f : [< `Number of int | `Off | `On] -> int = <fun>]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#List.map f [`On; `Off];;]]></user-input>
+            <system-response><![CDATA[- : int list = [1; 0]]]></system-response>
+          </eval-step>
+        </session>
+        <para><keyword>[&gt;`Off|`On] list</keyword> означает, что для совпадения с этим списком, должно быть совпадение с <keyword>`On</keyword> и <keyword>`Off</keyword> без аргумента. <keyword>[&lt; `On | `Off | Number of int ]</keyword> означает, что <keyword>f</keyword> можеть применяться либо к <keyword>`On</keyword>, либо к <keyword>`Off</keyword> (и то, и то без аргументов), либо к <keyword>`Number</keyword><term>n</term>, где <term>n</term> - целое число. <keyword>&lt;</keyword> и <keyword>&gt;</keyword> внутри вариантрого типа означают, что тип еще может доработан путем уменьшения или увеличения количества тегов. Они содержат скрытую переменную типа. В обоих случаях вариантные типы отображаются только один раз, а скрытые переменные не показываются.</para>
+        <para>Вариантные типы выше являются полиморфными и допускают дальнейшее уточнение. При написании аннотаций типа особое внимание следует уделять фиксированным вариантам, не позволяющим расширение. То же самое касается сокращений типа. В подобных случаях нет <keyword>&lt;</keyword> и <keyword>&gt;</keyword>, а есть только перечисление тегов и связанных с ними типов, как в обычном определении типа данных.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#type 'a vlist = [`Nil | `Cons of 'a * 'a vlist];;]]></user-input>
+            <system-response><![CDATA[type 'a vlist = [ `Cons of 'a * 'a vlist | `Nil]]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#let rec map f : 'a vlist -> 'b vlist = function
+   | `Nil -> `Nil
+   | `Cons(a, l) -> `Cons(f a, map f l)
+ ;;]]></user-input>
+            <system-response><![CDATA[val map : ('a -> 'b) -> 'a vlist -> 'b vlist = <fun>]]></system-response>
+          </eval-step>
+        </session>
+      </subsection>
+      <subsection name="Сложное использование" neednumber="0">
+        <para>Проверка типов полиморфных вариантов непроста, и некоторые выражения дают достаточно сложную информацию о типе:</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#let f = function `A -> `C | `B -> `D | x -> x;;]]></user-input>
+            <system-response><![CDATA[val f : ([> `A | `B | `C | `D] as 'a) -> 'a = <fun>]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#f `E;;]]></user-input>
+            <system-response><![CDATA[- : _[> `A | `B | `C | `D | `E] = `E]]></system-response>
+          </eval-step>
+        </session>
+        <para>Здесь мы видим две странности: во-первых, поскольку сравнение открыто (последний случай подходит для любого тега), мы получаем тип <keyword>[&gt; `A | `B]</keyword> (для закрытого сравнения было бы <keyword>[&lt; `A | `B]</keyword>; во-вторых, поскольку <keyword>x</keyword> возвращается в неизменном виде, типы аргумента и возвращаемого значения идентичны, на что указывает нотация <keyword>as 'a</keyword>. Если применить <keyword>f</keyword> еще к одному тегу <keyword>`E</keyword>, он добавится к списку.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#let f1 = function `A x -> x = 1 | `B -> true | `C -> false
+ let f2 = function `A x -> x = "a" | `B -> true ;;]]></user-input>
+            <system-response><![CDATA[val f1 : [< `A of int | `B | `C] -> bool = <fun>
+val f2 : [< `A of string | `B] -> bool = <fun>]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#let f x = f1 x && f2 x;;]]></user-input>
+            <system-response><![CDATA[val f : [< `A of string & int | `B] -> bool = <fun>]]></system-response>
+          </eval-step>
+        </session>
+        <para>В данном случае и <keyword>f1</keyword> и <keyword>f2</keyword> принимают вариантные теги <keyword>`A</keyword> и <keyword>`B</keyword>, но аргумент <keyword>`A</keyword> - <keyword>int</keyword> для <keyword>f1</keyword> и <keyword>string</keyword> для <keyword>f2</keyword>. В типе <keyword>f</keyword> <keyword>`C</keyword> исчезает, зато типом аргументом для <keyword>`A</keyword> становится <keyword>int &amp; string</keyword>, то есть значение, <term>одновременно</term> являющееся целым числом и строкой. Поскольку таких значений не существует, <keyword>f</keyword> не может быь применено к <keyword>`A</keyword>, и единственным допустимым аргументом остается <keyword>`B</keyword>.</para>
+        <para>Даже значения с фиксированным вариантным типом могут быть расширены с помощью приведения. В приведении обычно записываются и исходный, и окончательный типы, но в простых случаях исходный тип можно опускать.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#type 'a wlist = [`Nil | `Cons of 'a * 'a wlist | `Snoc of 'a wlist * 'a];;]]></user-input>
+            <system-response><![CDATA[type 'a wlist = [ `Cons of 'a * 'a wlist | `Nil | `Snoc of 'a wlist * 'a]]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#let wlist_of_vlist  l = (l : 'a vlist :> 'a wlist);;]]></user-input>
+            <system-response><![CDATA[val wlist_of_vlist : 'a vlist -> 'a wlist = <fun>]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#let open_vlist l = (l : 'a vlist :> [> 'a vlist]);;]]></user-input>
+            <system-response><![CDATA[val open_vlist : 'a vlist -> [> 'a vlist] = <fun>]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#fun x -> (x :> [`A|`B|`C]);;]]></user-input>
+            <system-response><![CDATA[- : [< `A | `B | `C] -> [ `A | `B | `C] = <fun>]]></system-response>
+          </eval-step>
+        </session>
+        <para>С помощью поиска по образцу приведение можно ограничить лишь избранными типами.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#let split_cases = function
+   | `Nil | `Cons _ as x -> `A x
+   | `Snoc _ as x -> `B x
+ ;;]]></user-input>
+            <system-response><![CDATA[val split_cases :
+  [< `Cons of 'a | `Nil | `Snoc of 'b] ->
+  [> `A of [> `Cons of 'a | `Nil] | `B of [> `Snoc of 'b]] = <fun>]]></system-response>
+          </eval-step>
+        </session>
+        <para></para>
+      </subsection>
+    </section>
+  </main-matters>
+</chapter>

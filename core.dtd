@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!ELEMENT abstract (para)>
+
+<!ELEMENT chapter (abstract,main-matters)>
+<!ATTLIST chapter
+	name CDATA #REQUIRED
+	number NMTOKEN #REQUIRED
+>
+
+<!ELEMENT command (#PCDATA)>
+
+<!ELEMENT eval-step (user-input,system-response?)>
+
+<!ELEMENT keyword (#PCDATA)>
+
+<!ELEMENT lb EMPTY>
+
+<!ELEMENT main-matters (section+)>
+
+<!ELEMENT mdash EMPTY>
+
+<!ELEMENT para (#PCDATA|command|keyword|mdash|term|sub)*>
+
+<!ELEMENT section (subsection|subsection-nonumber|para|session|listing|command-session|list|table)*>
+<!ATTLIST section name CDATA #REQUIRED>
+<!ELEMENT subsection (para|session|listing|command-session|list|table)*>
+<!ELEMENT subsection-nonumber (para|session|listing|command-session|list|table)*>
+<!ATTLIST subsection name CDATA #REQUIRED
+		     neednumber NMTOKEN #REQUIRED>
+<!ELEMENT session (eval-step+)>
+<!ELEMENT command-session (command-line+)>
+<!ELEMENT note (para|session)*>
+<!ELEMENT system-response (#PCDATA|lb|tab)*>
+<!ELEMENT list (item)+>
+<!ATTLIST list type CDATA #REQUIRED>
+<!ELEMENT item (para)+>
+<!ELEMENT table (thead,tbody)>
+<!ELEMENT thead (trow)+>
+<!ELEMENT tbody (trow)+>
+<!ELEMENT trow (tcell)+>
+<!ELEMENT tcell (para)+>
+<!ELEMENT tab EMPTY>
+
+<!ELEMENT user-input (#PCDATA|lb|tab)*>
+<!ELEMENT listing (#PCDATA|lb|tab)*>
+<!ELEMENT command-line (input?|response?)*>
+<!ELEMENT input (#PCDATA|lb|tab)*>
+<!ATTLIST input prompt  CDATA '$'>
+<!ELEMENT response (#PCDATA|lb|tab)*>
+<!ELEMENT sub (#PCDATA)>
+<!ELEMENT term (#PCDATA)>
+

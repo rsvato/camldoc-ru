@@ -1,0 +1,512 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?xml-stylesheet type="text/xml" href="ocaml.xsl"?>
+<!DOCTYPE chapter SYSTEM "core.dtd">
+<chapter name="Система модулей" number="2">
+	<abstract>
+		<para>
+			В этой главе содержится введение в систему
+			модулей Objective Caml.
+		</para>
+	</abstract>
+	<main-matters>
+		<section name="Структура">
+			<para>
+				Главная цель модулей - сгруппировать
+				связанные определения (например, определения типа
+				данных и операций, допустимых для него) и обеспечить
+				разумную схему именования. Подобная группа называется
+				<term>структурой</term> и задается блоком
+				<keyword>struct...end</keyword>, внутри которого может
+				содержаться произвольная последовательность определений. Обычно
+				струкуре дается имя с помощью оператора <keyword>module</keyword>.
+				Ниже приведен пример структуры, включающей тип очереди по
+				приоритету и операции для этого типа:
+			</para>
+			<session>
+				<eval-step>
+					<user-input><![CDATA[ # module PrioQueue =
+   struct
+     type priority = int
+     type 'a queue = Empty | Node of priority * 'a * 'a queue * 'a queue
+     let empty = Empty
+     let rec insert queue prio elt =
+       match queue with
+         Empty -> Node(prio, elt, Empty, Empty)
+       | Node(p, e, left, right) ->
+           if prio <= p
+           then Node(prio, elt, insert right p e, left)
+           else Node(p, e, insert right prio elt, left)
+     exception Queue_is_empty
+     let rec remove_top = function
+         Empty -> raise Queue_is_empty
+       | Node(prio, elt, left, Empty) -> left
+       | Node(prio, elt, Empty, right) -> right
+       | Node(prio, elt, (Node(lprio, lelt, _, _) as left),
+                         (Node(rprio, relt, _, _) as right)) ->
+           if lprio <= rprio
+           then Node(lprio, lelt, remove_top left, right)
+           else Node(rprio, relt, left, remove_top right)
+     let extract = function
+         Empty -> raise Queue_is_empty
+       | Node(prio, elt, _, _) as queue -> (prio, elt, remove_top queue)
+   end;;]]></user-input>
+					<system-response><![CDATA[
+module PrioQueue :
+  sig
+    type priority = int
+    and 'a queue = Empty | Node of priority * 'a * 'a queue * 'a queue
+    val empty : 'a queue
+    val insert : 'a queue -> priority -> 'a -> 'a queue
+    exception Queue_is_empty
+    val remove_top : 'a queue -> 'a queue
+    val extract : 'a queue -> priority * 'a * 'a queue
+  end]]></system-response>
+				</eval-step>
+			</session>
+			<para>
+				Вне структуры на ее компоненты можно ссылаться, предваряя имя компонента
+				именем структуры и точкой. Например, <keyword>PrioQueue.insert</keyword>
+				в контексте значения является функцией <keyword>insert</keyword>,
+				определенной в структуре <keyword>PrioQueue</keyword>. Аналогично,
+				<keyword>PrioQueue.queue</keyword> в контексте типа является типом
+				<keyword>queue</keyword>, определенным в <keyword>PrioQueue</keyword>.
+			</para>
+		</section>
+		<section name="Сигнатуры">
+			<para>
+				Сигнатуры - это интерфейсы для структур. Они указывают, какие
+				элементы структуры с какими типами доступны извне. Поэтому сигнатуры
+				могут использоваться для скрытия некоторых компонентов структуры
+				(например, локальных функций) или для ограничения типов экспортируемых
+				компонентов. Сигнатура ниже включает три оператора очереди по приоритету
+				<keyword>empty</keyword>, <keyword>insert</keyword> и
+				<keyword>extract</keyword>, но скрывает вспомогательную функцию
+				<keyword>remove_top</keyword>. Кроме того, тип <keyword>queue</keyword>
+				становится абстрактным (конкретный тип не указывается):
+			</para>
+			<session>
+				<eval-step>
+					<user-input><![CDATA[# module type PRIOQUEUE =
+   sig
+     type priority = int         (* конкретный *)
+     type 'a queue               (* абстрактный *)
+     val empty : 'a queue
+     val insert : 'a queue -> int -> 'a -> 'a queue
+     val extract : 'a queue -> int * 'a * 'a queue
+     exception Queue_is_empty
+   end;;
+]]></user-input>
+					<system-response><![CDATA[module type PRIOQUEUE =
+  sig
+    type priority = int
+    and 'a queue
+    val empty : 'a queue
+    val insert : 'a queue -> int -> 'a -> 'a queue
+    val extract : 'a queue -> int * 'a * 'a queue
+    exception Queue_is_empty
+  end
+]]></system-response>
+				</eval-step>
+			</session>
+			<para>
+				В результате мы получаем иное представление структуры
+				<keyword>PrioQueue</keyword>: фунция <keyword>remove_top</keyword>
+				недоступна, а конкретный тип очередей по приоритету скрыт.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>#module AbstractPrioQueue = (PrioQueue : PRIOQUEUE);;</user-input>
+					<system-response>module AbstractPrioQueue : PRIOQUEUE</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>#AbstractPrioQueue.remove_top;;</user-input>
+					<system-response>Unbound value AbstractPrioQueue.remove_top</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>#AbstractPrioQueue.insert AbstractPrioQueue.empty 1 "hello";;</user-input>
+					<system-response><![CDATA[- : string AbstractPrioQueue.queue = <abstr>]]></system-response>
+				</eval-step>
+			</session>
+			<para>
+				Подобные ограничения можно наложить и при определении
+				структуры:
+			</para>
+			<listing>
+module PrioQueue = (struct ... end : PRIOQUEUE);;
+			</listing>
+			<para>
+				Альтернативный синтаксис таков:
+			</para>
+			<listing>
+module PrioQueue : PRIOQUEUE = struct ... end;;
+			</listing>
+		</section>
+		<section name="Функторы">
+			<para>
+			Функторы - это "функции" для структур. Они используются для
+			параметризации структур: структура A, параметризованная структурой
+			B является функтором F с формальным аргументом B (соответвующим
+			сигнатуре B), возвращающим непосредственно структуру А.
+			Функтор F может быть применен к различным реализациям B
+			типа B<sub>1</sub>...B<sub>n</sub>, вернув в результате
+			структуры А<sub>1</sub>...А<sub>n</sub>, соответственно.
+			</para>
+			<para>
+				Ниже приведен пример структуры, реализующей наборы как
+				упорядоченные списки, и параметризованной структурой,
+				предоставляющей тип элементов набора и функцию сортировки
+				для этого типа (используется, чтобы сохранять списки
+				отсортированными).
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+#type comparison = Less | Equal | Greater;;						
+					</user-input>
+					<system-response>
+type comparison = Less | Equal | Greater						
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input><![CDATA[#module type ORDERED_TYPE =
+  sig
+    type t
+    val compare: t -> t -> comparison
+  end;;
+						]]>
+					</user-input>
+					<system-response><![CDATA[module type ORDERED_TYPE = sig type t val compare : t -> t -> comparison end]]></system-response>
+				</eval-step>
+				<eval-step>
+					<user-input><![CDATA[#module Set =
+   functor (Elt: ORDERED_TYPE) ->
+     struct
+       type element = Elt.t
+       type set = element list
+       let empty = []
+       let rec add x s =
+         match s with
+           [] -> [x]
+         | hd::tl ->
+            match Elt.compare x hd with
+              Equal   -> s         (* x уже помещен в s *)
+            | Less    -> x :: s    (* x меньше любого элемента s *)
+            | Greater -> hd :: add x tl
+       let rec member x s =
+         match s with
+           [] -> false
+         | hd::tl ->
+             match Elt.compare x hd with
+               Equal   -> true     (* x находится в s *)
+             | Less    -> false    (* x меньше любого элемента s *)
+             | Greater -> member x tl
+     end;;]]>
+					</user-input>
+					<system-response><![CDATA[module Set :
+  functor (Elt : ORDERED_TYPE) ->
+    sig
+      type element = Elt.t
+      and set = element list
+      val empty : 'a list
+      val add : Elt.t -> Elt.t list -> Elt.t list
+      val member : Elt.t -> Elt.t list -> bool
+    end]]>
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+				Применив функтор <keyword>Set</keyword> к структуре,
+				реализующей упорядочиваемый тип, мы получим операции
+				для набора этого типа:
+			</para>
+			<session>
+				<eval-step>
+					<user-input><![CDATA[#module OrderedString =
+   struct
+     type t = string
+     let compare x y = if x = y then Equal else if x < y then Less else Greater
+   end;;]]></user-input>
+   					<system-response><![CDATA[module OrderedString :
+  sig type t = string val compare : 'a -> 'a -> comparison end]]>
+   					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input><![CDATA[#module StringSet = Set(OrderedString);;]]>
+					</user-input>
+					<system-response><![CDATA[module StringSet :
+  sig
+    type element = OrderedString.t
+    and set = element list
+    val empty : 'a list
+    val add : OrderedString.t -> OrderedString.t list -> OrderedString.t list
+    val member : OrderedString.t -> OrderedString.t list -> bool
+  end]]>
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+#StringSet.member "bar" (StringSet.add "foo" StringSet.empty);;
+					</user-input>
+					<system-response>
+- : bool = false
+					</system-response>
+				</eval-step>
+			</session>
+		</section>
+		<section name="Функторы и абстрагирование от типа">
+			<para>
+				Как и в примере с <keyword>PrioQueue</keyword> хорошим стилем
+				будет скрыть реализацию типа <keyword>set</keyword>, чтобы пользователи
+				структуры не основывались на том, что она представлена как список, а мы 
+				могли бы впоследствие использовать более эффективную реализацию набора, не
+				заставляя их переписывать код. Достаточно ограничить <keyword>Set</keyword>
+				подходящей сигнатурой функтора.
+			</para>
+			<session>
+				<eval-step>
+					<user-input><![CDATA[#module type SETFUNCTOR =
+   functor (Elt: ORDERED_TYPE) ->
+     sig
+       type element = Elt.t      (* конкретный тип *)
+       type set                  (* абстрактный тип *)
+       val empty : set
+       val add : element -> set -> set
+       val member : element -> set -> bool
+     end;;]]></user-input>
+     			<system-response><![CDATA[module type SETFUNCTOR =
+  functor (Elt : ORDERED_TYPE) ->
+    sig
+      type element = Elt.t
+      and set
+      val empty : set
+      val add : element -> set -> set
+      val member : element -> set -> bool
+    end]]></system-response>
+				</eval-step>
+				<eval-step>
+					<user-input><![CDATA[#module AbstractSet = (Set : SETFUNCTOR);;]]></user-input>
+					<system-response><![CDATA[module AbstractSet : SETFUNCTOR]]></system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>#module AbstractStringSet = AbstractSet(OrderedString);;</user-input>
+					<system-response><![CDATA[module AbstractStringSet :
+  sig
+    type element = OrderedString.t
+    and set = AbstractSet(OrderedString).set
+    val empty : set
+    val add : element -> set -> set
+    val member : element -> set -> bool
+  end]]></system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>#AbstractStringSet.add "gee" AbstractStringSet.empty;;</user-input>
+					<system-response><![CDATA[- : AbstractStringSet.set = <abstr>]]></system-response>
+				</eval-step>
+			</session>
+			<para>
+				Может показаться, что ограничение типа получится элегантнее, если именовать
+				сигнатуру структуры, возвращаемой функтором, а затем использовать эту сигнатуру
+				в ограничении:
+			</para>
+			<session>
+				<eval-step>
+					<user-input><![CDATA[#module type SET =
+   sig
+     type element
+     type set
+     val empty : set
+     val add : element -> set -> set
+     val member : element -> set -> bool
+   end;;]]></user-input>
+   				<system-response><![CDATA[module type SET =
+  sig
+    type element
+    and set
+    val empty : set
+    val add : element -> set -> set
+    val member : element -> set -> bool
+  end]]></system-response>
+				</eval-step>
+				<eval-step>
+					<user-input><![CDATA[module WrongSet = (Set : functor(Elt: ORDERED_TYPE) -> SET);;]]></user-input>
+					<system-response><![CDATA[module WrongSet : functor (Elt : ORDERED_TYPE) -> SET]]></system-response>
+				</eval-step>
+				<eval-step>
+					<user-input><![CDATA[#module WrongStringSet = WrongSet(OrderedString);;]]></user-input>
+					<system-response><![CDATA[module WrongStringSet :
+  sig
+    type element = WrongSet(OrderedString).element
+    and set = WrongSet(OrderedString).set
+    val empty : set
+    val add : element -> set -> set
+    val member : element -> set -> bool
+  end]]></system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>#WrongStringSet.add "gee" WrongStringSet.empty;;</user-input>
+					<system-response><![CDATA[This expression has type string but is here used with type
+  WrongStringSet.element = WrongSet(OrderedString).element]]></system-response>
+				</eval-step>
+			</session>
+			<para>
+				Дело в том, что в модуле <keyword>SET</keyword> тип <keyword>element</keyword>
+				определен как абстрактный, поэтому равенство типов между <keyword>element</keyword>
+				в результате функтора и <keyword>t</keyword> не соблюдается. Следовательно,
+				<keyword>WrongStringSet.element</keyword> и <keyword>string</keyword> имеют
+				разные типы, а потому операции <keyword>WrongStringSet</keyword> не применимы к
+				строкам. Поэтому тип <keyword>element</keyword> в сигнатуре <keyword>SET</keyword>
+				должен быть объявлен как <keyword>Elt.t</keyword>, что, увы, невозможно, поскольку
+				<keyword>SET</keyword> объявлен в контексте, где <keyword>Elt</keyword> не существует.
+				Подобные проблемы в Objective Caml обходятся с помощью конструкции
+				<keyword>with type</keyword>, позволяющей добавить в сигнатуру дополнительные условия
+				равенства типов.
+			</para>
+			<session>
+				<eval-step>
+					<user-input><![CDATA[#module AbstractSet = 
+   (Set : functor(Elt: ORDERED_TYPE) -> (SET with type element = Elt.t));;]]></user-input>
+   				<system-response><![CDATA[module AbstractSet :
+  functor (Elt : ORDERED_TYPE) ->
+    sig
+      type element = Elt.t
+      and set
+      val empty : set
+      val add : element -> set -> set
+      val member : element -> set -> bool
+    end]]></system-response>
+				</eval-step>
+			</session>
+			<para>Как и в случае простых структур, для определения функторов и
+				ограничения их результатов существует альтернативный синтаксис:
+			</para>
+			<listing><![CDATA[module AbstractSet(Elt: ORDERED_TYPE) : (SET with type element = Elt.t) =
+  struct ... end;;
+			]]></listing>
+			<para>
+				Абстагирование от типа в функторе позволяет добиться высокой степени
+				безопасности типов. Например, функция сортировки может отличаться от той, что
+				используется в <keyword>OrderedString</keyword> - допустим, что при сортировке
+				не учитывается регистр символов.
+			</para>
+			<session>
+				<eval-step>
+					<user-input><![CDATA[#module NoCaseString =
+   struct
+     type t = string
+     let compare s1 s2 =
+       OrderedString.compare (String.lowercase s1) (String.lowercase s2)
+   end;;]]></user-input>
+   				<system-response><![CDATA[module NoCaseString :
+  sig type t = string val compare : string -> string -> comparison end]]></system-response>
+				</eval-step>
+				<eval-step>
+					<user-input><![CDATA[#module NoCaseStringSet = AbstractSet(NoCaseString);;]]></user-input>
+					<system-response><![CDATA[module NoCaseStringSet :
+  sig
+    type element = NoCaseString.t
+    and set = AbstractSet(NoCaseString).set
+    val empty : set
+    val add : element -> set -> set
+    val member : element -> set -> bool
+  end]]></system-response>
+				</eval-step>
+				<eval-step>
+					<user-input><![CDATA[#NoCaseStringSet.add "FOO" AbstractStringSet.empty;;]]></user-input>
+					<system-response><![CDATA[This expression has type
+  AbstractStringSet.set = AbstractSet(OrderedString).set
+but is here used with type
+  NoCaseStringSet.set = AbstractSet(NoCaseString).set]]></system-response>
+				</eval-step>
+			</session>
+			<para>
+				Типы <keyword>AbstractStringSet.set</keyword> и <keyword>NoCaseStringSet.set</keyword>
+				не совместимы, и их значения не равны. Это правильное поведение: несмотря на то, что оба
+				содержат элементы одного типа (строки), в них используются разные функции сортировки,
+				соотвественно, операции должны поддерживать разные инварианты. Использование операций
+				<keyword>AbstractStringSet</keyword> для значений типа
+				<keyword>NoCaseStringSet.set</keyword> приведет к неправильным результатам и
+				созданию списков, нарушающих инварианты <keyword>NoCaseStringSet</keyword>.
+			</para>
+		</section>
+		<section name="Модули и раздельная компиляция">
+			<para>
+				До сих пор о модулях рассказывалось в контексте интерактивной системы. Однако
+			особенно полезны они в больших программах, предназначенных для пакетной компиляции.
+			В подобных случаях практически необходимо разделять исходный текст на несколько
+			файлов (единиц компиляции), и компилировать их раздельно, чтобы после внесения
+			изменений повторно компилировать минимум текстов.
+			</para>
+			<para>
+				В Objective Caml единицы компиляции - это особый случай структур и сигнатур,
+				причем отношения между этими единицами легко описываются в терминах системы 
+				модулей. Единица компиляции <keyword>a</keyword> включает в себя два файла:
+			</para>
+			<list>
+				<item>
+					<para>
+						Реализация <command>a.ml</command>, включающая определения, как в 
+						блоке <keyword>struct...end</keyword>.
+					</para>
+				</item>
+				<item>
+					<para>
+						Интерфейс <command>a.mli</command>, содержащий спецификации, как 
+						в блоке <keyword>sig...end</keyword>.
+					</para>
+				</item>
+			</list>
+			<para>
+				Оба эти файла описывают структуру <keyword>А</keyword> (то же имя, что и
+				<keyword>a</keyword>, но с первой заглавной буквой, как если бы было введено
+				следующее определение: 
+			</para>
+			<listing><![CDATA[module A: sig (* содержимое файла a.mli *) end
+ = struct (* содержимое файла a.ml *) end;;]]>
+			</listing>
+			<para>
+				Файлы, составляющие единицу, компилируются отдельно, командой <command>ocamlc -c</command>
+				(ключ <command>-c</command> означает "только компиляция без компоновки"), что дает
+				файлы с расширениями <command>.cmi</command> для интерфейса и <command>.cmo</command>
+				для объектного кода. По окончании единиц объектные файлы компонуются командой 
+				<command>ocamlc</command>. Следующте команды компилирую и компонуют программу из 
+				единиц <command>aux</command> и <command>main</command>.
+			</para>
+			<command-session>
+				<command-line>
+					<input prompt="$"><![CDATA[
+$ ocamlc -c aux.mli                     # создает aux.cmi
+$ ocamlc -c aux.ml                      # создает aux.cmo
+$ ocamlc -c main.mli                    # создает main.cmi
+$ ocamlc -c main.ml                     # создает main.cmo
+$ ocamlc -o theprogram aux.cmo main.cmo]]>
+					</input>
+				</command-line>
+			</command-session>
+			<para>
+				Программа будет работать так, будто были введены следующие определения:
+			</para>
+			<listing><![CDATA[module Aux: sig (* contents of aux.mli *) end
+          = struct (* contents of aux.ml *) end;;
+module Main: sig (* contents of main.mli *) end
+           = struct (* contents of main.ml *) end;;]]></listing>
+      <para>
+      	<keyword>Main</keyword> может ссылаться на <keyword>Aux</keyword>:
+      	определения и объявления в <keyword>main.ml</keyword> могут использовать
+      	определения и объявления из <keyword>aux.ml</keyword> c помощью нотации
+      	<keyword>Aux.ident</keyword>, если соответствующие определения экспортируются
+      	в файле <command>aux.mli</command>.
+      </para>
+      <para>
+      	Объектные файлы передаются компилятору в порядке следования определений модуля.
+      	В примере выше <keyword>Aux</keyword> идет первым, поэтому <keyword>Main</keyword>
+      	может ссылаться на него, но <keyword>Aux</keyword> не может ссылаться на
+      	<keyword>Main</keyword>.
+      </para>
+      <para>
+      	На раздельно компилируемые файлы отображаются только структуры верхнего уровня, но
+      	никак не функторы или типы модулей. Впрочем, подобные объекты могут входить в
+      	структуру, а те отображаются на файлы. 
+      </para>
+		</section>
+	</main-matters>
+</chapter>

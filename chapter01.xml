@@ -1,0 +1,1214 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter SYSTEM "core.dtd">
+<chapter number="1" name="Описание языка">
+	<abstract>
+		<para>В этой части содержится учебное введение в язык Objective Caml.
+			Подразумевается, что читатель хорошо владеет навыками программирования 
+			на императивных языках (типа Pascal или C), однако знание функциональных 
+			языков не требуется. В главе 3 описываются объектно-ориентированные
+			возможности, а в главе 2 - система модулей. 
+		</para>
+	</abstract>
+	<main-matters>
+		<section name="Основы">
+			<para>
+				Для обзора Caml используется интерактивная система, которая запускается
+				командой <command>ocaml</command> из оболочки Unix или приложением
+				<command>Ocamlwin.exe</command> в среде Windows. Все введение представляет
+				собой журнал одной сессии.
+			</para>
+			<para>
+				Интерактивная система выводит приглашение 
+				<command>#</command>, ожидает от пользователя ввода фраз Caml, которые
+				тот заканчивает символами <keyword>;;</keyword>, затем 
+				компилирует их на лету, выполняeт и выводит результат. Фразы могут быть
+				простыми выражениями или определениями идентификаторов
+				(переменных или функций) <keyword>let</keyword>.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>1+2*3;;</user-input>
+					<system-response>- : int = 7</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						let pi = 4.0 *. atan 1.0;;
+					</user-input>
+					<system-response>
+						val pi : float = 3.14159265359
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						let square x = x *. x;;
+					</user-input>
+					<system-response>
+						val square : float -&gt; float = &lt;fun&gt;
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						square(sin pi) +. square(cos pi);;
+					</user-input>
+					<system-response>
+						- : float = 1.
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+				Система Caml вычисляет как значение, так и тип фразы. Даже в случае
+				с аргументами функции явное указание типа не требуется. Оно выводится из
+				того, как переменные используются внутри функции. Но следует обратить
+				внимание на то, что целые числа и числа с плавающей точкой являются
+				разными типами с разными операторами: + и * предназначены для целых, а 
+				+. и *. <mdash/> для чисел с плавающей точкой.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						1.0 * 2;;
+					</user-input>
+					<system-response>
+						This expression has type float but is here used with type int
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+				Рекурсивные функции определяются конструкцией <keyword>let rec</keyword>.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						let rec fib n = if n &lt; 2 then 1 else fib(n - 1) + fib(n -2);;
+					</user-input>
+					<system-response>
+						val fib: int -&gt; = &lt;fun&gt;
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						fib 10;;
+					</user-input>
+					<system-response>
+						-: int = 89
+					</system-response>
+				</eval-step>
+			</session>
+		</section>
+		<section name="Типы данных">
+			<para>
+				Помимо целых чисел и чисел с плавающей точкой Caml поддерживает 
+				обычные типы данных - булевы значения, символы и символьные строки.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						(1 &lt; 2) = false;;
+					</user-input>
+					<system-response>
+						- : bool = false
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						'a';;
+					</user-input>
+					<system-response>
+						- : char = 'a'
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						"Hello world";;
+					</user-input>
+					<system-response>
+						- : string = "Hello world"
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+				Кроме того, предопределены такие типы, как кортеж,
+				список и массив. Существует
+				также механизм добавления новых типов данных,
+				но он будет рассмотрен позднее, а сейчас речь пойдет
+				о списках. Списки задаются либо как перечень значений, разделенных
+				точкой с запятой, в квадратных скобках, либо строятся из 
+				пустого списка <keyword>[]</keyword> (он же "nil"), в 
+				начало которого с помощью оператора <keyword>::</keyword> 
+				(или "cons") добавляются элементы.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						let l = ["is"; "a"; "tale"; "told"; "etc."];;
+					</user-input>
+					<system-response>
+						val l : string list = ["is"; "a"; "tale"; "told"; "etc."]
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						"Life" :: l;;
+					</user-input>
+					<system-response>
+						- :  string list = ["Life"; "is"; "a"; "tale"; "told"; "etc."]
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+				Списки, как и другие структуры данных, не надо явно размещать и уничтожать
+				в памяти: в Caml управление памятью полностью автоматическое. Аналогично,
+				явного управления указателями нет - компилятор Caml сам при необходимости
+				создает указатели.
+			</para>
+			<para>
+				Исследование и изменение структуры списков, как и большинства других структур
+				данных осуществляется с помощью поиска по образцу. Образцы в этом случае записываются
+				в той же форме, что и определения списков, а идентификатор представляет неизвестную часть
+				списка. Вот пример сортировки списка вставкой:
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+					let rec sort lst = <lb/>
+						<tab/>match lst with <lb/>
+							<tab/><tab/>[] -&gt; []<lb/>
+						<tab/>| head :: tail -&gt; insert head (sort tail)<lb/>
+					and insert elt lst = <lb/>
+						<tab/>match lst with<lb/>
+							<tab/><tab/>[] -&gt; [elt]<lb/>
+						<tab/>| head :: tail -&gt; if elt &lt;= head then elt :: lst else head :: insert elt tail;;
+				</user-input>
+				<system-response>
+					val sort: 'a list -&gt; 'a list = &lt;fun&gt;<lb/>
+					val insert 'a -&gt; 'a list -&gt; 'a list = &lt;fun&gt;
+				</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						sort l;;
+					</user-input>
+					<system-response>
+						-: string list = ["a"; "etc."; "is"; "tale"; "told"]
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+			Тип данных, вычисленный для функции <keyword>sort</keyword>(<keyword>'a list -&gt; 'a list</keyword>),
+			означает, что она может работать со списками, состоящими из данных любого типа и возвращать
+			такие же списки. Тип <keyword>'a</keyword> является переменным типом и может соответствовать
+			любому типу данных. Функция <keyword>sort</keyword> может работать со списками, состоящими из
+			любых типов, поскольку операции сравнения в Caml (=, &lt;= и т.д.) полиморфичны: они работают с
+			любыми переменными одного типа. Таким образом, и функция <keyword>sort</keyword> становится
+			полиморфичной.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						sort [6;2;5;3;];;
+					</user-input>
+					<system-response>
+						- : int list = [2; 3; 5; 6]
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						sort [3.14; 2.718];;
+					</user-input>
+					<system-response>
+						- : float list = [2.718; 3.14]
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+				Функция <keyword>sort</keyword> не изменяет исходный список. Она строит и возвращает новый
+				список, состоящий из тех же элементов, расположенных в порядке возрастания. В Caml нет возможности
+				изменить уже созданный список, поэтому он является неизменяемым (immutable). То же самое относится
+				к большинству структур данных в Caml, однако существуют и изменяемые (mutable) типы (в первую очередь,
+				массивы).
+			</para>
+		</section>
+		<section name="Функции как значения">
+			<para>Caml - функциональный язык. Он поддерживает функции в
+				математическом смысле, так что последние могут обрабатываться
+				как обычные данные. Например, функция <keyword>deriv</keyword> 
+				принимает в качестве аргумента любую функцию, оперирующую
+				числами с плавающей точкой, и возвращает ее производную:</para>
+			<session>
+				<eval-step>
+					<user-input>let deriv f dx = function x -&gt; (f (x +. dx)
+						-. f(x)) /. dx;;</user-input>
+					<system-response>val deriv: (float -&gt; float) -&gt; float
+						-&gt; float -&gt; float = &lt;fun&gt; </system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>let sin' = deriv sin 1e-6;;</user-input>
+					<system-response>val sin' : float -> float = &lt;fun&gt; </system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>sin' pi;;</user-input>
+					<system-response>-: float = -1.00000000014</system-response>
+				</eval-step>
+			</session>
+			<para>Можно определять даже составные функции:</para>
+			<session>
+				<eval-step>
+					<user-input>let compose f g = function x -&gt; f(g(x));;</user-input>
+					<system-response>val compose: ('a -&gt; 'b) -> ('c ->&gt; 
+						'a) -&gt; 'c -&gt; 'b = &lt;fun&gt; </system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>let cos2 = compose square cos;;</user-input>
+					<system-response>val cos2: float -&gt; float = &lt;fun&gt; </system-response>
+				</eval-step>
+			</session>
+			<para>Функции, принимающие в качестве аргумента другие функции,
+				называются "функционалами" или "функциями высшего порядка". Они
+				особенно удобны, когда возникает потребность в итераторе или
+				подобной ему операции для структуры данных. Стандартная
+				библиотека Caml включает фукнкционал <keyword>List.map</keyword>
+				, применяющий функцию к каждому элементу списка и возвращающий
+				список, составленный из результатов функции.</para>
+			<session>
+				<eval-step>
+					<user-input>List.map(function n -&gt; n*2 + 1) [0;1;2;3;4];;</user-input>
+					<system-response>- : int list = [1; 3; 5; 7; 9] </system-response>
+				</eval-step>
+			</session>
+			<para>Этот функционал, как и некоторые другие функционалы для
+				массивов и списков предопределен, так как он часто бывает
+				полезен, однако в нем нет ничего необычного, и он может быть
+				записан следующим образом:</para>
+			<session>
+				<eval-step>
+					<user-input>let rec map f l = <lb/> <tab/>match l with 
+						<tab/><tab/>[] -&gt; [] <tab/> | hd :: tl -&gt; f hd ::
+						map f tl;;</user-input>
+					<system-response>val map: ('a -&gt; 'b) -&gt; 'a list 'b
+						list = &lt;fun&gt; </system-response>
+				</eval-step>
+			</session>
+		</section>
+		<section name="Записи и варианты">
+			<para>Пользовательские типы данных включают записи и варианты. И те,
+				и другие определяются декларацией <keyword>type</keyword>. Ниже
+				приведено определение типа рационального числа в виде записи.</para>
+			<session>
+				<eval-step>
+					<user-input>
+						type ratio = {num: int; denum: int};;
+					</user-input>
+					<system-response>
+						type ratio =  {num: int; denum: int};;
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						let add_ratio r1 r2 =<lb/>
+						<tab/>{num = r1.num * r2.denum + r2.num * r1.denum;
+						<tab/>{denum = r1.denum * r2.denum};;
+					</user-input>
+					<system-response>
+						val add_ratio : ratio -&gt; ratio -&gt; ratio = &lt;fun&gt;
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						add_ratio {num = 1; denum =3} {num = 2; denum =5};;
+					</user-input>
+					<system-response>
+						- : ratio = {num=11; denum=15}
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+				В определении вариантного типа перечисляются все возможные формы его значения.
+				Каждая из них задается по имени, которое называется конструктором и служит как
+				для создания значений вариантного типа, так и для исследования путем сопоставления
+				с образцом. Конструкторы записываются с заглавной буквы - так их можно отличить
+				от имен переменных (последние должны начинаться со строчной). Вот, например, 
+				вариантный тип для смешанной арифметики, допускающей операции с целыми и числами
+				с плавающей точкой:
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						type number = Int of int | Float of float | Error;;
+					</user-input>
+					<system-response>
+						type number = Int of int | Float of float | Error
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+				Значение типа <keyword>number</keyword> может быть целым, числом с плавающей точкой,
+				или константой <keyword>Error</keyword>, соответсвующей результату недопустимой операции
+				(например, деления на ноль).
+			</para>
+			<para>
+				Особым случаем вариантных типов являются перечисляемые типы. Все альтернативы в них -
+				константы.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>type sign = Positive | Negative;;</user-input>
+					<system-response>type sign = Positive | Negative</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>let sign_int n = if n =&gt; 0 then Positive else Negative;;</user-input>
+					<system-response>val sign_int: int -&gt; sign = &lt;fun&gt;</system-response>
+				</eval-step>
+			</session>
+			<para>
+				При определении арифметических функий с типом <keyword>number</keyword> используется
+				сравнение по образцу двух чисел, участвующих в операции.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						let add_num n1 n2 = <lb/>
+						<tab/>match (n1, n2) with<lb/>
+						<tab/><tab/>(Int i1, Int i2) -&gt;<lb/>
+						<tab/><tab/><tab/>(* Проверка на переполнение при сложении целых *)<lb/>
+						<tab/><tab/><tab/>if sign_int i1 = sign_int i2 &amp;&amp; sign_int(i1 + i2) &lt;&gt; sign_int i1<lb/>
+						<tab/><tab/><tab/>then Float(float i1 +. float i2)<lb/>
+						<tab/><tab/><tab/>else Int(i1 + i2)<lb/>
+						<tab/>| (Int i1, Float f2) -&gt; Float(float i1 +. f2)<lb/>
+						<tab/>| (Float f1, Int i2) -&gt; Float(f1 +. float i2)<lb/>
+						<tab/>| (Float f1, Float f2) -&gt; Float(f1 +. f2)<lb/>
+						<tab/>| (Error, _) -&gt; Error<lb/>
+						<tab/>| (_, Error) -&gt; Error;;
+					</user-input>
+					<system-response>val add_num: number -&gt; number -&gt; number = &lt;fun&gt;</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>add_num Int(123) Float(3.14159);;</user-input>
+					<system-response>-: number Float 126.14159</system-response>
+				</eval-step>
+			</session>
+			<para>
+				Чаще всего вариантные типы используются для описания рекурсивных структур данных. Вот, например,
+				бинарное дерево:
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						type 'a btree = Empty | Node of 'a * 'a btree * 'a btree;;
+					</user-input>
+					<system-response>type 'a btree = Empty | Node of 'a * 'a btree * 'a btree</system-response>
+				</eval-step>
+				
+			</session>
+			<para>
+				Это определение читается следующим образом: бинарное дерево, содержащее значения типа
+				<keyword>'a</keyword> (то есть, произвольные) либо пусто, либо является узлом, содержащим
+				одно значение типа <keyword>'a</keyword> и два поддерева, каждое из которых также содержит
+				значение типа <keyword>'a</keyword>, точнее <keyword>'a btree</keyword>.
+			</para>
+			<para>
+				Операции с бинарными деревьями записываются в виде рекурсивных функций той же структуры,
+				что и определение типа. Вот, например, операции поиска и вставки в упорядоченное бинарное
+				дерево (элементы возрастают слева направо):
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						let rec member x btree = <lb/>
+						<tab/>match btree with<lb/>
+						<tab/><tab/>Empty -&gt; false
+						<tab/><tab/>| Node(y, left, right) -&gt;
+						<tab/><tab/><tab/>if x = y then true else
+						<tab/><tab/><tab/>if x &lt; y then member x left else member x right;;
+					</user-input>
+					<system-response>val member : 'a -&gt; 'a btree -&gt; bool = &lt;fun&gt;</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						let insert x btree = <lb/>
+						<tab/>match btree with<lb/>
+						<tab/><tab/>Empty -&gt; Node (x, Empty, Empty)<lb/>
+						<tab/><tab/>| Node(y, left, right) -&gt; <lb/>
+						<tab/><tab/><tab/>if x &lt;= y then Node(y, insert x left, right)<lb/>
+						<tab/><tab/><tab/>else Node(y, left, insert x right);;
+					</user-input>
+					<system-response>val insert : 'a -&gt; 'a btree -&gt; 'a btree = &lt;fun&gt;</system-response>
+				</eval-step>
+			</session>
+		</section>
+		
+		<section name="Императивные возможности">
+			<para>До сих пор все примеры были написаны исключительно в аппликативном стиле, однако Caml включает
+			и полный набор императивных возможностей - циклы <keyword>for</keyword> и <keyword>while</keyword>, 
+			а также изменяемые структуры данных, в частности, массивы. Массивы задаются либо как список в квадратных
+			скобках <keyword>[|</keyword> и <keyword>|]</keyword>, либо заполняются после вызова функции
+			<keyword>Array.create</keyword>. Приведенная ниже функция поэлементно складывает два вектора,
+			представленных как массив из чисел с плавающей точкой.
+			</para> 
+			<session>
+				<eval-step>
+					<user-input>
+							let add_vect v1 v2 = <lb/>
+							<tab/> let len = min (Array.length v1) (Array.length v2) in<lb/>
+							<tab/> let res = Array.create len 0.0 in<lb/>
+							<tab/> for i = 0 to len - 1 do<lb/>
+							<tab/><tab/>res.(i) &lt;- v1.(i) + v2.(1)<lb/>
+							<tab/>done;
+							<tab/>res;;
+					</user-input>
+					<system-response>
+						val add_vect : float_array -&gt; float_array -&gt; float_array = &lt;fun&gt;
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						add_vect [| 1.0; 2.0 |] [| 3.0; 4.0|];;
+					</user-input>
+					<system-response>- : float_array[| 4.0; 6.0 |]</system-response>
+				</eval-step>
+			</session>
+			<para>
+				Записи также могут быть изменены оператором присваивания, если при их определении использовалось
+				ключевое слово <keyword>mutable</keyword>. 
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						type mutable_point = { mutable x : float; mutable y : float };;
+					</user-input>
+					<system-response>
+						type mutable_point = { mutable x : float; mutable y : float }
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						let translate p dx dy = <lb/>
+						<tab/>p.x &lt;- p.x +. dx; p.y &lt;- p.y +. dy;;
+					</user-input>
+					<system-response>
+						val translate : mutable_point -&gt; float -&gt; float -&gt; unit = &lt;fun&gt;
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						let mypoint = { x = 0.0; y = 0.0 };;
+					</user-input>
+					<system-response>
+						val mypoint : mutable_point =  { x = 0.  ; y = 0. }
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						translate mypoint 1.0 2.0;;
+					</user-input>
+					<system-response>
+						- : unit = ()
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						mypoint;;
+					</user-input>
+					<system-response>
+						-  : mypoint = { x = 1. ; y = 2. }
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+				В Caml отсутвует понятие переменной, как идентификатора, текущее
+				значение которого может быть изменено операцией	присваивания.
+				(<keyword>let</keyword> на самом деле не присваивает переменной значение,
+				а создает новый идентификатор с новой областью видимости.) Тем не менее
+				стандартная библиотека включает ссылки, то есть изменяемые области памяти
+				(или массивы из одного элемента). Оператор <keyword>!</keyword> 
+				используется для получения текущего значения ссылки,
+				а оператор <keyword>:=</keyword> - для его изменения.
+				Вот пример сортировки вставкой, изменяющий массив:
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						let insertion_sort a = <lb/>
+						<tab/>for i = 1 to Array.length a - 1 do<lb/>
+						<tab/><tab/>let val_i = a.(i) in<lb/>
+						<tab/><tab/>let j = ref i in <lb/>
+						<tab/><tab/>while !j &gt; 0 &amp;&amp; val_i &lt; a.(!j - 1) do<lb/>
+						<tab/><tab/><tab/>a.(!j) &lt;- a.(!j - 1)<lb/>
+						<tab/><tab/><tab/>j := j - 1<lb/>
+						<tab/><tab/>done;<lb/>
+						<tab/><tab/>a.(!j) &lt;- val_i
+						done;;
+					</user-input>
+					<system-response>val insertion_sort : 'a array = &lt;fun&gt;</system-response>
+				</eval-step>
+			</session>
+			<para>Другое применение ссылки находят в функциях, сохраняющих состояние
+				между вызовами. Например, генератор псевдослучайных чисел ниже запоминает
+				последнее возвращенное значение:</para>
+			<session>
+				<eval-step>
+					<user-input>
+						let current_rand = ref 0;;
+					</user-input>
+					<system-response>
+						val current_rand : int ref = { contents = 0 }
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						let random () = <lb/>
+						<tab/>current_rand := !current_rand * 25713 + 1345;
+						<tab/>!current_rand;;
+					</user-input>
+					<system-response>val random : unit -&gt; int = &lt;fun&gt;</system-response>
+				</eval-step>
+			</session>
+			<para>
+				Как уже говорилось, в ссылках нет ничего необычного - они реализованы как массивы
+				из одного элемента:
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						type 'a ref = { mutable contents : 'a };;
+					</user-input>
+					<system-response>
+						type 'a ref = { mutable contents : 'a; }
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						let (!) r = r.contents;;
+					</user-input>
+					<system-response>
+						val ( ! ) : 'a ref -&gt; 'a = &lt;fun&gt;
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						let (:=) r newval = r.contents &lt;- newval;;
+					</user-input>
+					<system-response>
+						val ( := ) : 'a ref -&gt; 'a -&gt; unit = &lt;fun&gt;
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+				В некоторых случаях требуется сохранить полиморфную функцию в структуре данных,
+				сохранив ее полиморфность. Без пользовтельского описания типа данных это невозможно,
+				так как полиморфизм существует только на глобальном уровне. Однако поля структуры
+				можно явно описать как полиморфные.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						type idref = {mutable id: 'a. 'a -> 'a};;
+					</user-input>
+					<system-response>
+						type idref = { mutable id: 'a. 'a -> 'a; }
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						let r = { id = fun x -&gt; x };;
+					</user-input>
+					<system-response>
+						val r : idref = { id = &lt;fun&gt; }
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						let g s = (s.id 1, s.id true);;
+					</user-input>
+					<system-response>
+						val g : idref -&gt; int * bool = &lt;fun&gt;
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						r.id &lt;- (fun x -&gt; print_string "called id\n"; x);;
+					</user-input>
+					<system-response>
+						- : unit = ()
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						g r;;
+					</user-input>
+					<system-response>
+						called id<lb/>
+						called id<lb/>
+						- : (int * bool) = (1, true)
+					</system-response>
+				</eval-step>
+			</session>
+		</section>
+		
+		<section name="Исключения">
+			<para>Исключения используются в Ocaml для оповещения об исключительных ситуациях и
+			для их обработки. Кроме того, они могут применяться как нелокальные контрольные
+			структуры общего назначения. Исключения объявляются блоком
+				<keyword>exception</keyword> и возбуждаются оператором <keyword>raise</keyword>.
+				Функция ниже возвращает первый списка и возбуждает исключение, если получает в
+				качестве параметра пустой список.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						exception Empty_list;;
+					</user-input>
+					<system-response>
+						exception Empty_list
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						let head l =<lb/>
+						<tab/>match l with<lb/>
+						<tab/><tab/>[] -&gt; raise Empty_list<lb/>
+						<tab/>hd :: tl -&gt; hd;;
+					</user-input>
+					<system-response>
+						val head : 'a list -&gt; 'a = &lt;fun&gt;
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+					head [1;2];;
+					</user-input>
+					<system-response>
+					- : int = 1
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						head [];;
+					</user-input>
+					<system-response>
+						Exception: Empty_list
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+				В стандартной библиотеке исключения сообщают о ситуациях, когда
+				функции не могут завершить работу в обычном порядке. Например, функция
+				<keyword>List.accoc</keyword>, возвращающая значение, ассоциированное с 
+				ключом в списке пар ключ-значение, возбуждает предопределенное исключение 
+				<keyword>Not_found</keyword>, если заданного ключа в списке нет.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						List.assoc 1 [(0, "zero"); (1, "one")];;
+					</user-input>
+					<system-response>
+						- : string = "one"
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						List.assoc 2 [(0, "zero"); (1, "one")];;
+					</user-input>
+					<system-response>
+						Exception: Not_found
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+				Исключение перехватываются блоком <keyword>try... with</keyword>:
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						let name_of_binary_digit = <lb/>
+						<tab/>try<lb/>
+						<tab/><tab/>List_assoc digit [(0, "zero"); (1, "one")]<lb/>
+						<tab/>with Not_found -&gt;<lb/>
+						<tab/><tab/>"not a binary digit";;
+					</user-input>
+					<system-response>
+						val name_of_binary_digit : int -&gt; string = &lt;fun&gt;
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						name_of_binary_digit 0;;
+					</user-input>
+					<system-response>
+						- : string = "zero"
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						name_of_binary_digit (-1);;
+					</user-input>
+					<system-response>
+						- : string = "not a binary digit"
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+				В ветви <keyword>with</keyword> на самом деле выполняется сравнение с
+				образцом. Таким образом, в блоке <keyword>try... with</keyword> можно
+				перехватить несколько исключений. Финализация же может выглядеть как
+				перехват всех исключений, выполнение некоторых финальных действий и 
+				повторный выброс исключения.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						let temporarily_set_reference ref newval funct = <lb/>
+						<tab/>let oldval = !ref in<lb/>
+						<tab/>try<lb/>
+						<tab/><tab/>ref := newval;<lb/>
+						<tab/><tab/>let res = funct() in<lb/>
+						<tab/><tab/>ref := oldval;<lb/>
+						<tab/><tab/>res<lb/>
+						<tab/>with x -&gt;
+						<tab/><tab/>let ref := oldval;<lb/>
+						<tab/><tab/>raise x;;
+					</user-input>
+					<system-response>
+						val temporarily_set_reference : 'a -&gt; 'a -&gt; (unit -&gt; 'b) -&gt; 'b = &lt;fun&gt;
+					</system-response>
+				</eval-step>
+			</session>
+		</section>
+		<section name="Символическая обработка выражений">
+			<para>
+				Введение завершается более полным примером, демонстрирующим применение
+				Caml для символической обработки: формальные манипуляции арифметическими
+				выражениями с переменными. Следующий вариантный тип описывает допустимые
+				выражения:
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						type expression = <lb/>
+						<tab/>Const of Float<lb/>
+						<tab/>| Var of String<lb/>
+						<tab/>| Sum of expression * expression (* e1 + e2 *)<lb/>
+						<tab/>| Diff of expression * expression (* e1 - e2 *)<lb/>
+						<tab/>| Prod of expression * expression   (* e1 * e2 *)<lb/>
+   						<tab/>| Quot of expression * expression   (* e1 / e2 *)<lb/>
+   						;;
+					</user-input>
+					<system-response>
+						type expression =<lb/>
+    <tab/>Const of float<lb/>
+  <tab/>| Var of string<lb/>
+  <tab/>| Sum of expression * expression<lb/>
+  <tab/>| Diff of expression * expression<lb/>
+  <tab/>| Prod of expression * expression<lb/>
+  <tab/>| Quot of expression * expression
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+				Для начала определим функцию, которая будет вычислять выражение
+				по заданным аргументам (они будут передаваться как пары имена-значения).
+				Для простоты аргументы оформляются в виде ассоциативного списка.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						exception Unbound_variable of string;;
+					</user-input>
+					<system-response>
+						exception Unbound_variable of string
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						let rec eval env exp = <lb/>
+						<tab/>match exp with<lb/>
+						<tab/><tab/>Const c -&gt; c<lb/>
+						<tab/><tab/>| Var v ->&gt;<lb/>
+						<tab/><tab/><tab/>(try List.assoc v env with Not_found -&gt; raise(Unbound_variable v))<lb/>
+						<tab/><tab/>| Sum(f, g) -&gt; eval env f +. env g<lb/>
+						<tab/><tab/>| Diff(f, g) -&gt; eval env f -. env g<lb/>
+						<tab/><tab/>| Prod(f, g) -&gt; eval env f *. env g<lb/>
+						<tab/><tab/>| Quot(f, g) -&gt; eval env f /. env g;;
+					</user-input>
+					<system-response>
+						var eval : (sting * float) list -&gt; expression -&gt; float = &lt;fun&gt;
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						eval [("x", 1.0); ("y", 3.14)] (Prod(Sum(Var "x", Const 2.0), Var "y"));;
+					</user-input>
+					<system-response>
+						- : float = 9.42
+					</system-response>
+				</eval-step>
+			</session>
+			<para>
+				Непосредственно для символической обработки служит
+				производная выражения по модулю <keyword>dv</keyword>.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						let rec deriv exp dv =<lb/>
+   						<tab/>match exp with<lb/>
+     					<tab/><tab/>Const c -&gt; Const 0.0<lb/>
+						<tab/><tab/>| Var v -&gt; if v = dv then Const 1.0 else Const 0.0<lb/>
+   						<tab/><tab/>| Sum(f, g) -&gt; Sum(deriv f dv, deriv g dv)<lb/>
+   						<tab/><tab/>| Diff(f, g) -&gt; Diff(deriv f dv, deriv g dv)<lb/>
+						<tab/><tab/>| Prod(f, g) -&gt; Sum(Prod(f, deriv g dv), Prod(deriv f dv, g))<lb/>
+						<tab/><tab/>| Quot(f, g) -&gt; Quot(Diff(Prod(deriv f dv, g), Prod(f, deriv g dv)),<lb/>
+                        <tab/><tab/><tab/>Prod(g, g))<lb/>
+                        ;;
+					</user-input>
+					<system-response>
+						val deriv : expression -&gt; string -&gt; expression = &lt;fun&gt;
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						deriv (Quot(Const "1.0", Var "x")) "x";; 
+					</user-input>
+					<system-response>
+						- : expression = <lb/>
+						<tab/>Quot(Diff(Prod(Const 0., Var "x"),  Prod (Const 1., Const 1.)),<lb/>
+						<tab/><tab/>Prod (Var "x", Var "x"))
+					</system-response>
+				</eval-step>
+			</session>
+			
+		</section>
+		<section name="Вывод и лексический разбор">
+			<para>
+				По предыдущим примерам видно, что внутренее представление (или
+				абстрактный синтаксис) выражений становится трудным как для чтения,
+				так и для написания по мере роста этих выражений. Нам нужны функции
+				вывода и лексического разбора, чтобы переключаться между абстракным
+				и конкретным синтаксисом (то есть, привычной алгебраической нотацией
+				вида <keyword>2 * x + 1</keyword>.
+			</para>
+			<para>
+				Для функции вывода стоит воспользоваться стандартными правилами
+				приоритета операторов (то есть, <keyword>*</keyword> выполяется раньше
+					<keyword>+</keyword>), что позволит избежать вывода ненужных скобок.
+					Поэтому скобки будут печаться лишь в том случае, когда текущий оператор
+					должен выполняться с особым приоритетом.
+			</para>
+			<session>
+				<eval-step>
+					<user-input>
+						let print_exp exp = <lb/>
+						<tab/>(* Определение локальных функций *)<lb/>
+						<tab/>let open_paren prec op_prec =<lb/>
+     					<tab/><tab/>if prec > op_prec then print_string "(" in<lb/>
+     					<tab/>let close_paren prec op_prec =<lb/>
+     					<tab/><tab/>if prec > op_prec then print_string ")" in<lb/>
+     					<tab/> let rec print prec exp =     (* prec -- приоритет текущего оператора *)<lb/>
+     					<tab/><tab/>match exp with
+       					<tab/><tab/><tab/>Const c -&gt; print_float c
+     					<tab/><tab/><tab/>| Var v -&gt; print_string v
+     					<tab/><tab/><tab/>| Sum(f, g) -&gt;
+         				<tab/><tab/><tab/><tab/>open_paren prec 0;
+        				<tab/><tab/><tab/><tab/>print 0 f; print_string " + "; print 0 g;
+        				<tab/><tab/><tab/><tab/>close_paren prec 0
+     					<tab/><tab/><tab/>| Diff(f, g) -&gt;
+         				<tab/><tab/><tab/><tab/>open_paren prec 0;
+         				<tab/><tab/><tab/><tab/>print 0 f; print_string " - "; print 1 g;
+         				<tab/><tab/><tab/><tab/>close_paren prec 0
+     					<tab/><tab/><tab/>| Prod(f, g) -&gt;
+         				<tab/><tab/><tab/><tab/>open_paren prec 2;
+         				<tab/><tab/><tab/><tab/>print 2 f; print_string " * "; print 2 g;
+         				<tab/><tab/><tab/><tab/>close_paren prec 2
+     					<tab/><tab/><tab/>| Quot(f, g) -&gt;
+         				<tab/><tab/><tab/><tab/>open_paren prec 2;
+         				<tab/><tab/><tab/><tab/>print 2 f; print_string " / "; print 3 g;
+         				<tab/><tab/><tab/><tab/>close_paren prec 2
+   						<tab/><tab/>in print 0 exp;;
+					</user-input>
+					<system-response>
+						val print_expr : expression -&gt; unit = &lt;fun&gt;
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						let e = Sum(Prod(Const 2.0, Var "x"), Const 1.0);;
+					</user-input>
+					<system-response>
+						val e : expression = Sum (Prod (Const 2., Var "x"), Const 1.)
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						print_expr e; print_newline();;
+					</user-input>
+					<system-response>
+						2. * x + 1.<lb/>
+						- : unit = ()
+					</system-response>
+				</eval-step>
+				<eval-step>
+					<user-input>
+						print_expr (deriv e "x"); print_newline();;
+					</user-input>
+					<system-response>
+						2. * 1. + 0. * x + 0.<lb/>
+						- : unit = ()
+					</system-response>
+				</eval-step>
+				
+				</session>
+				<para>
+					Лексический разбор (преобразование конкретного синтаксиса
+					в абстрактный), как правило, сложнее. Caml включает несколько
+					среств, облегчающих написание анализаторов: с одной стороны,
+					есть Caml-версии лексического анализатора Lex и синтаксического
+					анализатора YACC (см. главу 12), обрабатыващие LALR-языки с
+					помощью автоматов с магазинной памятью, с другой - предопределенные
+					типы потоков (символов и токенов) и операции сопоставления
+					по образцу для потоков, облегчающие написание
+					рекурсивных нисходящих анализаторов для LL-языков. Мы воспользуемся
+					поточными анализаторами. Синтаксическая поддержка для них 
+					предусмотрена препроцессором Camlp4, который загружается в
+					интерактивную среду директивой <keyword>#load</keyword>.
+				</para>
+				<session>
+					<eval-step>
+						<user-input>
+							#load camlp4o.cma;;
+						</user-input>
+						<system-response>
+							<tab/>Camlp4 Parsing version 3.05 (2002-07-22)
+						</system-response>
+					</eval-step>
+					<eval-step>
+						<user-input>
+							open Genlex;;
+						</user-input>
+						<system-response/>
+					</eval-step>
+					<eval-step>
+						<user-input>
+							let lexer = make_lexer ["("; ")"; "+"; "-"; "*"; "/"];;
+						</user-input>
+						<system-response>
+							val lexer : char Stream.t -&gt; Genlex.token Stream.t = &lt;fun&gt;
+						</system-response>
+					</eval-step>
+				</session>
+				<para>
+					Для фазы лексического разбора (трансформации текста в поток
+					токенов) используется "обобщенный" лексический анализатор
+					из модуля стандартной библиотеки <keyword>Generic</keyword>.
+					Функция <keyword>make_lexer</keyword> принимает список аргументов
+					и возвращает функцию лексического разбора, которая "токенизирует"
+					поток символов. Токены могут быть идентификаторами, ключевыми
+					словами или литералами (целыми, числами с плавающей точкой, 
+					символами, строками). Комметарии и пробелы пропускаются.
+				</para>
+				<session>
+					<eval-step>
+						<user-input>
+							let token_stream = lexer(Stream.of_string "1.0 +x");;
+						</user-input>
+						<system-response>
+							val token_stream : Genlex.token Stream.t = &lt;abstr&gt;
+						</system-response>
+					</eval-step>
+					<eval-step>
+						<user-input>
+							Stream.next token_stream;;
+						</user-input>
+						<system-response>
+							- : Genlex.token = Float 1.
+						</system-response>
+					</eval-step>
+					<eval-step>
+						<user-input>
+							Stream.next token_stream;;
+						</user-input>
+						<system-response>
+							- : Genlex.token = Kwd "+"
+						</system-response>
+					</eval-step>
+					<eval-step>
+						<user-input>
+							Stream.next token_stream;;
+						</user-input>
+						<system-response>
+							- : Genlex.token = Ident "x"
+						</system-response>
+					</eval-step>
+				</session>
+				<para>
+					Анализатор сопоставляет поток токенов с образцом. Чтобы учесть
+					приоритет и ассоциативность операторов, в рекурсивных нисходящих
+					анализаторах используются промежуточные функции разбора. Обработка
+					потока предпочтительнее обработки регулярной структуры данных, поскольку
+					позволяет рекурсивно вызывать функции разбора внутри образцов, выделяя
+					подкопмоненты потока. Подробнее об этом написано в гл. 7. 
+				</para>
+				<para>
+					Чтобы работать с потоками, необходимо загрузить препроцессор
+					<keyword>camlp4</keyword>.
+				</para>
+				<session>
+					<eval-step>
+						<user-input>
+							#load "camlp4o.cmo";;
+						</user-input>
+						<system-response>
+							<tab/>Camlp4 Parsing version 3.05 (2002-07-22)
+						</system-response>
+					</eval-step>
+				</session>
+				<para>
+					Теперь можно писать анализатор.
+				</para>
+				<session>
+					<eval-step>
+						<user-input>
+							let rec parse_expr = parser<lb/>
+     						<tab/>[&lt; e1 = parse_mult; e = parse_more_adds e1 &gt;] -&gt; e<lb/>
+ 							and parse_more_adds e1 = parser<lb/>
+     						<tab/>[&lt; 'Kwd "+"; e2 = parse_mult; e = parse_more_adds (Sum(e1, e2)) &gt;] -&gt; e<lb/>
+   							<tab/>| [&lt; 'Kwd "-"; e2 = parse_mult; e = parse_more_adds (Diff(e1, e2)) &gt;] -&gt; e<lb/>
+   							<tab/>| [&lt; &gt;] -&gt; e1<lb/>
+ 							and parse_mult = parser<lb/>
+     						<tab/>[&lt; e1 = parse_simple; e = parse_more_mults e1 &gt;] -&gt; e<lb/>
+ 							and parse_more_mults e1 = parser<lb/>
+     						<tab/>[&lt; 'Kwd "*"; e2 = parse_simple; e = parse_more_mults (Prod(e1, e2)) &gt;] -&gt; e<lb/>
+   							<tab/>| [&lt; 'Kwd "/"; e2 = parse_simple; e = parse_more_mults (Quot(e1, e2)) &gt;] -&gt; e<lb/>
+   							<tab/>| [&lt; &gt;] -&gt; e1<lb/>
+ 							and parse_simple = parser<lb/>
+     						<tab/>[&lt; 'Ident s &gt;] -&gt; Var s<lb/>
+   							<tab/>| [&lt; 'Int i &gt;] -&gt; Const(float i)<lb/>
+   							<tab/>| [&lt; 'Float f &gt;] -&gt; Const f<lb/>
+   							<tab/>| [&lt; 'Kwd "("; e = parse_expr; 'Kwd ")" &gt;] -&gt; e;;
+						</user-input>
+						<system-response>
+							val parse_expr : Genlex.token Stream.t -&gt; expression = &lt;fun&gt;<lb/>
+							val parse_more_adds : expression -&gt; Genlex.token Stream.t -&gt; expression =<lb/>
+  							<tab/>&lt;fun&gt;<lb/>
+							val parse_mult : Genlex.token Stream.t -&gt; expression = &lt;fun&gt;<lb/>
+							val parse_more_mults : expression -&gt; Genlex.token Stream.t -&gt; expression =<lb/>
+  							<tab/>&lt;fun&gt;<lb/>
+							val parse_simple : Genlex.token Stream.t -&gt; expression = &lt;fun&gt;
+						</system-response>
+					</eval-step>
+					<eval-step>
+						<user-input>
+							let parse_expression = parser [&lt; e = parse_expr; _ = Stream.empty &gt;] -&gt; e;;
+						</user-input>
+						<system-response>
+							val parse_expression : Genlex.token Stream.t -&gt; expression = &lt;fun&gt;
+						</system-response>
+					</eval-step>
+				</session>
+				<para>
+					Совместив лексический и синтаксический анализаторы, мы получаем
+					функцию, читающую выражение из символьной строки:
+				</para>
+				<session>
+					<eval-step>
+						<user-input>
+							let read_expression s = parse_expression(lexer(Stream.of_string s));;
+						</user-input>
+						<system-response>
+							val read_expression : string -&gt; expression = &lt;fun&gt;
+						</system-response>
+					</eval-step>
+					<eval-step>
+						<user-input>
+							read_expression "2*(x+y)";;
+						</user-input>
+						<system-response>
+							- : expression = Prod (Const 2., Sum (Var "x", Var "y"))
+						</system-response>
+					</eval-step>
+				</session>
+				<para>
+					Загадка: почему следующие примеры дают разные результаты?
+				</para>
+				<session>
+					<eval-step>
+						<user-input>
+							read_expression "x - 1";;
+						</user-input>
+						<system-response>
+							- : expression = Diff (Var "x", Const 1.)
+						</system-response>
+					</eval-step>
+					<eval-step>
+						<user-input>
+							read_expression "x-1";;
+						</user-input>
+						<system-response>
+							Exception: Stream.Error "".
+						</system-response>
+					</eval-step>
+				</session>
+				<para>
+					Ответ: обобщенный анализатор из модуля <keyword>Genlex</keyword>
+					считает отрицательный целочисленный литерал одним токеном. Поэтому
+					<keyword>"x-1"</keyword> читается как <keyword>Ident "x"</keyword>
+					и <keyword>Int(-1)</keyword>, а такая последовательность не
+					соотвествует ни одному правилу. Два же пробела в выражении
+						<keyword>x - 1</keyword> заставляют анализатор вернуть
+						правильную последовательность из трех токенов:
+						<keyword>Ident "x"</keyword>, <keyword>Kwd "-"</keyword>
+						и <keyword>Int 1</keyword>.
+				</para>
+			</section>
+			<section name="Самостоятельные программы на Caml">
+				<para>
+					До сих пор все примеры исполнялись в интерактивной системе. Но код
+					Ocaml также может быть скомпилирован компиляторами
+					<command>ocamlc</command> и <command>ocamlopt</command>. Исходные
+					тексты обычно хранятся в файлах с расширением <command>.ml</command>.
+					Они состоят из фраз, которые вычисляются
+					по порядку их следования в файле. В отличие от интерактивного режима,
+					типы и значения не выводятся, поэтому программа должна явно вызывать
+					функции вывода, если это необходимо. Следующая программа выводит числа
+					Фибоначчи:
+				</para>
+				<listing>
+					<![CDATA[
+(* Файл fib.ml *)
+let rec fib n =
+	if n < 2 then 1 else fib(n-1) + fib(n-2);;
+let main () =
+  	let arg = int_of_string Sys.argv.(1) in
+  	print_int(fib arg);
+  	print_newline();
+	exit 0;;
+main ();;
+					]]>
+				</listing>
+				<para>
+					<keyword>Sys.argv</keyword> - это массив строк, содержащий аргументы
+					командной строки. Таким образом, <keyword>Sys.argv.(1)</keyword> -
+					первый аргумент. Программа компилируется и выполняется следующими
+					командами:
+				</para>
+				<command-session>
+					<command-line>
+						<input prompt="$">
+							ocamlc -o fib fib.ml
+						</input>
+						<input prompt="$">
+							./fib 10
+						</input>
+						<response>
+							89
+						</response>
+						<input prompt="$">
+							./fib 20
+						</input>
+						<response>
+							10946
+						</response>
+					</command-line>
+				</command-session>
+			</section>
+	</main-matters>
+</chapter>
