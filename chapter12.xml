@@ -66,7 +66,7 @@ and ...
 ]]></listing>
       <para>Комментарии ограничиваются <keyword>(*</keyword> и
 	<keyword>*)</keyword> как обычно в Caml.</para>
-      <subsection name="Заголовок и концевик">
+      <subsection name="Заголовок и концевик" neednumber="1">
 	<para>
 	  <emph>Заголовок</emph> и <emph>концевик</emph> - это
 	  произвольный текст Caml и фигурных скобках. Оба раздела
@@ -76,7 +76,7 @@ and ...
 	  необходимые для действий, и при необходимости вспомогательные
 	  функии.</para>
       </subsection>
-      <subsection name="Именованные регулярные выражения">
+      <subsection name="Именованные регулярные выражения" neednumber="1">
 	<para>Между заголовком и вхождениями можно определить по именам
 	  часто используемые регулярные выражения. Они записываются в
 	  форме <value>let</value> <term>ident</term> <value>=</value>
@@ -84,7 +84,7 @@ and ...
 	  <emph>ident</emph> в дальнейшем будет использоваться как
 	  сокращение для <emph>regexp</emph>.</para>
       </subsection>
-      <subsection name="Вхождения">
+      <subsection name="Вхождения" neednumber="1">
 	<para>Имена вхождений должны быть допустимыми идентификаторами
 	  для значений Caml (начинающимися с буквы в строчном
 	  регистре). Каждое вхождение сановится функцией Caml,
@@ -101,7 +101,7 @@ and ...
 	  связке выбирается ранее совпавшее регулярное
 	  выражение.</para>
       </subsection>
-      <subsection name="Регулярные выражения">
+      <subsection name="Регулярные выражения" neednumber="1">
 	<para>Регулярные выражения записываются в стиле
 	  <command>lex</command> с добавками Caml-подобного
 	  синтаксиса.</para>
@@ -157,7 +157,8 @@ and ...
 	  </dict-art>
 	  <dict-term><term>regexp</term><value>+</value></dict-term>
 	  <dict-art>
-	    <para>(Строгое повторение.) Одна и более совпадающая строка.</para>
+	    <para>(Строгое повторение.) Одна и более совпадающая
+	      строка.</para>
 	  </dict-art>
 	  <dict-term><term>regexp</term><value>?</value></dict-term>
 	  <dict-art>
@@ -165,7 +166,70 @@ and ...
 	      <term>regexp</term></para>
 	  </dict-art>
 	  <dict-term><term>regexp</term><sub>1</sub><value>|</value><term>regexp</term><sub>2</sub></dict-term>
+	  <dict-art>
+	    <para>(Альтернатива.) Любая строка, совпадающая либо с
+	      <term>regexp</term><sub>1</sub>, либо с
+	      <term>regexp</term><sub>2</sub>.</para>
+	  </dict-art>
+	  <dict-term><term>regexp</term><sub>1</sub>
+	    <term>regexp</term><sub>2</sub></dict-term>
+	  <dict-art>
+	    <para>(Объединение.) Совпадает с последовательностью двух
+	      строк, первая из который совпадает с
+	      <term>regexp</term><sub>1</sub>, а вторая - с
+	      <term>regexp</term><sub>2</sub>.</para>
+	  </dict-art>
+	  <dict-term><value>(</value><term>regexp</term><value>)</value></dict-term>
+	  <dict-art>
+	    <para>То же самое, что и <term>regexp</term>.</para>
+	  </dict-art>
+	  <dict-term><term>ident</term></dict-term>
+	  <dict-art>
+	    <para>Ссылка на регулярное выражение, связанное с
+	      <term>ident</term> ранее определением <value>let</value>
+	      <term>ident</term> <value>=</value>
+	      <term>regexp</term>.</para>
+	  </dict-art>
 	</dict>
+	<para>Что касается приоритета, то наивысший у * и +, затем
+	  следует ?, затем объединение и, наконец, |
+	  (альтернатива).</para>
+      </subsection>
+      <subsection name="Действия" neednumber="1">
+	<para>Действием может быть любое выражение Caml. Оно
+	  вычисляется в зависимости от контекста, когда идентификатор
+	  <keyword>lexbuf</keyword> связывается с текущим буфером
+	  лексического анализатора. Некоторые распространенные случаи
+	  использования <keyword>lexbuf</keyword>, а также операции с
+	  буферами анализатора, определенные в модуле стандартной
+	  библиотеки <keyword>Lexing</keyword> приведены ниже.</para>
+	<dict>
+	  <dict-term><keyword>Lexing.lexeme lexbuf</keyword></dict-term>
+	  <dict-art>
+	    <para>Возвращает совпавшую строку.</para>
+	  </dict-art>
+	  <dict-term><keyword>Lexing.lexeme_char lexbuf</keyword> <emph>n</emph></dict-term>
+	  <dict-art>
+	    <para>Возвращает <emph>n</emph>-ный символ совпавшей
+	      строки. Для первого символа <emph>n</emph> = 0.</para>
+	  </dict-art>
+	  <dict-term><keyword>Lexing.lexeme_start lexbuf</keyword></dict-term>
+	  <dict-art>
+	    <para>Вовзращает абсолютную позицию начала совпавшей строки во
+	      входном тексте. Первый считанный символ входного текста
+	      имеет позицию 0.</para>
+	  </dict-art>
+	  <dict-term><keyword>Lexing.lexeme_end lexbuf</keyword></dict-term>
+	  <dict-art>
+	    <para>Вовзращает абсолютную позицию конца совпавшей строки во
+	      входном тексте. Первый считанный символ входного текста
+	      имеет позицию 0.</para>
+	  </dict-art>
+	  <dict-term><emph>entrypoint</emph> <keyword>lexbuf</keyword></dict-term>
+	  <dict-art>
+	    <para>(Где <emph>entrypoint</emph> - имя другого вхождения в том же определении анализатора.) Рекурсивно вызывает анализатор на заданном вхождении, что бывает полезно, например, для вложенных комментариев.</para>
+	  </dict-art>
+	  </dict>
       </subsection>
     </section>
   </main-matters>
