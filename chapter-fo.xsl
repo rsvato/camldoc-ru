@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <xsl:stylesheet version="1.0"
   xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
+  xmlns:fotex="http://www.tug.org/fotex"
   xmlns:fo="http://www.w3.org/1999/XSL/Format" xmlns:xs="http://www.w3.org/2001/XMLSchema">
-  <xsl:output encoding="koi8-r" method="xml"/>
+  <xsl:output encoding="utf-8" method="xml" indent="yes"/>
   <xsl:preserve-space elements="listing user-input system-response"/>
 
  
@@ -72,10 +73,53 @@
       Глава
       <xsl:value-of select="@number"/>.
       <xsl:value-of select="@name"/>
+       <fotex:bookmark
+        fotex-bookmark-level="1"
+        >
+        <xsl:attribute name="fotex-bookmark-label">
+          <xsl:value-of select="generate-id()"/>
+        </xsl:attribute>
+        <xsl:value-of select="@name"/>
+      </fotex:bookmark>
     </fo:block>
     <xsl:apply-templates/>
   </xsl:template>
-
+  <xsl:template match="thead/trow/tcell/para">
+    <fo:block
+      text-align-last="justify"
+      font-size="10pt"
+      font-family="Times"
+      line-height="12pt"
+      language="ru"
+      font-weight="bold"
+      background-color="#efefef">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+ <xsl:template match="para" mode="thead">
+    <fo:block
+      text-align-last="justify"
+      font-size="10pt"
+      font-family="Times"
+      line-height="12pt"
+      language="ru"
+      font-weight="bold"
+      background-color="#efefef">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
+   <xsl:template match="para" mode="thead">
+    <fo:block
+      text-align-last="justify"
+      font-size="10pt"
+      font-family="Times"
+      line-height="12pt"
+      language="ru"
+      font-weight="bold"
+      background-color="#efefef">
+      <xsl:apply-templates/>
+    </fo:block>
+  </xsl:template>
   <xsl:template match="para">
     <fo:block
       text-align-last="justify"

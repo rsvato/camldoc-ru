@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
-                version="1.0"
+  version="1.0"
+  xmlns:fotex="http://www.tug.org/fotex"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
  <xsl:template match="section">
     <fo:block
@@ -10,10 +11,20 @@
       font-family="sans-serif"
       font-weight="bold"
       line-height="24pt"
-      keep-with-next="true">
+      keep-with-next="true"
+      language="ru"
+      >
       <xsl:value-of select="ancestor::node()/@number"/>.<xsl:call-template name="NumberSection"/>
       <xsl:text>&#160;</xsl:text>
       <xsl:value-of select="@name"/>
+      <fotex:bookmark
+        fotex-bookmark-level="2"
+        >
+        <xsl:attribute name="fotex-bookmark-label">
+          <xsl:value-of select="generate-id()"/>
+        </xsl:attribute>
+        <xsl:value-of select="@name"/>
+      </fotex:bookmark>
     </fo:block>
     <xsl:apply-templates/>
   </xsl:template>
@@ -29,6 +40,14 @@
       <xsl:value-of select="ancestor::node()/@number"/>.<xsl:call-template name="NumberSection"/>
       <xsl:text>&#160;</xsl:text>
       <xsl:value-of select="@name"/>
+      <fotex:bookmark
+        fotex-bookmark-level="3"
+        >
+        <xsl:attribute name="fotex-bookmark-label">
+          <xsl:value-of select="generate-id()"/>
+        </xsl:attribute>
+        <xsl:value-of select="@name"/>
+      </fotex:bookmark>
     </fo:block>
     <xsl:apply-templates/>
   </xsl:template>

@@ -118,8 +118,8 @@
 			<table cols="2">
 				<thead>
 					<trow>
-						<tcell>Префикс</tcell>
-						<tcell>Основание</tcell>
+						<tcell><para>Префикс</para></tcell>
+						<tcell><para>Основание</para></tcell>
 					</trow>
 				</thead>
 				<tbody>

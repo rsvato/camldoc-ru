@@ -4,7 +4,7 @@
   xmlns:fotex="http://www.tug.org/fotex"
   >
   <xsl:template match="bnf">
-    <fo:table>
+    <fo:table  space-before.optimum="14pt" space-after.optimum="14pt">
       <fo:table-column column-number="1" fotex:column-align="r" column-width="25%"/>
       <fo:table-column column-number="2" fotex:column-align="l" column-width="75%"/>
       <fo:table-body>

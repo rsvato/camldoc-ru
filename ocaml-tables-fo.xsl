@@ -4,18 +4,40 @@
   xmlns:fotex="http://www.tug.org/fotex"
   >
   <xsl:template match="table">
-    <fo:table>
-      <xsl:call-template name="count-cols">
-        <xsl:with-param name="content">
-          <xsl:value-of select="descendant::node()"/>
-        </xsl:with-param>
-      </xsl:call-template>
-    </fo:table>
+    <fo:block  space-before.optimum="14pt" space-after.optimum="14pt">
+      <fo:table border-color="black" border-width="1pt" border-style="solid" space-before.optimum="14pt" space-after.optimum="14pt" table-layout="fixed">
+        <xsl:for-each select="tbody/trow[1]/tcell">
+          <fo:table-column column-width="8cm">
+            <xsl:attribute name="column-number">
+              <xsl:value-of select="position()"/>
+            </xsl:attribute>
+            <xsl:attribute name="fotex:column-align">
+              <xsl:text>p</xsl:text>
+            </xsl:attribute>
+          </fo:table-column>
+        </xsl:for-each>
+        <xsl:apply-templates/>
+      </fo:table>
+    </fo:block>
   </xsl:template>
-  <xsl:template name="count-cols">
-    <xsl:param name="content"/>
-    <xsl:message>
-      <xsl:value-of select="$content"/>
-    </xsl:message>
+  <xsl:template match="tcell">
+    <fo:table-cell  padding-start="1pt" padding-end="1pt" padding-before="3pt" padding-after="3pt" border-style="solid" border-width="1pt" border-color="black">
+      <xsl:apply-templates/>
+    </fo:table-cell>
+  </xsl:template>
+  <xsl:template match="thead">
+    <fo:table-header>
+      <xsl:apply-templates/>
+    </fo:table-header>
+  </xsl:template>
+  <xsl:template match="tbody">
+    <fo:table-body>
+      <xsl:apply-templates/>
+    </fo:table-body>
+  </xsl:template>
+  <xsl:template match="trow">
+    <fo:table-row>
+      <xsl:apply-templates/>
+    </fo:table-row>
   </xsl:template>
 </xsl:stylesheet>
