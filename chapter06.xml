@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!-- <!DOCTYPE chapter SYSTEM "core.dtd"> -->
+<!DOCTYPE chapter SYSTEM "core.dtd">
 <chapter name="Язык Objective Caml" number="6">
   <main-matters>
     <section name="Введение">
@@ -1933,7 +1933,9 @@ with ]]></listing>
 	  </or>
 	</def>
       </bnf>
-      <para>В таблице ниже показан относительный приоритет и ассоциативность незакрытых конструкций образцов. Элементы с высшим приоритетом помещены в таблицу первыми.</para>
+      <para>В таблице ниже показан относительный приоритет и
+      ассоциативность незакрытых конструкций образцов. Элементы с
+      высшим приоритетом помещены в таблицу первыми.</para>
       <table cols="2">
 	<thead>
 	  <trow>
@@ -1995,6 +1997,134 @@ with ]]></listing>
 	не подходит для этого образца", либо "значение подходит для
 	образца, что дает в резулльтате связывание имен со
 	значениями".</para>
+      <subsection name="Образцы переменных" neednumber="0">
+	<para>Образец, включающий только имя значения совпадает с
+	  любым значением и связывает последнее с именем. Образец
+	  <value>_</value> также совпадает с любым значением, но не
+	  дает связывания.</para>
+	<para>Образцы <emph>линейны</emph>: переменная может
+	  встречаться в конкретном образцк несколько раз. В частности,
+	  использование только образца не позволяет проверить на
+	  равенство две части структуры данных (впрочем, для этой цели
+	  может быть использована конструкция <value>when</value>).</para>
+      </subsection>
+      <subsection name="Образцы констант" neednumber="0">
+	<para>Образец, включающий лишь константу, совпадает со
+	  значением, равным этой константе.</para>
+      </subsection>
+      <subsection name="Образцы псевдонимов" neednumber="0">
+	<para>Образец <term>pattern</term><sub>1</sub>
+	  <value>as</value> <term>value-name</term> совпадает с теми
+	  же значениями, что и <term>pattern</term><sub>1</sub>. Если
+	  сопоставление с <term>pattern</term><sub>1</sub> успешно, то
+	  помимо связывания в результате этой операции имя
+	  <term>name</term> связывается с совпавшим значением.</para>
+      </subsection>
+      <subsection name="Образцы в скобках" neednumber="0">
+	<para>Образец <value>(</value>
+	  <term>pattern</term><sub>1</sub> <value>)</value> совпадает
+	  с теми же значениями, что и
+	  <term>pattern</term><sub>1</sub>. Кроме того, в такой форме
+	  может присутствовать ограничение типа: <value>(</value>
+	  <term>pattern</term><sub>1</sub> <value>:</value>
+	  <term>typexpr</term> <value>)</value>. Оно требует, чтобы
+	  тип <term>pattern</term><sub>1</sub> был совместим с
+	  <term>type</term>.</para>
+      </subsection>
+      <subsection name="Образцы &quot;или&quot;" neednumber="0">
+	<para>Образец  <term>pattern</term><sub>1</sub>
+	  <value>|</value>  <term>pattern</term><sub>2</sub>
+	  представляет собой логическое "или" двух образцов. Значение,
+	  совпадающее с ним, должно совпадать либо с
+	  <term>pattern</term><sub>1</sub>, либо с
+	  <term>pattern</term><sub>2</sub>. Образцы
+	  <term>pattern</term><sub>1</sub> и
+	  <term>pattern</term><sub>2</sub> должны связывать точно одни
+	  и те же идентификаторы с переменными, имеющими такой же тип.
+	  Связывание осущесьтвляется либо при успешном сопоставлении с
+	  <term>pattern</term><sub>1</sub>, либо с
+	  <term>pattern</term><sub>2</sub>. Если успешны оба
+	  сопоставления, конкретный выбор связывания
+	  неопределен.</para>
+      </subsection>
+      <subsection name="Образцы вариантов" neednumber="0">
+	<para>Образец  <term>ncconstr pattern</term><sub>1</sub>
+	  совпадает со всеми вариантами, конструкторы которых равны
+	  <term>ncconstr</term>, а аргументы совпадают с
+	  <term>pattern</term><sub>1</sub>.</para>
+	<para>Образец  <term>pattern</term><sub>1</sub>
+	  <value>::</value>  <term>pattern</term><sub>2</sub>
+	  совпадает с непустым списком, первый элемент которого
+	  совпадает с  <term>pattern</term><sub>1</sub>, а последний -
+	  с  <term>pattern</term><sub>2</sub>. Этот образец работает
+	  так же, как <value>(::) (</value>
+	  <term>pattern</term><sub>1</sub> <value>,</value>
+	  <term>pattern</term><sub>2</sub> <value>)</value>.</para>
+	<para>Образец <value>[</value>
+	  <term>pattern</term><sub>1</sub> <value>; ... ;</value>
+	  <term>pattern</term><sub>n</sub> <value>]</value> совпадает
+	  со списоком из <emph>n</emph> элементов, совпадающих с
+	  образцами  <term>pattern</term><sub>1</sub> ...
+	  <term>pattern</term><sub>n</sub>, соответственно. Он
+	  работает так же, как и  <term>pattern</term><sub>1</sub>
+	  <value>::</value> ... <value>::</value>
+	  <term>pattern</term><sub>n</sub> <value>[]</value>.</para>
+      </subsection>
+      <subsection name="Образцы полиморфных вариантов" neednumber="0">
+	<para>Образец <value>`tag-name</value>
+	  <term>pattern</term><sub>1</sub> совпадает с любым
+	  полиморфным вариантом, тег которого равен
+	  <term>tag-name</term>, а аргумент совпадает с
+	  <term>pattern</term><sub>1</sub>.</para>
+      </subsection>
+      <subsection name="Образцы сокращений вариантов" neednumber="0">
+	<para>Если определен тип [<value>('a, 'b, ...)</value>]
+	  <term>typeconstr</term> <value>=[ `tag</value><sub>1</sub>
+	  <term>t</term><sub>1</sub> <value>|</value> ...
+	  <value>`tag</value><sub>n</sub> <term>t</term><sub>n</sub>,
+	  то образец #<term>typeconstr</term> является сокращеним для
+	  образца-или
+	  <value>(`tag</value><sub>1</sub><value>(_:</value><term>t</term><sub>1</sub> 
+	  <value>)|</value> ... <value>|</value>
+	  <value>(`tag</value><sub>n</sub><value>(_:</value><term>t</term><sub>n</sub> 
+	  <value>))</value> и совпадает с любым значением типа
+	  #<term>typeconstr</term>.</para>
+      </subsection>
+      <subsection name="Образцы кортежей" neednumber="0">
+	<para>Образец  <term>pattern</term><sub>1</sub>
+	  <value>,</value> ... <value>,</value>
+	  <term>pattern</term><sub>n</sub> совпадает с
+	  <emph>n</emph>-элементным кортежем, компоненты которого
+	  совпадают с образцами от  <term>pattern</term><sub>1</sub>
+	  до  <term>pattern</term><sub>n</sub>. Иначе говоря, образец
+	  совпадает со значениями кортежа (<term>v</term><sub>1</sub>,
+	  ..., <term>v</term><sub>n</sub>) так, что
+	  <term>pattern</term><sub>i</sub> совпадаетс с
+	  <term>v</term><sub>i</sub> для i = 1, ... , n.</para>
+      </subsection>
+      <subsection name="Образцы записей">
+	<para>Образец <value>{</value> <term>field</term><sub>1</sub>
+	  <value>=</value>  <term>pattern</term><sub>1</sub> <value>;
+	    ... ; </value> <term>field</term><sub>n</sub>
+	  <value>=</value>  <term>pattern</term><sub>n</sub>
+	  <value>}</value> совпадает с записью, в которой определены
+	  по крайней мере поля от <term>field</term><sub>1</sub> до
+	  <term>field</term><sub>n</sub> так, чтобы значение,
+	  связанное с полем <term>field</term><sub>i</sub> совпадало с
+	  образцом <term>pattern</term><sub>i</sub> для i = 1, ..., n.
+	  Запись может определять больше полей, но значения, связанные
+	  с ними не учитываются при сопоставлении.</para>
+      </subsection>
+      <subsection name="Образцы массивов" neednumber="0">
+	<para>Образец <value>[|</value>
+	  <term>pattern</term><sub>1</sub> <value>;</value> ...
+	  <value>;</value> <term>pattern</term><sub>n</sub>
+	  <value>|]</value> совпадает с массивом длины <emph>n</emph>
+	  так, что элемент с индексом <emph>i</emph> совпадает с
+	  образцом <term>pattern</term><sub>i</sub> для i = 1, ...,
+	  n.</para>
+      </subsection>
     </section>
   </main-matters>
 </chapter>
+

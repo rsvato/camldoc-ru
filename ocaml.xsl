@@ -169,7 +169,7 @@
     <i><xsl:apply-templates/></i>
   </xsl:template>
   <xsl:template match="sub">
-    <sub><span style="font-size:-2"><xsl:apply-templates/></span></sub>
+    <sub><span style="font-size:8px"><xsl:apply-templates/></span></sub>
   </xsl:template>
   <xsl:template match="list">
     <ul>
