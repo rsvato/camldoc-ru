@@ -374,7 +374,7 @@ padding-right:15;
 		</xsl:for-each>
 	</xsl:template>
 	<xsl:template name="NumberSection">
-		<xsl:number level="multiple" count="section|subsection"/>
+		<xsl:number level="multiple" count="section|subsection[@neednumber=1]"/>
 	</xsl:template>
 	<xsl:template name="NumberNote">
 		<xsl:number level="single" count="note"/>

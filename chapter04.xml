@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<?xml-stylesheet href="file://localhost/C:/ocaml/ocaml.css" type="text/css"?>
+<?xml-stylesheet href="file://localhost/C:/work/ocaml/ocaml.css" type="text/css"?>
 <?xmlspysps C:\ocaml\ocaml.sps?>
 <!DOCTYPE chapter SYSTEM "core.dtd">
 <chapter name="Метки и варианты" number="4">
@@ -42,7 +42,9 @@
         </eval-step>
       </session>
       <para>Имена меток следуют тем же правилам, что и имена остальных идентификаторов в OCaml, то есть для них нельзя использовать зарезервированные слова (<keyword>in</keyword>, <keyword>to</keyword> и т.д.).</para>
-      <para>Формальные аргументы и параметры сопоставляются соответвующим меткам, причем отсуствие метки рассматривается как пустая метка. Аргументы в вызовах могут коммутироваться. Можно, например, применить функцию к любому аргументу, что создаст для остальных функцию:</para>
+      <para>Формальные аргументы и параметры сопоставляются соответвующим меткам<note>
+          <para>Это соответствует коммутирующему режиму меток в Ocaml с версии 3.0 по 3.02. Так называемый классический режим (режим <command>-nolabels</command>) в настоящее время считается устаревшим и несовместимым.</para>
+        </note>, причем отсуствие метки рассматривается как пустая метка. Аргументы в вызовах могут коммутироваться. Можно, например, применить функцию к любому аргументу, что создаст для остальных функцию:</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#ListLabels.fold_left;;]]></user-input>
@@ -438,7 +440,83 @@ val f2 : [< `A of string | `B] -> bool = <fun>]]></system-response>
   [> `A of [> `Cons of 'a | `Nil] | `B of [> `Snoc of 'b]] = <fun>]]></system-response>
           </eval-step>
         </session>
-        <para></para>
+        <para>Когда шаблон, основанный на "или" и содержащий теги вариантов, помещается внутри шаблона, основанного на синонимах, синоним получает тип, содержащий только теги, перечисленные в первом шаблоне. Таким образом становятся возможными многие полезные идиомы, например инкрементное определение функций.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#let num x = `Num x
+ let eval1 eval (`Num x) = x
+ let rec eval x = eval1 eval x ;;]]></user-input>
+            <system-response><![CDATA[val num : 'a -> [> `Num of 'a] = <fun>
+val eval1 : 'a -> [ `Num of 'b] -> 'b = <fun>
+val eval : [ `Num of 'a] -> 'a = <fun>]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#let plus x y = `Plus(x,y)
+ let eval2 eval = function
+   | `Plus(x,y) -> eval x + eval y
+   | `Num _ as x -> eval1 eval x
+ let rec eval x = eval2 eval x ;;]]></user-input>
+            <system-response><![CDATA[val plus : 'a -> 'b -> [> `Plus of 'a * 'b] = <fun>
+val eval2 : ('a -> int) -> [< `Num of int | `Plus of 'a * 'a] -> int = <fun>
+val eval : ([< `Num of int | `Plus of 'a * 'a] as 'a) -> int = <fun>]]></system-response>
+          </eval-step>
+        </session>
+        <para>Для дополнительного удобства определения типов можно использовать как сокращения шаблонов, основанных на "или". Иными словами при определенном типе <keyword>myvariant = [`Tag1 int | `Tag2 bool]</keyword> шаблон <keyword>#myvariant</keyword> эквивалентен записи <keyword>(`Tag1(_ : int) | `Tag2(_ : bool))</keyword>.</para>
+        <para>Подобные сокращения могут использоваться как независимо</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#let f = function
+   | #myvariant -> "myvariant"
+   | `Tag3 -> "Tag3";;]]></user-input>
+            <system-response><![CDATA[val f : [< `Tag1 of int | `Tag2 of bool | `Tag3] -> string = <fun>]]></system-response>
+          </eval-step>
+        </session>
+        <para>так и совместно с синонимами</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#let g1 = function `Tag1 _ -> "Tag1" | `Tag2 _ -> "Tag2";;]]></user-input>
+            <system-response><![CDATA[val g1 : [< `Tag1 of 'a | `Tag2 of 'b] -> string = <fun>]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#let g = function
+   | #myvariant as x -> g1 x
+   | `Tag3 -> "Tag3";;]]></user-input>
+            <system-response><![CDATA[val g : [< `Tag1 of int | `Tag2 of bool | `Tag3] -> string = <fun>]]></system-response>
+          </eval-step>
+        </session>
+      </subsection>
+      <subsection name="Недостатки" neednumber="1">
+        <para>Видя возможности полиморфеых вариантов, можно задаться вопросом, почему они дополняют стандартные варианты, а не заменяют их.</para>
+        <para>Причины две. Во-первых, несмотря на явную эффективность, недостаток статической информации о типах затрудняет оптимизацию кода и делает полиморфные варианты немного медленнее обычных. Впрочем, это действительно заметно лишь на больших структурах данных.</para>
+        <para>Гораздо важнее то, что, несмотря на собственную безопасность по типу, полиморфные варианты ослабляют дисциплину типов. Стандартные варианты не только обеспечивают безопасность по типу, но и проверяют, чтобы в коде использовались только объявленные конструкторы, чтобы все конструкторы структуры данных были совместимы, и, наконец, применяют ограничения типов к своим парамтерам.</para>
+        <para>Поэтому при работе с полиморфными вариантами все типы лучше делать явными. При проектировании библиотеки это просто, поскольку в интерфейсах описываются конкретные типы, но в небольших программах разумнее ограничиться обычными вариантами.</para>
+        <para>Кроме того, некторые идиомы приводят к тривиальным, но трудноотслеживаемым ошибкам. Например, следующий код скорее всего неверен, но у компилятора нет способа узнать это.</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#type abc = [`A | `B | `C] ;;]]></user-input>
+            <system-response><![CDATA[type abc = [ `A | `B | `C]]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#let f = function
+   | `As -> "A"
+   | #abc -> "other" ;;]]></user-input>
+            <system-response><![CDATA[val f : [< `A | `As | `B | `C] -> string = <fun>]]></system-response>
+          </eval-step>
+          <eval-step>
+            <user-input><![CDATA[#let f : abc -> string = f ;;]]></user-input>
+            <system-response><![CDATA[val f : abc -> string = <fun>]]></system-response>
+          </eval-step>
+        </session>
+        <para>Такого риска можно избежать, снабдив аннотацией само определение</para>
+        <session>
+          <eval-step>
+            <user-input><![CDATA[#let f : abc -> string = function
+   | `As -> "A"
+   | #abc -> "other" ;;]]></user-input>
+            <system-response><![CDATA[Warning: this match case is unused.
+val f : abc -> string = <fun>]]></system-response>
+          </eval-step>
+        </session>
       </subsection>
     </section>
   </main-matters>
