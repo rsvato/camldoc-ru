@@ -1809,5 +1809,33 @@ with ]]></listing>
 	  типов описаны в разделе 6.8.1.</para>
       </subsection>
     </section>
+    <section name=" онстанты">
+      <bnf>
+	<term>constant</term>
+	<def>
+	  <or multiline="1">
+	    <choice>
+	      <term>integer-literal</term>
+	    </choice>
+	    <choice>
+	      <term>float-literal</term>
+	    </choice>
+	    <choice>
+	      <term>char-literal</term>
+	    </choice>
+	    <choice>
+	      <term>string-literal</term>
+	    </choice>
+	    <choice>
+	      <value>`</value><term>tag-name</term>
+	    </choice>
+	  </or>
+	</def>
+      </bnf>
+      <para>—интаксический класс констант включает литералы четырех
+	базовых типов (целые, числа с плавающей точкой, символы,
+	симовольные строки) и константные конструкторы как нормальных,
+	так и полиморфных вариантов.</para>
+    </section>
   </main-matters>
 </chapter>
