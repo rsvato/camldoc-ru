@@ -410,6 +410,16 @@
 		<xsl:apply-templates/>
 	</dd>
 </xsl:template>
+<xsl:template match="dict-term">
+	<dt><strong>
+		<xsl:apply-templates/>
+	</strong></dt>
+</xsl:template>
+<xsl:template match="dict-art">
+	<dd>
+		<xsl:apply-templates/>
+	</dd>
+</xsl:template>
 	<xsl:template name="notes">
 		<xsl:for-each select="//note">
 		<div style="border: black solid thin;padding:10px 10px 10px 10px">
