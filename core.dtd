@@ -1,6 +1,6 @@
 <!ENTITY % bnf-content "term | value">
 <!ENTITY % para-stuff "#PCDATA|command|keyword|mdash|term|sub|%bnf-content;|power|index">
-<!ENTITY % section-stuff "para|session|listing|command-session|list|table|bnf">
+<!ENTITY % section-stuff "para|session|listing|command-session|list|table|bnf|message|command-option-group|dict">
 <!ELEMENT abstract (para)>
 <!ELEMENT chapter (abstract?,main-matters)>
 <!ATTLIST chapter
@@ -32,7 +32,7 @@
 <!ELEMENT system-response (#PCDATA|lb|tab)*>
 <!ELEMENT list (item)+>
 <!ATTLIST list type CDATA #REQUIRED>
-<!ELEMENT item (para)+>
+<!ELEMENT item (para|listing)+>
 <!--tables-->
 <!ELEMENT table (thead,tbody)>
 <!ELEMENT thead (trow)+>
@@ -65,3 +65,17 @@
 <!ATTLIST repetitive count NMTOKEN #IMPLIED>
 <!ELEMENT choice (%bnf-content; | repetitve | optional | group)+>
 <!-- end bnf-stuff -->
+<!-- options etc. -->
+<!ELEMENT message (m-name, message-description)>
+<!ELEMENT m-name (#PCDATA)>
+<!ELEMENT message-description (para|listing|list)+>
+<!ELEMENT command-option-group (command-option)+>
+<!ELEMENT command-option (c-option, option-description)>
+<!ELEMENT c-option (mc-option, c-param)>
+<!ELEMENT mc-option (#PCDATA)>
+<!ELEMENT c-param (#PCDATA)>
+<!ELEMENT option-description (para|listing|list|dict)+>
+<!ELEMENT dict (dict-term, dict-art)>
+<!ELEMENT dict-term (#PCDATA)>
+<!ELEMENT dict-art (para|listing|list)+>
+<!-- end options -->
