@@ -148,7 +148,34 @@
 				<term>float-literal</term>
 				<def>
 					<optional><value>-</value></optional>
-					<repetitive count="1"><value>0..9</value></repetitive>
+					<repetitive count="1"><value>0...9</value></repetitive>
+					<optional>
+						<value>.</value>
+						<repetitive>
+							<value>0...9</value>
+						</repetitive>
+					</optional>
+					<optional>
+						<group>
+							<or multiline="0">
+								<choice>
+									<value>e</value>
+								</choice>
+								<choice>
+									<value>E</value>
+								</choice>
+							</or>
+						</group>
+						<optional>
+							<or>
+								<choice><value>+</value></choice>
+								<choice><value>-</value></choice>
+							</or>
+						</optional>
+						<repetitive count="1">
+							<value>0...9</value>
+						</repetitive>
+					</optional>
 				</def>
 			</bnf>
 		</subsection>

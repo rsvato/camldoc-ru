@@ -49,7 +49,7 @@
 <!ELEMENT value (#PCDATA)>
 <!ELEMENT def (%bnf-content; | or | group | repetitive | optional)+>
 <!ELEMENT repetitive (%bnf-content; | or)+>
-<!ELEMENT optional (%bnf-content;)+>
+<!ELEMENT optional (%bnf-content;|group|repetitive|optional)+>
 <!ELEMENT group (%bnf-content; | or)+>
 <!ELEMENT or (choice)+>
 <!ATTLIST or 
