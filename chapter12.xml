@@ -1,0 +1,89 @@
+<?xml version="1.0"?>
+<!DOCTYPE chapter SYSTEM "core.dtd">
+<chapter name="Генераторы синаксических и лексических анализаторов (ocamllex, ocamlyacc)" number="12">
+  <abstract>
+    <para>В этой главе описываются два генератора -
+      <command>ocamllex</command>, создающий лексический анализатор из
+      набора регулярных выражений со связанными с ними семантическими
+      действиями, и <command>ocamlyacc</command>, создающий
+      синтаксический анализатор из грамматики и связанных с ней
+      семантических действий.</para>
+    <para>Эти программы весьма близки к известным командам
+      <command>lex</command> и <command>yacc</command>, доступным в
+      большинстве сред С. Дальнейшее изложение подразумевает знание
+      <command>lex</command> и <command>yacc</command>, поскольку
+      описывает синтаксис и отличия от них <command>ocamllex</command>
+      и <command>ocamlyacc</command>, но не рассказывает о том, как
+      готовить описания лексических и синтаксических анализаторов
+      <command>lex</command> и <command>yacc</command>. Читатели, не
+      знакомые с этими инструментами, могут обратиться к книгам
+      "Compilers: princioles, techniques and tools" Aho, Sethi и
+      Ullman (Addison-Wesley, 1986) и "Lex &amp; Yacc" Levine, Mason и
+      Brown (O'Reilly, 1992).</para>
+  </abstract>
+  <main-matters>
+    <section name="Обзор ocamllex">
+      <para><command>ocamllex</command> создает лексический анализатор
+	из набора регулярных выражений и связанных с ними
+	семантических действий в стиле <command>lex</command>. Если
+	входной файл называется <command>lexer.mll</command>,
+	команда</para>
+      <listing>ocamllex lexer.mll</listing>
+      <para>сгенерирует файл <command>lexer.ml</command> c кодом Caml
+	для лексического анализатора. В этом файле на каждое вхождение
+	в определении лексического анализатора создается одна функция с
+	тем же именем, что и вхождение. Аргументом для таких функций
+	служит буфер анализатора, а возвращают они семантический
+	атирибут, соотвествующий вхождению.</para>
+      <para>Буферы анализатора - это абстрактный тип данных,
+	реализованный в модуле стандартной библиотеки
+	<command>Lexing</command>. Функции
+	<keyword>Lexing.from_channel</keyword>,
+	<keyword>Lexing.from_string</keyword> и
+	<keyword>Lexing.from_function</keyword> создают лексические
+	буферы, принимающие данный из канала ввода, строки символов
+	или функции чтения, соотвественно (см. описание модуля
+	Lexing).</para>
+      <para>При использовании с синтаксичесим анализатором,
+	сгенерированным <command>ocamlyacc</command> семантические
+	действия вычисляют значение типа <keyword>token</keyword>,
+	определенное этим анализатором (см. описание
+	<command>ocamlyacc</command> ниже).</para>
+    </section>
+    <section name="Синтаксис определения лексического анализатора">
+      <para>Формат определения лексического анализатора таков:</para>
+      <listing><![CDATA[
+{ заголовок }
+let ident = regexp ...
+rule entrypoint =
+  parse regexp { action }
+      | ...
+      | regexp { action }
+and entrypoint =
+  parse ...
+and ...
+{ концевик }
+]]></listing>
+      <para>Комментарии ограничиваются <keyword>(*</keyword> и
+	<keyword>*)</keyword> как обычно в Caml.</para>
+    </section>
+    <section name="Заголовок и концевик">
+      <para>
+	<emph>Заголовок</emph> и <emph>концевик</emph> - это
+	произвольный текст Caml и фигурных скобках. Оба раздела
+	необязательны. Если они заданы, текст заголовка копируется в
+	начало генерируемого файла, а текст концевика - в конец.
+	Обычно заголовок содержит директивы <command>open</command>,
+	необходимые для действий, и при необходимости вспомогательные
+	функии.</para>
+    </section>
+    <section name="Именованные регулярные выражения">
+      <para>Между заголовком и вхождениями можно определить по именам
+	часто используемые регулярные выражения. Они записываются в
+	форме <value>let</value> <term>ident</term> <value>=</value>
+	<term>regexp</term>. В этом случае идентификатор
+	<emph>ident</emph> в дальнейшем будет использоваться как
+	сокращение для <emph>regexp</emph>.</para>
+    </section>
+  </main-matters>
+</chapter>
