@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!-- <!DOCTYPE chapter SYSTEM "core.dtd"> -->
+<!DOCTYPE chapter SYSTEM "core.dtd">
 <chapter name="Броузер/редактор (ocamlbrowser)" number="14">
   <abstract>
     <para>В этой главе описывается OCamlBrowser, броузер исходных
@@ -145,6 +145,9 @@
 	    двойном щелчке на ней закрывается броузер.</para>
 	</item>
       </list>
+    </section>
+    <section name="Просмотр модулей">
+      <para></para>
     </section>
   </main-matters>
       
