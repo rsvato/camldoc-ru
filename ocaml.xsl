@@ -1,119 +1,23 @@
 <?xml version="1.0" encoding="koi8-r"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
-	<xsl:output encoding="windows-1251" method="html" indent="yes"/>
+	<xsl:output encoding="windows-1251" method="html" indent="yes"
+		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
+		doctype-system="http://www.w3.org/TR/html4/loose.dtd"/>
 	<xsl:preserve-space elements="listing user-input system-response"/>
 	<xsl:template match="/">
           <html>
             <head>
               <meta name="keywords" content="Ocaml, Objective Caml, Caml, functional programming, функциональное программирование"/>
-              <style type="text/css">
-                <xsl:text><![CDATA[<!--
-                body{
-                color:black;
-                background-color:white;
-                }
-                * {
-                font-size:12px;
-                }
-                p{
-                font-family:Verdana,Helvetica,sans-serif,*;
-                font-size:12px;
-                text-align:justify;
-                }
-                h1,h2,h3,h4,h5{
-                font-family:Verdana,Helvetica,sans-serif,*;
-                color:black;
-                background-color:#eee;
-                }
-                h1{
-                font-size:18px;
-                }
-                
-                h2{
-                font-size:16px;
-                }
-                h3{
-                font-size:14px;
-                }
-                h4{
-                font-size:12px;
-                }
-                
-                #abstract{
-                space-before:12px;
-                background-color:#eee;
-                space-after:12px;
-                margin:10px 10px 10px 10px;
-                }
-                #code{
-                text-align:left;
-                font-family:Courier New,Courier,monospaced,*;
-                }
-                #navigation{
-                position: absolute;
-                top:15px;
-                width:10em;
-                padding-left:5px;
-                background-color:#eee;
-                border:1px solid #999;
-                line-height:17px;
-                voice-family: "\"}\"";
-                voice-family:inherit;
-                width:10em;
-                }
-                #main-matters{
-                margin:10px 20px 20px 11em;
-                padding:10px;
-                border:1px solid #555;
-                }
-                a.toc{
-                text-decoration: none;
-                font-size:10px;
-                font-weight:bold;
-                font-family:Verdana,Helvetica,sans-serif,*;
-                color:#999;
-                }
-                th{
-                background-color:#ccc;
-                border:black solid thin;
-                }
-                td{
-                border: black solid thin;
-                padding-left:15;
-                padding-right:15;
-                }
-                table{
-                border:black solid thin;
-                border-collapse:collapse;
-                }
-                table.bnf{
-                width:80%;
-                left=20px;
-                border:	none;																																			
-                }
-                table.bnf td{
-                border:none;
-                padding-left:0;
-                padding-right:0;
-                }
-                #term{
-                color:maroon;
-                font-style:italic;
-                font-family:monospace;
-                }
-                #value{
-                color:navy;
-                font-family:monospace
-                }
-                -->]]>
-              </xsl:text>
-            </style>
+	      <link rel="stylesheet" type="text/css" href="./ocaml-html.css"/>
             <title>
               <xsl:value-of select="/chapter/@number"/>. <xsl:value-of select="/chapter/@name"/>
             </title>
           </head>
           <body>
             <xsl:apply-templates select="chapter"/>
+	<div id="counter" style="position:relative;margin-top:15px" align="center">
+	<!--Rating@Mail.ru COUNTER--><a target="_top" href="http://top.mail.ru/jump?from=656088"><img src="http://top.list.ru/counter?id=656088;t=217" border="0" height="31" width="88" alt="пЕИРХМЦ@Mail.ru"/></a><!--/COUNTER-->
+	</div>
           </body>
         </html>
       </xsl:template>
@@ -350,10 +254,10 @@
     </table>
   </xsl:template>
   <xsl:template match="term">
-    <span id="term"><xsl:apply-templates/></span>
+    <span class="term"><xsl:apply-templates/></span>
   </xsl:template>
   <xsl:template match="value">
-    <span id="value"><xsl:apply-templates/></span>
+    <span class="value"><xsl:apply-templates/></span>
   </xsl:template>
   <xsl:template match="def">
     <xsl:apply-templates/>
@@ -391,10 +295,13 @@
       <xsl:apply-templates/>
     </dl>
   </xsl:template>
-  <xsl:template match="command-option">
+  <xsl:template match="c-option">
     <dt>
       <xsl:apply-templates/>
     </dt>
+  </xsl:template>
+  <xsl:template match="command-option">
+      <xsl:apply-templates/>
   </xsl:template>
   <xsl:template match="mc-option">
     <span style="font-weight:bold;font-family:monospaced">
