@@ -178,6 +178,274 @@
 					</optional>
 				</def>
 			</bnf>
+			<para>Литералы для чисел с плавающей точкой состоят из трех частей - целочисленной, десятичной
+			и экспоненты. Целочисленная часть - это последовательность из одной или нескольких цифр
+			с необязательным знаком плюс или минус. Десятичная - точка, за которой следуют ноль или более цифр.
+			Экспонента - буква <keyword>e</keyword> или <keyword>E</keyword>, необязательный знак плюс или
+			минус и одна или более цифр. Десятичная часть или экспонента могут быть опущены, однако лучше, чтобы
+			присутствовала хоть одна из них, чтобы число отличалось от целочисленных литералов. Интерпретация литералов
+			для чисел с плавающей точкой, не попадающих в приемлемый диапазон, не определена.</para>
+		</subsection>
+		<subsection name="Символьные литералы" neednumber="0">
+			<bnf>
+				<term>char-literal</term>
+				<def>
+					<or multiline="1">
+						<choice><value>'</value><term>regular-char</term><value>'</value></choice>
+						<choice><value>'</value><term>escape-sequence</term><value>'</value></choice>
+					</or>
+				</def>
+			</bnf>
+			<bnf>
+				<term>escape-sequence</term>
+				<def>
+					<or multiline="1">
+						<choice>
+							<value>\</value>
+							<group>
+								<or multiline="0">
+									<choice><value>\</value></choice>
+									<choice><value>"</value></choice>
+									<choice><value>'</value></choice>
+									<choice><value>n</value></choice>
+									<choice><value>t</value></choice>
+									<choice><value>b</value></choice>
+									<choice><value>r</value></choice>
+								</or>
+							</group>
+						</choice>
+						<choice>
+							<value>\</value>
+							<group><value>0...9</value></group>
+							<group><value>0...9</value></group>
+							<group><value>0...9</value></group>
+						</choice>
+					</or>
+				</def>
+			</bnf>
+			<para>Символьные литералы ограничиваются одинарными кавычками (<keyword>&apos;</keyword>). Две
+			одинарные кавычки могут ограничивать либо один символ, отличный от &apos; и \, либо одну из управляющих
+			последовательностей ниже:</para>
+			<table>
+				<thead>
+					<trow>
+						<tcell><para>Последовательность</para></tcell>
+						<tcell><para>Обозначаемый символ</para></tcell>
+					</trow>
+				</thead>
+				<tbody>
+					<trow>
+						<tcell><para><keyword>\\</keyword></para></tcell>
+						<tcell><para>Обратная косая черта (\)</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para><keyword>\&quot;</keyword></para></tcell>
+						<tcell><para>Двойная кавычка (&quot;)</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para><keyword>\&apos;</keyword></para></tcell>
+						<tcell><para>Одинарная кавычка (&apos;)</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para><keyword>\n</keyword></para></tcell>
+						<tcell><para>Перевод строки (LF)</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para><keyword>\r</keyword></para></tcell>
+						<tcell><para>Возврат каретки (CR)</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para><keyword>\t</keyword></para></tcell>
+						<tcell><para>Горизонтальная табуляция (TAB)</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para><keyword>\b</keyword></para></tcell>
+						<tcell><para>Забой (BS)</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para><keyword>\ddd</keyword></para></tcell>
+						<tcell><para>Символ с десятичным кодом ASCII <keyword>ddd</keyword></para></tcell>
+					</trow>
+				</tbody>
+			</table>
+		</subsection>
+		<subsection name="Строковые литералы" neednumber="0">
+			<bnf>
+				<term>string-literal</term>
+				<def>
+					<value>&quot;</value>
+					<repetitive><term>string-character</term></repetitive>
+					<value>&quot;</value>
+				</def>
+			</bnf>
+			<bnf>
+				<term>string-character</term>
+				<def>
+					<or multiline="1">
+						<choice>
+							<term>regular-char</term>
+						</choice>
+						<choice>
+							<term>escape-sequence</term>
+						</choice>
+					</or>
+				</def>
+			</bnf>
+			<para>
+				Строковые литералы ограничиваются двойными кавычками (<keyword>&quot;</keyword>). 
+				Двойные кавычки могут ограничивать либо один символ, отличный от &apos; и \, либо одну из управляющих
+			последовательностей из таблицы выше.
+			</para>
+			<para>
+				Чтобы длинные строковые литералы можно было разбивать на несколько строк,
+				последовательность <term>\newline blanks</term> (обратная косая черта внутри строки,
+				за которой следует произвольное число пробельных символов
+				в начале следующей строки) игнорируется.
+			</para>
+			<para>В текущей реализации длина строковых литералов практически не ограничена</para>
+		</subsection>
+		<subsection name="Именованные метки" neednumber="0">
+			<para>
+				Во избежание двусмысленностей именованные метки нельзя просто определить синтаксически
+				как последовательность трех токенов <value>~</value>, <term>ident</term> и <keyword>:</keyword>.
+				Они требуют определения на лексическом уровне.
+			</para>
+			<bnf>
+				<term>label</term>
+				<def>
+					<value>~</value>
+					<group><value>a...z</value></group>
+					<repetitive count="1">
+						<or multiline="0">
+							<choice><term>letter</term></choice>
+							<choice><value>0...9</value></choice>
+							<choice><value>_</value></choice>
+							<choice><value>&apos;</value></choice>
+						</or>
+					</repetitive>
+					<value>:</value>
+				</def>
+			</bnf>
+			<bnf>
+				<term>oplabel</term>
+				<def>
+					<value>?</value>
+					<group><value>a...z</value></group>
+					<repetitive count="1">
+						<or multiline="0">
+							<choice><term>letter</term></choice>
+							<choice><value>0...9</value></choice>
+							<choice><value>_</value></choice>
+							<choice><value>&apos;</value></choice>
+						</or>
+					</repetitive>
+					<value>:</value>
+				</def>
+			</bnf>
+			<para>
+				Именованные метки бывают двух видов: <term>label</term> для обычных аргументов
+				и <term>optlabel</term> для необязательных. Они отличаются только первым символом
+				- <keyword>~</keyword> или <keyword>?</keyword>.
+			</para>
+		</subsection>
+		<subsection name="Префиксные и инфиксные символы" neednumber="0">
+			<bnf>
+				<term>infix-symbol</term>
+				<def>
+					<group>
+						<or multiline="0">
+							<choice><value>=</value></choice>
+							<choice><value>&lt;</value></choice>
+							<choice><value>&gt;</value></choice>
+							<choice><value>@</value></choice>
+							<choice><value>^</value></choice>
+							<choice><value>|</value></choice>
+							<choice><value>&amp;</value></choice>
+							<choice><value>+</value></choice>
+							<choice><value>-</value></choice>
+							<choice><value>*</value></choice>
+							<choice><value>/</value></choice>
+							<choice><value>$</value></choice>
+							<choice><value>%</value></choice>
+						</or>
+					</group>
+					<repetitive><term>operator-char</term></repetitive>
+				</def>
+			</bnf>
+			<bnf>
+				<term>prefix-symbol</term>
+				<def>
+					<group>
+						<or multiline="0">
+							<choice><value>~</value></choice>
+							<choice><value>!</value></choice>
+							<choice><value>?</value></choice>
+						</or>
+					</group>
+					<repetitive><term>operator-char</term></repetitive>
+				</def>
+			</bnf>
+			<bnf>
+				<term>operator-char</term>
+				<def>
+						<or multiline="0">
+							<choice><value>!</value></choice>
+							<choice><value>:</value></choice>
+							<choice><value>.</value></choice>
+							<choice><value>~</value></choice>
+							<choice><value>=</value></choice>
+							<choice><value>&lt;</value></choice>
+							<choice><value>&gt;</value></choice>
+							<choice><value>@</value></choice>
+							<choice><value>^</value></choice>
+							<choice><value>|</value></choice>
+							<choice><value>&amp;</value></choice>
+							<choice><value>+</value></choice>
+							<choice><value>-</value></choice>
+							<choice><value>*</value></choice>
+							<choice><value>/</value></choice>
+							<choice><value>$</value></choice>
+							<choice><value>%</value></choice>
+						</or>
+				</def>
+			</bnf>
+			<para>
+				Последовательности &quot;символов операторов&quot; типа
+				<keyword>&lt;=&gt;</keyword> или <keyword>!!</keyword> читаются как 
+				один токен из классов <term>infix-char</term> или <term>prefix-char</term>.
+				Такие символы разбраются как префиксные или инфиксные операторы внутри
+				выражения или же ведут себя как идентификаторы.
+			</para>
+		</subsection>
+		<subsection name="Ключевые слова" neednumber="0">
+			<para>Следующие идентификаторы считаются ключевыми словами и не могут использоваться
+			в другом качестве:</para>
+			<listing>
+				<![CDATA[
+			and         as          assert      asr         begin       class
+      closed      constraint  do          done        downto      else
+      end         exception   external    false       for         fun
+      function    functor     if          in          include     inherit
+      land        lazy        let         lor         lsl         lsr
+      lxor        match       method      mod         module      mutable
+      new         of          open        or          parser      private
+      rec         sig         struct      then        to          true
+      try         type        val         virtual     when        while
+      with ]]></listing>
+			<para>
+				Следующие последовательности символов также считаются ключевыми словами:
+			</para>
+			<listing><![CDATA[    #     &     '     (     )     *     ,     ->    ?
+    ??    .     ..    .(    .[    :     ::    :=    ;
+    ;;    <-    =     [     [|    [<    {<    ]     |]
+    >]    >}    _     `     {     |     }     ~]]></listing>
+		</subsection>
+		<subsection name="Неоднозначности" neednumber="0">
+			Лексические неоднозначтности решаются по правилу "длиннейшего совпадения":
+			если последовательность символов может быть разобрана на два токена несколькими
+			способами, используется тот способ, который дает наиболее длинный первый токен.
+		</subsection>
+		<subsection name="Директивы номера строки" neednumber="0">
 		</subsection>
 	</section>
 	</main-matters>
