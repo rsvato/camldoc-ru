@@ -10,7 +10,7 @@
       <fo:table-body>
         <fo:table-row>
           <fo:table-cell>
-            <fo:block>
+            <fo:block text-align-last="end">
               <xsl:apply-templates select="term"/>
               <xsl:text>::=</xsl:text>
             </fo:block>

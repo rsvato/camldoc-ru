@@ -58,6 +58,7 @@
   <xsl:include href="chapter-sections-fo.xsl"/>
   <xsl:include href="ocaml-bnf-fo.xsl"/>
   <xsl:include href="ocaml-tables-fo.xsl"/>
+  <xsl:include href="ocaml-inline-elements-fo.xsl"/>
   <!-- end includes -->
   <xsl:template match="chapter">
     <fo:block
@@ -85,18 +86,6 @@
     <xsl:apply-templates/>
   </xsl:template>
   <xsl:template match="thead/trow/tcell/para">
-    <fo:block
-      text-align-last="justify"
-      font-size="10pt"
-      font-family="Times"
-      line-height="12pt"
-      language="ru"
-      font-weight="bold"
-      background-color="#efefef">
-      <xsl:apply-templates/>
-    </fo:block>
-  </xsl:template>
- <xsl:template match="para" mode="thead">
     <fo:block
       text-align-last="justify"
       font-size="10pt"
@@ -142,11 +131,4 @@
       <xsl:apply-templates/>
     </fo:block>
   </xsl:template>
-
-  <xsl:template match="command">
-    <fo:inline font-family="Courier">
-      <xsl:apply-templates/>
-    </fo:inline>
-  </xsl:template>
- 
 </xsl:stylesheet>
