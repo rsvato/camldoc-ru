@@ -55,7 +55,13 @@
 	    </repetitive>
 	  </choice>
 	  <choice>
-	    
+			<value>external</value>
+			<term>value-name</term>
+			<value>:</value>
+			<term>typexpr</term><value>=</value><term>external-decalaration</term>
+	  </choice>
+		<choice><term>type-definition</term></choice>
+		<choice><term>exception-definition</term></choice>
 	</or>
       </def>
     </bnf>
