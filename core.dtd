@@ -40,9 +40,9 @@
 <!ELEMENT tbody (trow)+>
 <!ELEMENT trow (tcell)+>
 <!ELEMENT tcell (para)+>
+<!ATTLIST table cols NMTOKEN #REQUIRED>
 <!--end tables-->
 <!ELEMENT tab EMPTY>
-
 <!ELEMENT user-input (#PCDATA|lb|tab)*>
 <!ELEMENT listing (#PCDATA|lb|tab)*>
 <!ELEMENT command-line (input?|response?)*>
