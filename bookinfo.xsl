@@ -1,13 +1,16 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.1"
-  xmlns:saxon="http://saxon.sf.net">
-  <xsl:param name="default.encoding" select="'windows-1251'"></xsl:param>
-<xsl:param name="htmlhelp.encoding" select="'windows-1251'"></xsl:param>
-<xsl:param name="saxon.character.representation" select="'native'"/>
-	 <xsl:param name="chunker.output.encoding" select="'windows-1251'"/>
-	 <xsl:param name="site.build" select="false">
+		xmlns:saxon="http://saxon.sf.net">
+	<xsl:param name="default.encoding" select="'windows-1251'"/>
+	<xsl:param name="htmlhelp.encoding" select="'windows-1251'"/>
+	<xsl:param name="saxon.character.representation" select="'native'"/>
+	<xsl:param name="chunker.output.encoding" select="'windows-1251'"/>
+	<xsl:param name="site.build" select="false"/>
+	<xsl:param name="main.site">
+		<xsl:text>./</xsl:text>
+	</xsl:param>
 	<xsl:output encoding="windows-1251" method="html" indent="yes"/>
-	
+		
 	<xsl:template match="/">
 		<xsl:apply-templates select="bookinfo"/>
 	</xsl:template>
@@ -42,11 +45,11 @@
 			</head>
 			<body>
 				<div style="margin-top:90px;margin-left:15px;margin-right:15px;background-color:#eee;padding-left:10px;">
-				<xsl:apply-templates/>
+					<xsl:apply-templates/>
 				</div>
-				<xsl:if test="${site.build} = 'true'">
-				<div id="counter" style="position:relative;margin-top:15px" align="center">
-                                  <xsl:text disable-output-escaping="yes"><![CDATA[
+				<xsl:if test="$site.build = 'true'">
+					<div id="counter" style="position:relative;margin-top:15px" align="center">
+						<xsl:text disable-output-escaping="yes"><![CDATA[
 <!-- SpyLOG f:0211 -->
 <script language="javascript"><!--
 Mu="u5437.05.spylog.com";Md=document;Mnv=navigator;Mp=0;
@@ -70,8 +73,8 @@ My+="</a>";Md.write(My);//--></script><noscript>
 </a></noscript>
 <!-- SpyLOG -->&nbsp;
 <!--Rating@Mail.ru COUNTER--><a target="_top" href="http://top.mail.ru/jump?from=656088"><img src="http://top.list.ru/counter?id=656088;t=217" border="0" height="31" width="88" alt="Рейтинг@Mail.ru"/></a><!--/COUNTER-->]]></xsl:text>
-
-				</div>
+						
+					</div>
 				</xsl:if>
 			</body>
 		</html>
@@ -100,15 +103,17 @@ My+="</a>";Md.write(My);//--></script><noscript>
 	</xsl:template>
 	<xsl:template match="authors">
 		<div style="text-align:center;font-size:18px;font-weight:bold">
-			<xsl:apply-templates select="main-author"/><br/>
+			<xsl:apply-templates select="main-author"/>
+			<br/>
 			(а также
 			 	<xsl:for-each select="sec-author">
 					<xsl:if test="position() = last()">
 					и 
 					</xsl:if>
-					<xsl:apply-templates/><xsl:if test="position() &lt; last() - 1">,<xsl:text>&#0160;</xsl:text>
-					</xsl:if>
-				</xsl:for-each>)
+				<xsl:apply-templates/>
+				<xsl:if test="position() &lt; last() - 1">,<xsl:text>&#0160;</xsl:text>
+				</xsl:if>
+			</xsl:for-each>)
 		</div>
 	</xsl:template>
 	<xsl:template match="legal">
@@ -129,19 +134,22 @@ My+="</a>";Md.write(My);//--></script><noscript>
 		<xsl:variable name="nf" select="@nf"/>
 		<a>
 			<xsl:attribute name="href">
-				<xsl:value-of select="concat('http://ocaml.spb.ru/ref/', @file)"/>
+				<xsl:value-of select="concat($main.site, @file)"/>
 			</xsl:attribute>
 			<h2>Глава <xsl:call-template name="NumberChaps"/>.
 			<xsl:value-of select="chapter/@name"/>
-			<xsl:if test="$nf &gt; 0">
-				<span style="color:red">
+				<xsl:if test="$nf &gt; 0">
+					<span style="color:red">
 					не закончено
 				</span>
-			</xsl:if>
-		</h2></a>
+				</xsl:if>
+			</h2>
+		</a>
 		<ul>
 			<xsl:for-each select="./chapter/main-matters/section[@name]">
-				<li><xsl:value-of select="@name"/></li>
+				<li>
+					<xsl:value-of select="@name"/>
+				</li>
 			</xsl:for-each>
 		</ul>
 		
