@@ -1,6 +1,7 @@
 <!ENTITY % bnf-content "term | value">
 <!ENTITY % para-stuff "#PCDATA|command|keyword|mdash|term|sub|%bnf-content;|power|index">
 <!ENTITY % section-stuff "para|session|listing|command-session|list|table|bnf|message|command-option-group|dict">
+<!ENTITY % dict-unit "dict-term,dict-art">
 <!ELEMENT abstract (para)>
 <!ELEMENT chapter (abstract?,main-matters)>
 <!ATTLIST chapter
@@ -75,7 +76,7 @@
 <!ELEMENT mc-option (#PCDATA)>
 <!ELEMENT c-param (#PCDATA)>
 <!ELEMENT option-description (para|listing|list|dict)+>
-<!ELEMENT dict (dict-term, dict-art)>
+<!ELEMENT dict (%dict-unit;)+>
 <!ELEMENT dict-term (#PCDATA)>
 <!ELEMENT dict-art (para|listing|list)+>
 <!-- end options -->

@@ -24,7 +24,7 @@
 	  данных, и т.д. Из файла <command>X.mli</command> компилятор
 	  <command>ocamlc</command> создаст файл
 	  <command>X.cmi</command> со скомпилированным
-	  интерфейсом</para>
+	    <!-- one of (dict list listing para) -->	  интерфейсом</para>
 	</item>
 	<item>
 	  <para>Аргументы, заканчивающиеся на <command>.ml</command>
@@ -473,7 +473,175 @@
 	    <c-param></c-param>
 	  </c-option>
 	  <option-description>
-	    <para></para>
+	    <para>Во время проверки типов компилятор проверяет также информацию о
+	    путях, следя чтобы все типы выводились приниципально. Этот флаг обязателен
+	    при использовании аргументов с метками и/или полиморфных методов -
+	    только так можно быть уверенным, что будущие версии компилятора
+	    смогут правильно определить типы даже при изменении внутреннего
+	      алгоритма. Программы, допустимые в режиме
+	    <command>-principal</command>, допустимы и в режиме по умолчанию с
+	    эквивалентными типами, однако бинарные сигнатуры в этом случае
+	    другие, поэтому проверка типов работает медленнее. Тем не менее,
+	    компиляция с этим флагом может быть полезна, если исходный код еще не
+	    опубликован.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-rectypes</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Разрешает во время проверки типа произвольные рекурсивные
+	    типы. По умолчанию поддерживаются только рекурсивные типы с рекурсией
+	    по типу объекта.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-thread</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Компилирует или компонует многопоточные программы с
+	      использованием библиотеки <command>thread</command>, описанной в
+	      главе 24. На самом деле, эта опция просто подключает особую версию
+	      стандартной библиотеки, безопасную по потокам.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-unsafe</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>
+	      Отключает проверку границ на массивах и обращении к строкам
+	      (конструкции <command>v.(i)</command> и
+	      <command>s.[i]</command>). Программы, собранные с этой опцией
+	      несколько быстрее, но не являются безопасными: при обращении к
+	      элементу за пределами массива или границы строки может произойти
+	      все, что угодно.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-use-runtime</mc-option>
+	    <c-param>runtime-name</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>
+	      Создает байткод, исполняемый в пользовательской системе времени
+	      исполнения, построенной ранее командой <command>ocamlc
+	      -make-runtime runtime-name</command>. Дополнительная информация
+	      содержится в разделе 18.1.6.
+	    </para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-v</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>
+	      Выводит номер версии компилятора и путь к стандартной библиотеке,
+	      после чего прекращает работу.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-verbose</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Выводит все внешние команды перед их выполнением. В частности
+	      это касается компилятора и компоновщика C в режиме
+	      <command>-custom</command>. Эта опция полезна при отладке проблем с
+	      библиотеками C.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-version</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Выводит номер версии компилятора в краткой форме (например
+	    <command>3.06</command>) и прекращает работу.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-w</mc-option>
+	    <c-param>warning-list</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Включает или выключает предупреждения согласно аргументу
+	    <command>warning-list</command>. Аргумент является строкой из одной
+	    или нескольких букв следующего значения:</para>
+	    <dict>
+	      <dict-term>A/a</dict-term>
+	      <dict-art>
+		<para>включить/выключить все предупреждения.</para>
+	      </dict-art>
+	      <dict-term>C/c</dict-term>
+	      <dict-art>
+		<para>включить/выключить предупреждения о подозрительных
+		комментариях.</para>
+	      </dict-art>
+	      <dict-term>D/d</dict-term>
+	      <dict-art>
+		<para>
+		  Включить/выключить предупреждения об использовании устаревших
+		  функций.
+		</para>
+	      </dict-art>
+	      <dict-term>F/f</dict-term>
+	      <dict-art>
+		<para>Включить/выключить предупреждения о неполном применении
+		  функций (например, <command>f x; expr</command> при том, что
+		  вызов <command>f x</command> имеет тип функции).</para>
+	      </dict-art>
+	      <dict-term>L/l</dict-term>
+	      <dict-art>
+		<para>Включить/выключить предупреждения о пропуске меток в
+		вызовах.</para>
+	      </dict-art>
+	      <dict-term>M/m</dict-term>
+	      <dict-art>
+		<para>Включить/выключить предупреждения о переопределенных
+		методах.</para>
+	      </dict-art>
+	      <dict-term>P/p</dict-term>
+	      <dict-art>
+		<para>Включить/выключить предупреждения о неполных совпадениях
+		(пропущенные ветки в поиске по образцу).</para>
+	      </dict-art>
+	      <dict-term>S/s</dict-term>
+	      <dict-art>
+		<para>Включить/выключить предупреждения о предложениях с типом,
+		  отличным от <command>unit</command> (например, <command>expr1;
+		    expr2</command>, когда <command>expr1</command> не имеет тип
+		  <command>unit</command>.</para>
+	      </dict-art>
+	      <dict-term>U/u</dict-term>
+	      <dict-art>
+		<para>Включить/выключить предупреждения о неиспользуемых
+		(избыточных) совпадениях с образцом.</para>
+	      </dict-art>
+	      <dict-term>V/v</dict-term>
+	      <dict-art>
+		<para>Включить/выключить предупреждения о скрытых переменных
+		экземпляра.</para>
+	      </dict-art>
+	      <dict-term>X/x</dict-term>
+	      <dict-art>
+		<para>Включить/выключить все остальные предупреждения.</para>
+	      </dict-art>
+	    </dict>
+	    <para>По умолчанию используется установка <command>-w Al</command>
+	    (все предупреждения, кроме меток).</para>
 	  </option-description>
 	</command-option>
       </command-option-group>
