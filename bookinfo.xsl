@@ -23,6 +23,9 @@
 							font-family:verdana,arial,sans-serif,*;
 							font-size:10px;
 						}
+						li{
+							font-family:verdana,arial,sans-serif,*;
+						}
 						a{
 							color:black;
 							text-decoration:none;
@@ -125,7 +128,7 @@ My+="</a>";Md.write(My);//--></script><noscript>
 		<xsl:variable name="nf" select="@nf"/>
 		<a>
 			<xsl:attribute name="href">
-				<xsl:value-of select="@file"/>
+				<xsl:value-of select="concat('http://ocaml.spb.ru/ref/', @file)"/>
 			</xsl:attribute>
 			<h2>Глава <xsl:call-template name="NumberChaps"/>.
 			<xsl:value-of select="chapter/@name"/>

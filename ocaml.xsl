@@ -5,9 +5,54 @@
     doctype-system="http://www.w3.org/TR/html4/loose.dtd"/>
   <xsl:preserve-space elements="listing user-input system-response"/>
   <xsl:template match="chapter">
+		<xsl:variable name="ch.count">
+			<xsl:value-of select="count(ancestor::*//chap)"/>
+		</xsl:variable>
+		<xsl:message>
+			<xsl:value-of select="concat('There are ', $ch.count, ' chapters')"/>
+		</xsl:message>
+    <xsl:variable name="page.top">
+			<xsl:text>http://ocaml.spb.ru/ref/toc.html</xsl:text>
+    </xsl:variable>
+		<xsl:variable name="page.previous">
+			<xsl:choose>
+				<xsl:when test="@number - 1 &gt; 0">
+					<xsl:value-of select="concat('http://ocaml.spb.ru/ref/chapter', format-number(@number - 1, '00'), '.html')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$page.top"/>
+				</xsl:otherwise>
+			</xsl:choose>	
+		</xsl:variable>
+		<xsl:variable name="page.next">
+			<xsl:choose>
+				<xsl:when test="@number + 1 &lt; $ch.count">
+					<xsl:value-of select="concat('http://ocaml.spb.ru/ref/chapter', format-number(@number + 1, '00'), '.html')"/>
+				</xsl:when>
+				<xsl:otherwise>
+					<xsl:value-of select="$page.top"/>
+				</xsl:otherwise>
+			</xsl:choose>	
+		</xsl:variable>
     <html>
       <head>
+				<meta name="descrition" content="Перевод официальной документации Objective Caml"/>
         <meta name="keywords" content="Ocaml, Objective Caml, Caml, functional programming, функциональное программирование"/>
+				<link rel="up">
+					<xsl:attribute name="href">
+						<xsl:value-of select="$page.top"/>
+					</xsl:attribute>
+				</link>
+				<link rel="next" title="Следующая глава">
+					<xsl:attribute name="href">
+						<xsl:value-of select="$page.next"/>
+					</xsl:attribute>
+				</link>
+				<link rel="prev">
+					<xsl:attribute name="href">
+						<xsl:value-of select="$page.previous"/>
+					</xsl:attribute>
+				</link>
         <link rel="stylesheet" type="text/css" href="./ocaml-html.css"/>
         <title>
           <xsl:value-of select="@number"/>. <xsl:value-of select="@name"/>
