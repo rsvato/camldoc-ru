@@ -1,7 +1,11 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.0">
+<xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.1"
+									xmlns:saxon="http://saxon.sf.net">
 	<xsl:output encoding="windows-1251" method="html" indent="yes"/>
 	<xsl:template match="/">
+		<xsl:apply-templates select="bookinfo"/>
+	</xsl:template>
+	<xsl:template match="bookinfo">
 		<html>
 			<head>
 				<title>
@@ -39,7 +43,19 @@
 				</div>
 			</body>
 		</html>
+		<xsl:for-each select="//chap">
+			<xsl:variable name="chapn">
+				<xsl:value-of select="./chapter/@number"/>
+			</xsl:variable>
+			<xsl:variable name="chapf">
+				<xsl:value-of select="format-number($chapn, '00')"/>
+			</xsl:variable>
+			<xsl:document href="chapter{$chapf}.html">
+				<xsl:apply-templates/>
+			</xsl:document>
+		</xsl:for-each>
 	</xsl:template>
+	<xsl:include href="ocaml.xsl"/>
 	<xsl:template match="//bookinfo/title">
 		<div style="text-align:center;font-size:24px;font-weight:bold">
 			<xsl:apply-templates/>
@@ -96,6 +112,7 @@
 				<li><xsl:value-of select="@name"/></li>
 			</xsl:for-each>
 		</ul>
+		
 	</xsl:template>
 	<xsl:template name="NumberParts">
 		<xsl:number count="part"/>
