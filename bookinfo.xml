@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE bookinfo SYSTEM "./bookinfo.dtd">
+<!DOCTYPE bookinfo SYSTEM "./bookinfo.dtd" [
+	<!ENTITY chap01 SYSTEM "./chapter01.xml">
+	<!ENTITY chap02 SYSTEM "./chapter02.xml">
+	<!ENTITY chap03 SYSTEM "./chapter03.xml">
+	<!ENTITY chap04 SYSTEM "./chapter04.xml">
+	<!ENTITY chap05 SYSTEM "./chapter05.xml">
+	<!ENTITY chap06 SYSTEM "./chapter06.xml">
+	<!ENTITY chap07 SYSTEM "./chapter07.xml">
+	<!ENTITY chap08 SYSTEM "./chapter08.xml">
+	<!ENTITY chap09 SYSTEM "./chapter09.xml">
+]>
 <bookinfo>
 <title>Система Objective Caml, релиз 3.06</title>
 <subtitle>Документация и руководство пользователя</subtitle>
@@ -29,5 +39,6 @@
 <part>
 	<title>Инструменты Objective Caml</title>
 	<chap file="./chapter08.html">&chap08;</chap>
+	<chap file="./chapter09.html" nf="1">&chap09;</chap>
 </part>
 </bookinfo>

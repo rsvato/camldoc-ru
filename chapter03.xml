@@ -922,7 +922,6 @@ but is here used with type c = < m : int >
 Self type cannot be unified with a closed object type
 ]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Однако, наиболее распространенный случай, а именно приведение <keyword>self</keyword> к текущему классу рапознается мехнизмом проверки типов и типизируется правильно.</para>
       <para></para>
@@ -931,7 +930,6 @@ Self type cannot be unified with a closed object type
           <user-input><![CDATA[#class c = object (self) method m = (self :> c) end;;]]></user-input>
           <system-response><![CDATA[class c : object method m : c end]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>В результате становится возможной идиома, сохраняющая список всех объектов, принадлежащих к некоему классу или его субклассам:</para>
       <para></para>
@@ -948,7 +946,6 @@ Self type cannot be unified with a closed object type
    end;;]]></user-input>
           <system-response><![CDATA[class c : int -> object method m : int end]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Эта идиома позволяет получить объект, тип которого был приведен к суперклассу:</para>
       <para></para>
@@ -963,7 +960,6 @@ Self type cannot be unified with a closed object type
           <user-input><![CDATA[#let lookup_c obj = lookup_obj obj !all_c;;]]></user-input>
           <system-response><![CDATA[val lookup_c : < .. > -> < m : int > = <fun>]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Тип <keyword>&lt; m : int &gt;</keyword> является просто расширением <keyword>с</keyword>, поскольку используется ссылка. Словом, функция действительно вернула объект класса <keyword>c</keyword>.</para>
       <para>Проблемы, описанной выше можно и вовсе избежать, определив сначала сокращение с помощью типа класса.</para>
@@ -982,7 +978,6 @@ Self type cannot be unified with a closed object type
           <system-response><![CDATA[class c : c'
 class d : object method as_c : c' method m : int method n : int end]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Другой способ состоит в том, чтобы воспользоваться виртуальным классом - при наследовании от него все методы <keyword>c</keyword> будут иметь тот же тип, что и методы <keyword>c'</keyword>.</para>
       <session>
@@ -994,21 +989,18 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
           <user-input><![CDATA[#class c = object (self) inherit c' method m = 1 end;;]]></user-input>
           <system-response><![CDATA[class c : object method m : int end]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Можно также задать сокращение типа явно:</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#type c' = <m : int>;;]]></user-input>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Впрочем сокращение <keyword>#c'</keyword> так определить не получится. Оно задается определением либо класса, либо типа класса. Сокращения со знаком диеза <keyword>#</keyword> неявно включют анонимную переменную <keyword>..</keyword>, а ее явно именовать нельзя. Наиболее близок к цели следующий код:</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#type 'a c'_class = 'a constraint 'a = < m : int; .. >;;]]></user-input>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Здесь появляется дополнительная переменная типа, фиксирующая открытость объекта.</para>
     </section>
@@ -1042,7 +1034,6 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
           <user-input><![CDATA[#p#get_x;;]]></user-input>
           <system-response><![CDATA[- : int = 7]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Обратите внимание, что сокращение типа <keyword>functional_point</keyword> рекурсивно, что видно в типе класса <keyword>functional_point</keyword>: тип <keyword>self</keyword> - <keyword>'a</keyword>, а кроме того <keyword>'a</keyword> появляется внутри типа метода <keyword>move</keyword>.</para>
       <para>Вышеприведенное определение <keyword>functional_point</keyword> не эквивалентно следующему:</para>
@@ -1090,7 +1081,6 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
           <user-input>#Oo.copy;;</user-input>
           <system-response><![CDATA[- : (< .. > as 'a) -> 'a = <fun>]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Ключевое слово <keyword>as</keyword> в данном случае связывает переменную типа <keyword>'a</keyword> с объектом типа <keyword>&lt; .. &gt;</keyword>. Таким образом, <keyword>OO.copy</keyword> принимает объект с любыми методами (что соотвествует многоточию) и возвращает объект того же типа. Тип функции отличается от <keyword>&lt; .. &gt; -&gt; &lt; .. &gt;</keyword>, поскольку каждое многоточие соответствует разным наборам методов - оно ведет себя как переменная типа.</para>
       <session>
@@ -1118,7 +1108,6 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
           <user-input>#p = q, p = p;;</user-input>
           <system-response>- : bool * bool = (false, true)</system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Можно использовать и другие обобщенные операторы сравнения (<keyword>&lt;, &lt;=</keyword> и т.д.). Отношение <keyword>&lt;</keyword> задает неопределенный, но строгий порядок объектов. Он фиксируется раз и навсегда после создания объектов и в дальнейшем не подвергается изменениям.</para>
       <para>Клонирование и переопределение взаимозаменяемы, когда используются внутри объекта и не переопределяют полей.</para>
@@ -1137,7 +1126,6 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
    end;;]]></user-input>
           <system-response><![CDATA[class copy : object ('a) method copy : 'a end]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Только переопределение позволяет переопределять поля, и только примитив <keyword>OO.copy</keyword> может использоваться извне.</para>
       <para>Клонирование также помогает сохранять и восстанавливать состояние объектов.</para>
@@ -1156,7 +1144,6 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
     method save : unit
   end]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Такой класс допускает сохранение только одного уровня, но множественное наследование позволяет добавить возможность сохранения в любой класс.</para>
       <session>
@@ -1183,7 +1170,6 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
  [get p 0; get p 1; get p 2; get p 3; get p 4];;]]></user-input>
           <system-response><![CDATA[- : int list = [2; 1; 1; 1; 1]]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Один из вариантов может сохранять все копии (метод <keyword>clear</keyword> позвляет вручную удалять их).</para>
       <session>
@@ -1247,7 +1233,6 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
 class widget :
   window -> object val window : window method window : window end]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Несмотря на взаимную рекурсивность типов, классы <keyword>window</keyword> и <keyword>widget</keyword> сами по себе независимы.</para>
     </section>
@@ -1261,7 +1246,6 @@ class widget :
    end;;]]></user-input>
           <system-response>class virtual comparable : object ('a) method virtual leq : 'a -&gt; bool end</system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Ниже приведено определение класса <keyword>money</keyword> как субкласса <keyword>comparable</keyword>. На самом деле это просто обертка для чисел с плавающей точкой, позволяющая сравнивать их как объекты. Дополнительные операции появятся позже. Параметр класса <keyword>x</keyword> ограничен по типу, так как примитив <keyword>&lt;=</keyword> в Objective Caml является полиморфной функцией сравнения. Конструкция <keyword>inherit</keyword> гарантирует, что экземпляры класса будут также экземплярами <keyword>#comparable</keyword>. </para>
       <session>
@@ -1300,7 +1284,6 @@ class widget :
     method value : float
   end]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Возможно, однако, определить функции, работающие с объектами обоих типов: функция <keyword>min</keyword> будет возвращать меньший их объектов, типы которых объединяются с помощью <keyword>#comparable</keyword>. Тип этой функции отличается от <keyword>#comparable -&gt; #comparable -&gt; #comparable</keyword>, поскольку сокращение <keyword>#comparable</keyword> скрывает переменную типа (многоточие). Всякий раз это сокращение порождает новую переменную.</para>
       <session>
@@ -1309,7 +1292,6 @@ class widget :
    if x#leq y then x else y;;]]></user-input>
           <system-response><![CDATA[val min : (#comparable as 'a) -> 'a -> 'a = <fun>]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Эта функция работает как с <keyword>money</keyword>, так и с <keyword>money2</keyword>.</para>
       <session>
@@ -1321,7 +1303,6 @@ class widget :
           <user-input><![CDATA[#(min (new money2 5.0) (new money2 3.14))#value;;]]></user-input>
           <system-response><![CDATA[- : float = 3.14]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Другие примеры бинарных методов можно найти в разделах 5.2.1 и 5.2.3.</para>
       <para>В методе <keyword>times</keyword> используется функциональное обновление. Определение <keyword>new money2 (k *. repr)</keyword> (вместо <keyword>{&lt; repr = k *. repr &gt;}</keyword>) будет неправильно работать в случае наследования: для субкласса <keyword>money2 money3</keyword> такой метод вместо <keyword>money3</keyword> вернул бы объект класса <keyword>money2</keyword>.</para>
@@ -1348,7 +1329,6 @@ class widget :
     method value : float
   end]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
     </section>
     <section name="Друзья">
@@ -1369,7 +1349,6 @@ class widget :
     method times : float -> 'a
   end]]></system-response>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Здесь внутреннее представление объекта известно только текущему объекту. Чтобы сделать его видимым для других объектов того же класса, приходится открывать его всем. Но видимость представления легко ограничивается с помощью системы модудей.</para>
       <session>
@@ -1402,7 +1381,6 @@ class widget :
        end
    end;;]]></user-input>
         </eval-step>
-        <eval-step/>
       </session>
       <para>Другие примеры функций-друзей приведены в разделе 5.2.3. Подобная техника применяется, когда внутри группы объектов (в данном случае - объектов одного класса) и функций должно быть доступна внутреннее представление, скрытое при этом от внешнего мира. Решение в таких ситуациях одно: объявлять всех друзей в одном модуле и с помощью ограничения сигнатуры делать представление абстрактным за пределами модуля.</para>
     </section>

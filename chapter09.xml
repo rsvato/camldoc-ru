@@ -1,0 +1,184 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE chapter SYSTEM "./core.dtd">
+<chapter name="Интерактивная система (ocaml)" number="9">
+  <abstract/>
+  <main-matters>
+    <section>
+    <para>В этой главе описывается интерактивная система Objective
+    Caml, преднзначенная для использования языка в циле
+    чтения-компиляции-вызова. В этом режиме система считывает фразы
+    Caml из ввода, проверяет тип, компилирует и выполняет и, а затем
+    выводит распознанный тип и значение результата, если он
+    есть. Перед чтением каждой фразы система выводит символ
+    <command>#</command> (диез).</para> <para>Ввод может занимать
+    несколько строк. Он заканчивается <command>;;</command> (двумя
+    точками с запятыми) и состоит из одной или нескольких фраз со
+    следующим синтаксисом:</para>
+    <bnf>
+      <term>toplevel-input</term>
+      <def>
+	<repetitive>
+	  <term>toplevel-phrase</term>
+	</repetitive>
+	<value>;;</value>
+      </def>
+    </bnf>
+    <bnf>
+      <term>toplevel-phrase</term>
+      <def>
+	<or multiline="1">
+	  <choice>
+	    <term>definition</term>
+	  </choice>
+	  <choice>
+	    <term>expr</term>
+	  </choice>
+	  <choice>
+	    <value>#</value>
+	    <term>ident</term>
+	    <term>directive-argument</term>
+	  </choice>
+	</or>
+      </def>
+    </bnf>
+    <bnf>
+      <term>definition</term>
+      <def>
+	<or multiline="1">
+	  <choice>
+	    <value>let</value>
+	    <optional>
+	      <value>rec</value>
+	    </optional>
+	    <term>let-binding</term>
+	    <repetitive>
+	      <value>and</value>
+	      <term>let-binding</term>
+	    </repetitive>
+	  </choice>
+	  <choice>
+<<<<<<< chapter09.xml
+	    <term>type-definition</term>
+	  </choice>
+	  <choice>
+	    <term>exception-definition</term>
+	  </choice>
+	  <choice>
+	    <value>module</value>
+	    <term>module-name</term>
+	    <group>
+	      <value>:</value>
+	      <term>module-type</term>
+	    </group>
+	    <value>=</value>
+	    <term>module-expr</term>
+	  </choice>
+	  <choice>
+	    <value>module type</value>
+	    <term>modtype-name</term>
+	    <value>=</value>
+	    <term>module-type</term>
+	  </choice>
+	  <choice>
+	    <value>open</value>
+	    <term>module-path</term>
+	  </choice>  
+=======
+			<value>external</value>
+			<term>value-name</term>
+			<value>:</value>
+			<term>typexpr</term><value>=</value><term>external-decalaration</term>
+	  </choice>
+		<choice><term>type-definition</term></choice>
+		<choice><term>exception-definition</term></choice>
+>>>>>>> 1.2
+	</or>
+      </def>
+    </bnf>
+    <bnf>
+      <term>directive-argument</term>
+      <def>
+	<or multiline="1">
+	  <choice><term>nothing</term></choice>
+	  <choice><term>string-literal</term></choice>
+	  <choice><term>integer-literal</term></choice>
+	  <choice><term>value-path</term></choice>
+	</or>
+      </def>
+    </bnf>
+    <para>
+    	Фраза состоит из определений, подобных тем, что включаются в
+    	реализации единиц компиляции, или в выражениях модулей
+    	<keyword>struct ... end</keyword>. Определение связывает имена
+    	значений, имена типов, исключения, имена модулей и имена типов
+    	модулей. Интерактивная система осуществляет само связывание и
+    	выводит определенные типы и значения, если они есть.
+    </para>
+    <para>
+    	Кроме того, фраза может содержать директиву
+    	<keyword>open</keyword> (см. раздел 6.11) или выражение
+    	(см. раздел 6.7). Выражение вычисляется без связывания, и
+    	система выводит его результат.
+    </para>
+    <para>
+    	Наконец, фраза может включать директивы интерактивной системы,
+    	начинающиеся со знака <keyword>#</keyword>. Они управляют
+    	работой интерактивной системы и описаны ниже, в разделе 9.2.
+    </para>
+    <dict>
+      <dict-term>UNIX</dict-term>
+      <dict-art>
+	<para>Интерактивная система запускается командой
+    		<command>ocaml</command>:
+    	</para>
+	<listing><![CDATA[ocaml options objects # интерактивный режим
+ocaml options objects scriptfile # пакетный режим]]></listing>
+
+	<para>Опции описаны ниже. Параметр <command>objects</command>
+	включает имена файлов с расширениями <command>.cmo</command>
+	или <command>.cma</command> - интерпретатор загружает их сразу
+	после установки опций. Параметр <command>scriptfile</command>
+	- это любое имя файла без расширения <command>.cmo</command>
+	или <command>.cma</command>.
+	</para>
+
+	<para> Если параметр <command>scriptfile</command> отсутствует
+	в командной строке, система запускается в интерактивном режиме
+	- фразы читаются из стандартного ввода, результаты выводятся в
+	стандартный вывод, ошибки - в стандратный поток ошибок. Знако
+	конца файла в стандартном вводе останавливает
+	<command>ocaml</command> (см. также директиву
+	<command>#quit</command> в разделе 9.2).
+	</para>
+	<para>При запуске, но до чтения первой фразы, из текущего
+	каталога считывается файл <command>.ocamlinit</command> (если
+	он есть). Его содержимое читается как последовательность фраз
+	OCaml и выполняеся как в при использовании директивы
+	<command>#use</command>. При вычислении эти фразы не
+	выводятся.</para>
+	
+	<para>Интерактивная система не редактирует строки, однако ее
+	легко можно использовать в комбинации с внешним редактором
+	строк типа <command>fep</command> командой <command>fep -emacs
+	ocaml</command> или <command>fep -vim ocaml</command>. Кроме
+	того, <command>ocaml</command> может запускаться в GNU Emacs,
+	что позволяет использовать все возможности этого редактора
+	(см. подкаталог <command>emacs</command> в дистрибутиве
+	Objective Caml).</para>
+
+	<para>
+	  Анализ, компиляция и выполнение текущей фразы в любой момент
+	  могут быть прерваны клавишами <command>ctrl-c</command>
+	  (или, если точнее отправкой сигнала
+	  <keyword>sigintr</keyword> процессу
+	  <command>ocaml</command>). Интерактивная система в этом
+	  случае немедленно возвращается к приглашению
+	  <command>#</command>.
+        </para>
+    	</dict-art>
+    </dict>
+    </section>
+    <section name="Опции">
+    </section>
+  </main-matters>
+</chapter>

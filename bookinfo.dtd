@@ -1,19 +1,13 @@
-<!ENTITY chap01 SYSTEM "./chapter01.xml">
-<!ENTITY chap02 SYSTEM "./chapter02.xml">
-<!ENTITY chap03 SYSTEM "./chapter03.xml">
-<!ENTITY chap04 SYSTEM "./chapter04.xml">
-<!ENTITY chap05 SYSTEM "./chapter05.xml">
-<!ENTITY chap06 SYSTEM "./chapter06.xml">
-<!ENTITY chap07 SYSTEM "./chapter07.xml">
-<!ENTITY chap08 SYSTEM "./chapter08.xml">
+<!ENTITY % core SYSTEM "./core.dtd">
+%core;
 <!ELEMENT bookinfo (title,subtitle?,authors,legal,part+)>
 <!ELEMENT part (title,chap+)>
-<!ELEMENT chap (ENTITIES)>
+<!ELEMENT chap (chapter)>
 <!ATTLIST chap file CDATA #REQUIRED
-         	 nf CDATA #IMPLIED
+         	 nf (0|1) "0"
 >
 <!ELEMENT name (#PCDATA)>
-<!ELEMENT authors (main-author,sec-author?)>
+<!ELEMENT authors (main-author,sec-author*)>
 <!ELEMENT title (#PCDATA)>
 <!ELEMENT subtitle (#PCDATA)>
 <!ELEMENT legal (#PCDATA)>

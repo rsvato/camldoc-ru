@@ -1,5 +1,6 @@
 <!ENTITY % bnf-content "term | value">
-<!ENTITY % para-stuff "#PCDATA|command|keyword|mdash|term|sub|%bnf-content;|power|index|emph">
+<!ENTITY % para-stuff "#PCDATA|command|keyword|mdash|sub|%bnf-content;|power|index|emph|note">
+<!ENTITY % elem-stuff "#PCDATA|index|power">
 <!ENTITY % section-stuff "para|session|listing|command-session|list|table|bnf|message|command-option-group|dict">
 <!ENTITY % dict-unit "dict-term,dict-art">
 <!ELEMENT abstract (%section-stuff;)+>
@@ -9,8 +10,8 @@
 	number NMTOKEN #REQUIRED
 >
 <!ELEMENT command (#PCDATA)>
-<!ELEMENT eval-step (user-input,system-response?)>
-<!ELEMENT keyword (#PCDATA)>
+<!ELEMENT eval-step (user-input,system-response? )>
+<!ELEMENT keyword (%elem-stuff;)*>
 <!ELEMENT lb EMPTY>
 <!ELEMENT power (#PCDATA)>
 <!ATTLIST power pow CDATA #REQUIRED>
@@ -21,11 +22,11 @@
 <!ELEMENT mdash EMPTY>
 <!ELEMENT para (%para-stuff;)*>
 <!ELEMENT section (subsection|subsection-nonumber|%section-stuff;)*>
-<!ATTLIST section name CDATA #REQUIRED>
+<!ATTLIST section name CDATA #IMPLIED>
 <!ELEMENT subsection (%section-stuff;|subsubsection)*>
 <!ELEMENT subsection-nonumber (%section-stuff;)*>
 <!ATTLIST subsection name CDATA #REQUIRED
-		     neednumber NMTOKEN #REQUIRED>
+		     neednumber NMTOKEN #IMPLIED>
 <!ELEMENT subsubsection (%section-stuff;)*>
 <!ATTLIST subsubsection name CDATA #REQUIRED>
 <!ELEMENT session (eval-step+)>
@@ -33,7 +34,7 @@
 <!ELEMENT note (para|session)*>
 <!ELEMENT system-response (#PCDATA|lb|tab)*>
 <!ELEMENT list (item)+>
-<!ATTLIST list type CDATA #REQUIRED>
+<!ATTLIST list type (plain | ordered) "plain" >
 <!ELEMENT item (para|listing)+>
 <!--tables-->
 <!ELEMENT table (thead,tbody)>
@@ -51,7 +52,7 @@
 <!ATTLIST input prompt  CDATA "$">
 <!ELEMENT response (#PCDATA|lb|tab)*>
 <!ELEMENT sub (#PCDATA)>
-<!ELEMENT term (#PCDATA)>
+<!-- <!ELEMENT term (#PCDATA)> -->
 
 <!-- bnf stuff -->
 <!ELEMENT bnf (term,def)>
@@ -59,7 +60,7 @@
 <!ELEMENT value (#PCDATA)>
 <!ELEMENT def (%bnf-content; | or | group | repetitive | optional)+>
 <!ELEMENT repetitive (%bnf-content; | or)+>
-<!ELEMENT optional (%bnf-content;|group|repetitive|optional)+>
+<!ELEMENT optional (%bnf-content;|group|repetitive|optional|or)+>
 <!ELEMENT group (%bnf-content; | or)+>
 <!ELEMENT or (choice)+>
 <!ATTLIST or 
@@ -78,6 +79,6 @@
 <!ELEMENT c-param (#PCDATA)>
 <!ELEMENT option-description (para|listing|list|dict)+>
 <!ELEMENT dict (%dict-unit;)+>
-<!ELEMENT dict-term (#PCDATA)>
+<!ELEMENT dict-term (%para-stuff;)*>
 <!ELEMENT dict-art (para|listing|list)+>
 <!-- end options -->

@@ -265,7 +265,7 @@ UnixLabels.write : file_descr -> buf:string -> pos:int -> len:int -> unit]]></li
         <listing><![CDATA[StringLabels.create : int -> string]]></listing>
         <para>Этот же принцип применяется для функций с несколькими аргументами, возвращающих переменную типа, поскольку роль каждого аргумента и так понятна. Метки для таких функций могут привести к трудноотслеживаемым ошибкам в ситуациях, когда метки опускаются (как это было с <keyword>ListLabels.fold_left</keyword>).</para>
         <para>Вот некорые имена меток из стандартной библиотеки:</para>
-        <table>
+        <table cols="2">
           <thead>
             <trow>
               <tcell>

@@ -4,6 +4,7 @@
   xmlns:fotex="http://www.tug.org/fotex"
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
  <xsl:template match="section">
+ 	<xsl:if test="@name">
     <fo:block
       space-before.optimum="24pt"
       space-after.optimum="18pt"
@@ -26,6 +27,7 @@
         <xsl:value-of select="@name"/>
       </fotex:bookmark>
     </fo:block>
+		</xsl:if>
     <xsl:apply-templates/>
   </xsl:template>
    <xsl:template match="subsection[@neednumber=1]">
