@@ -135,6 +135,28 @@
 	      <command>-noautolink</command>.</para>
 	  </option-description>
 	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-c</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Только компиляция. Фаза компоновки опускается. Файлы
+	    с исходным кодом преобразуются в компилированные файлы, но
+	    исполняемый файл не создается. Этот параметр полезен для
+	    раздельной компиляции модулей.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-cc</mc-option>
+	    <c-param>ccomp</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Использовать <emph>ccomp</emph> как компоновщик C
+	    для построения испольняемого файла и как компилятор С для
+	      компиляции файлов с исходным текстом <command>.c</command>.</para>
+	</command-option>
       </command-option-group>
     </section>
   </main-matters>
