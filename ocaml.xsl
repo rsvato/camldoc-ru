@@ -14,6 +14,75 @@
         </title>
       </head>
       <body>
+				<div style="width:100%">
+		<table class="cnt">
+			<tr>
+				<td align="left" style="padding-left:40px" width="33%">
+					<xsl:for-each select="preceding::*/chapter">
+						<xsl:message>found preceding</xsl:message>
+						<xsl:variable name="ps">
+							<xsl:value-of select="@number"/>
+						</xsl:variable>
+						<xsl:variable name="pch"><xsl:value-of select="concat('chapter', format-number($ps, '00'), '.html')"/></xsl:variable>
+						<a>
+							<xsl:attribute name="href">
+								<xsl:value-of select="$pch"/>
+							</xsl:attribute>
+							<xsl:attribute name="title">
+								<xsl:text>Глава </xsl:text>
+								<xsl:value-of select="$ps"/>
+							</xsl:attribute>
+							<img src="img/left-arrow.png" style="border:none">
+								<xsl:attribute name="title">
+								<xsl:text>Глава </xsl:text>
+								<xsl:value-of select="$ps"/>
+							</xsl:attribute>
+							<xsl:attribute name="alt">
+								<xsl:text>Глава </xsl:text>
+								<xsl:value-of select="$ps"/>
+							</xsl:attribute>
+							</img>
+						</a>
+						</xsl:for-each>
+					<xsl:text>&#160;</xsl:text>
+				</td>
+				<td width="33%" align="center">
+					<a href="toc.html" title="Содержание">
+						<img style="border:none" src="img/up-arrow.png"/>
+					</a>
+				</td>
+				<td align="right" style="padding-right:40px" width="33%">
+					<xsl:for-each select="following::*/chapter">
+						<xsl:message>found following</xsl:message>
+						<xsl:variable name="ps">
+							<xsl:value-of select="@number"/>
+						</xsl:variable>
+						<xsl:variable name="pch"><xsl:value-of select="concat('chapter', format-number($ps, '00'), '.html')"/></xsl:variable>
+						<a>
+							<xsl:attribute name="href">
+								<xsl:value-of select="$pch"/>
+							</xsl:attribute>
+							<xsl:attribute name="title">
+								<xsl:text>Глава </xsl:text>
+								<xsl:value-of select="$ps"/>
+							</xsl:attribute>
+							<img src="img/right-arrow.png" style="border:none">
+								<xsl:attribute name="title">
+								<xsl:text>Глава </xsl:text>
+								<xsl:value-of select="$ps"/>
+							</xsl:attribute>
+							<xsl:attribute name="alt">
+								<xsl:text>Глава </xsl:text>
+								<xsl:value-of select="$ps"/>
+							</xsl:attribute>
+							</img>
+						</a>
+						</xsl:for-each>
+					<xsl:text>&#160;</xsl:text>
+				</td>
+			</tr>
+		</table>
+	</div>
         <div id="main-matters">
           <a>
             <xsl:attribute name="name">
@@ -387,5 +456,29 @@
 </xsl:template>
 <xsl:template name="NumberNote">
   <xsl:number level="single" count="note"/>
+</xsl:template>
+<xsl:template name="navigation">
+	<xsl:param name="n"/>
+	<div style="width:100%">
+		<table style="width:100%;border:none;padding:0px">
+			<tr>
+				<td align="left" style="padding-left:40px">
+					<xsl:if test="preceding-sibling::*[0]">
+						<xsl:variable name="ps">
+							<xsl:value-of select="preceding-sibling::*[0]/@number"/>
+						</xsl:variable>
+						<xsl:variable name="pch"><xsl:value-of select="concat('chapter', $ps)"/></xsl:variable>
+						<a>
+							<xsl:attribute name="href">
+								<xsl:value-of select="$pch"/>
+							</xsl:attribute>
+							<img src="img/left-arrow.png" title="Назад" alt="Назад" style="border:none"/>
+						</a>
+						</xsl:if>
+					<xsl:text>&#160;</xsl:text>
+				</td>
+			</tr>
+		</table>
+	</div>
 </xsl:template>
 </xsl:stylesheet>
