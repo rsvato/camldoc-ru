@@ -35,7 +35,7 @@
 <!ELEMENT system-response (#PCDATA|lb|tab)*>
 <!ELEMENT list (item)+>
 <!ATTLIST list type (plain | ordered) "plain" >
-<!ELEMENT item (para|listing)+>
+<!ELEMENT item (para|listing|list)+>
 <!--tables-->
 <!ELEMENT table (thead,tbody)>
 <!ELEMENT thead (trow)+>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!DOCTYPE chapter SYSTEM "./core.dtd">
+<!-- <!DOCTYPE chapter SYSTEM "./core.dtd"> -->
 <chapter name="Компиляция во внутренний код (ocamlopt)" number="11">
   <abstract>
     <para>
@@ -137,27 +137,524 @@
 	</command-option>
 	<command-option>
 	  <c-option>
-	    <mc-option>-c</mc-option>
-	    <c-param></c-param>
+	    <mc-option>-cclib</mc-option>
+	    <c-param>-llibname</c-param>
 	  </c-option>
 	  <option-description>
-	    <para>Только компиляция. Фаза компоновки опускается. Файлы
-	    с исходным кодом преобразуются в компилированные файлы, но
-	    исполняемый файл не создается. Этот параметр полезен для
-	    раздельной компиляции модулей.</para>
+	    <para>Передать компилятору и компоновщику С опцию
+	      <emph>-llibname</emph>. В результате указанная
+	      библиотека С будет скомпонована с программой.</para>
 	  </option-description>
 	</command-option>
 	<command-option>
 	  <c-option>
-	    <mc-option>-cc</mc-option>
-	    <c-param>ccomp</c-param>
+	    <mc-option>-ccopt</mc-option>
+	    <c-param>option</c-param>
 	  </c-option>
 	  <option-description>
-	    <para>Использовать <emph>ccomp</emph> как компоновщик C
-	    для построения испольняемого файла и как компилятор С для
-	      компиляции файлов с исходным текстом <command>.c</command>.</para>
+	    <para>Передать указанную опцию компилятору и компоновщику
+	      С. Например, <command>-ccopt
+		-L</command><emph>dir</emph> заставит его искать
+	      библиотеки С в каталоге <emph>dir</emph>.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-compact</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Оптимизировать код по размеру, а не быстродействию.
+	      В результате получаются программы чуть меньшего размера,
+	      работающие чуть медленее. По умолчанию используется
+	      оптимизация по быстродействию.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-i</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Компилятор выводит все определенные имена, а также
+	      выведенные типы или определения при компиляции
+	      реализации (файла <command>.ml</command>).  Это бывает
+	      полезно для проверки типов, распознанных компилятором.
+	      Кроме того, поскольку вывод соответствует синтаксису
+	      интерфейсов, он может помочь явно написать интерфейс
+	      (файл <command>.mli</command>) для файла: достаточно
+	      перенаправить вывод компилятора в файл
+	      <command>.mli</command> и убрать из результата
+	      декларации имен, экспорт которых не
+	      предполагается.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-I</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Добавляет <command>directory</command> к списку
+	    каталогов, в которых ищутся компилированные файлы
+	    интерфейсов (<command>.cmi</command>), компилированные
+	    объектные файлы (<command>.cmx</command>) и библиотеки
+	    (<command>.cmxa</command>). По умолчанию в
+	    первую очередь файлы ищутся в текущем каталоге, затем - в
+	    каталоге стандартной библиотеки. Каталоги, заданные опцией
+	    <command>-I</command> учитываются после текущего, в том же
+	    порядке, как они заданы в командной строке, но перед
+	    стандартной библиотекой.</para>
+	    
+	    <para>Если каталог
+	    начиначается со знака <command>+</command>, то он
+	    считается заданным относительно каталога стандартной
+	    библиотеки. Например, <command>-I +labltk</command>
+	    добавляет к списку поиска подкаталог
+	    <command>labltk</command> стандартной библиотеки.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-inline</mc-option>
+	    <c-param>n</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Устанавливает агрессивность встраиваемости в
+	      значение <emph>n</emph>, где <emph>n</emph> -
+	      положительное целое число. Значение <command>-inline
+		0</command> приводит к тому, что функции вовсе не
+	      становятся встраиваемыми, за исключением тех, тело
+	      которых меньше точки вызова. Таким образом,
+	      встраиваемость не приводит к увеличению объема кода.
+	      Агрессивность по умолчанию (<command>-inline 1</command>
+	      предусматривает встраиваемость чуть больших по размеру
+	      функций, что дает небольшой прирост кода. Дальнейнее
+	      увеличение значения этого параметра приводит к том, что
+	      все более и более объемные функции становятся
+	      кандидатами на встраивание, но и код от этого может
+	      значительно вырасти.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-linkall</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Форсирует компоновку всех модулей библиотеки. Без
+	      этого параметра модули, на которых ссылок нет, не
+	      компонуются.  При построении библиотеки (флаг
+	      <command>-a</command>) установка флага
+	      <command>-linkall</command> приводит к тому, что в
+	      последующем при компиляции программ, использующих эту
+	      библиотеку, все модули библиотеки будут компоноваться
+	      заново.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-noassert</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Отключает проверку утверждений, и утверждения не
+	    компилируются. При компоновке ранее скомпилированных
+	    файлов этот флаг не работает.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-noautolink</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>При компоновке библиотек <command>.cmxa</command>
+	    опции <command>-custom</command>,
+	    <command>-cclib</command> и <command>-ccopt</command>,
+	    вероятно хранящиеся в библиотеках (если они были указаны
+	    при построении библиотек), игнорируются. Этот флаг
+	    полезен, если библиотека содержит неправильные
+	    спецификации библиотек или опций С. В этом случае надо
+	    указать в командной строке правильные библиотеки и опции
+	    С.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-nolabels</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Игнорировать неопциональные метки в типах. В этом
+	    случае метки не могут использоваться в приложениях, и
+	    порядок аргументов становится строгим.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-o</mc-option>
+	    <c-param>exec-file</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Имя файла, создаваемого компоновщиком. По умолчанию
+	    по традициям Unix создается файл
+	    <command>a.out</command>. Если используется опция
+	    <command>-a</command>, укажите имя библиотеки. Если
+	    используется опция <command>-output-obj</command>, укажите
+	    имя объектного файла.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-output-obj</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Вместо исполняемого файла компоновщик создает
+	    объектный файл С. Это позволяет при необходимости оформить код
+	    Caml как библиотеку С, которую можно вызывать из любой
+	    программы С. Более подробно см. раздел 18.7.5. По
+	    умолчанию создается файл <command>camlprog.o</command>, но
+	    имя может быть задано с помощью опции
+	    <command>-o</command>.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-p</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Генерировать дополнительный код для записи
+	      профилировочной информации при исполнении программы.
+	      Такую информацию можно изучить с помощью программы
+	      <command>gprof</command> (см. подробнее гл. 17).
+	      Параметр должен быть задан как во время компиляции, так
+	      и во время компоновки. Можно компоновать объектные
+	      файлы, скомпилированные в обычном режиме, но
+	      профилирование в этом случае будет менее точным.</para>
+	    <dict>
+	      <dict-term>Unix</dict-term>
+	      <dict-art>
+		<para>Подробную информацию о профайлах см. в  страницах руководства Unix <command>gprof(1)</command>.</para>
+		<para>Полная поддержка <command>gprof</command> есть только на некоторых платформах (в настоящее время - Intel x86/Linux и Alpha/Digital Unix). На других платформах профайлы менее точны (нет графов вызова, только профайл по времени).</para>
+	      </dict-art>
+	      <dict-term>Windows</dict-term>
+	      <dict-art>
+		<para>Этот параметр не работает под Windows.</para>
+	      </dict-art>
+	    </dict>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-pack</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Создает объектный файл (<command>.cmx/.o</command>)
+	      и связанный с с ним скомпилированный интерфейс
+	      (<command>.cmi</command>), которые включают все
+	      объектные файлы <command>.cmx</command>, перечисленные в
+	      командной строке. Эти файлы становятся субмодулями
+	      результирующего файла <command>.cmx</command>. Имя
+	      последнего задается опцией <command>-o</command>.
+	      Например, </para>
+
+	    <listing>ocamlopt -pack -o p.cmx a.cmx b.cmx c.cmx</listing>
+
+	    <para>создает компилированные файлы
+	      <command>p.cmx</command> и <command>p.cmi</command>,
+	      описывающие единицу компиляции, включающую субмодули A,
+	      B и C, соотвествующие содержанию объектных файлов
+	      <command>a.cmx</command>, <command>b.cmx</command> и
+	      <command>c.cmx</command>. В дальнейшем на них можно
+	      ссылаться как <command>P.A</command>,
+	      <command>P.B</command> и <command>P.C</command>.</para>
+	    <dict>
+	      <dict-term>Unix</dict-term>
+	      <dict-art>
+		<para>Параметр <command>-pack</command> доступен лишь
+		  на тех платформах, для которых существуют
+		  инструменты GNU <command>binutils</command>
+		  <command>nm</command> и
+		  <command>objcopy</command>.</para>
+	      </dict-art>
+	    </dict>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-pp</mc-option>
+	    <c-param>command</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Компилятр вызывает заданную команду
+	    <command>command</command> как препроцессор для каждого
+	    исходного файла. Вывод команды перенаправляется в
+	    промежуточный файл, который и компилируется. Если
+	    компиляция проходит без ошибок, по ее завершении
+	    промежуточный файл удаляется. Имя файла конструируется на
+	    основе имени исходного файла и получает расширение
+	    <command>.ppi</command> для интерфейса
+	    (<command>.mli</command>) или <command>.ppo</command> для
+	    реализации (<command>.ml</command>).</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-principal</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Во время проверки типов компилятор проверяет также
+	    информацию о путях, следя чтобы все типы выводились
+	    приниципально. Программы, допустимые в режиме
+	    <command>-principal</command>, допустимы и в режиме по
+	    умолчанию с эквивалентными типами, однако бинарные
+	    сигнатуры в этом случае другие.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-rectypes</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Разрешает во время проверки типа произвольные
+	    рекурсивные типы. По умолчанию поддерживаются только
+	    рекурсивные типы с рекурсией по типу объекта.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-S</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Сохранять код ассемблера, полученный во время
+	      компиляции. Код для файла <command>X.ml</command>
+	      сохраняется как <command>X.s</command>.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-thread</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Компилирует или компонует многопоточные программы с
+	    использованием библиотеки <command>thread</command>,
+	    описанной в главе 24. На самом деле, эта опция просто
+	    подключает особую версию стандартной библиотеки,
+	    безопасную по потокам.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-unsafe</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para> Отключает проверку границ на массивах и обращении к
+	      строкам (конструкции <command>v.(i)</command> и
+	      <command>s.[i]</command>). Программы, собранные с этой
+	      опцией несколько быстрее, но не являются безопасными:
+	      при обращении к элементу за пределами массива или
+	      границы строки может произойти все, что угодно.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-v</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Выводит номер версии компилятора и путь к
+	      стандартной библиотеке, после чего прекращает
+	      работу.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-verbose</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Выводит все внешние команды перед их выполнением. В
+	      частности это касается ассемблера, компилятора и
+	      компоновщика C.
+	    </para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-version</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Выводит номер версии компилятора в краткой форме
+	      (например <command>3.06</command>) и прекращает
+	      работу.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-w</mc-option>
+	    <c-param>warning-list</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Включает или выключает предупреждения согласно
+	    аргументу <command>warning-list</command>. Аргумент
+	    является строкой из одной или нескольких букв следующего
+	    значения:</para>
+	    <dict>
+	      <dict-term>A/a</dict-term>
+	      <dict-art>
+		<para>включить/выключить все предупреждения.</para>
+	      </dict-art>
+	      <dict-term>C/c</dict-term>
+	      <dict-art>
+		<para>включить/выключить предупреждения о подозрительных
+		комментариях.</para>
+	      </dict-art>
+	      <dict-term>D/d</dict-term>
+	      <dict-art>
+		<para>
+		  Включить/выключить предупреждения об использовании
+		  устаревших функций.
+		</para>
+	      </dict-art>
+	      <dict-term>F/f</dict-term>
+	      <dict-art>
+		<para>Включить/выключить предупреждения о неполном
+		применении функций (например, <command>f x;
+		expr</command> при том, что вызов <command>f
+		x</command> имеет тип функции).</para>
+	      </dict-art>
+	      <dict-term>L/l</dict-term>
+	      <dict-art>
+		<para>Включить/выключить предупреждения о пропуске
+		  меток в вызовах.</para>
+	      </dict-art>
+	      <dict-term>M/m</dict-term>
+	      <dict-art>
+		<para>Включить/выключить предупреждения о
+		  переопределенных методах.</para>
+	      </dict-art>
+	      <dict-term>P/p</dict-term>
+	      <dict-art>
+		<para>Включить/выключить предупреждения о неполных
+		совпадениях (пропущенные ветки в поиске по
+		образцу).</para>
+	      </dict-art>
+	      <dict-term>S/s</dict-term>
+	      <dict-art>
+		<para>Включить/выключить предупреждения о предложениях
+		  с типом, отличным от <command>unit</command>
+		  (например, <command>expr1; expr2</command>, когда
+		  <command>expr1</command> не имеет тип
+		  <command>unit</command>.</para>
+	      </dict-art>
+	      <dict-term>U/u</dict-term>
+	      <dict-art>
+		<para>Включить/выключить предупреждения о
+		  неиспользуемых (избыточных) совпадениях с
+		  образцом.</para>
+	      </dict-art>
+	      <dict-term>V/v</dict-term>
+	      <dict-art>
+		<para>Включить/выключить предупреждения о скрытых
+		  переменных экземпляра.</para>
+	      </dict-art>
+	      <dict-term>X/x</dict-term>
+	      <dict-art>
+		<para>Включить/выключить все остальные предупреждения.</para>
+	      </dict-art>
+	    </dict>
+	    <para>По умолчанию используется установка <command>-w
+		Al</command> (все предупреждения, кроме меток).</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-warn-error</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Все предупреждения, включенные в аргумент
+	      <command>warning-list</command> считаются ошибками.
+	      Компилятор останавливается на ошибке при появлении
+	      одного из предупреждений, вместо того, чтобы продолжать
+	      выполнение. <command>warning-list</command> является
+	      строкой из одной или нескольких букв того же значения,
+	      что и в опции <command>w</command>: прописная буква
+	      превращает предупреждение в ошибку, строчная оставляет
+	      ее предупреждением. Значение по умолчанию -
+	      <command>-warn-error a</command> (все предупреждения не
+	      считаются ошибками).</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-where</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Выводит путь к стандартной библиотеке и прекращает
+	    работу.</para>
+	  </option-description>
 	</command-option>
       </command-option-group>
+    </section>
+    <section name="Распространенные ошибки">
+      <para>Сообщения об ошибказ практически идентичны сообщениям <command>ocamlc</command>. См. раздел 8.4.</para>
+    </section>
+    <section name="Совместимость с компилятором байткода">
+      <para>В этом разделе перечислены известные случаи
+	несовместимости компилятора байткода и компилятора во
+	внутренний код. В остальном код, созданный этими
+	компиляторами, должен работать одинаково.</para>
+      
+      <list>
+	<item>
+	  <para>Следующие операции приводят к остановке программы
+	    через системное прерывание или аварийный сигнал Unix
+	    (байткод вызывает исключение):</para>	  
+	  <list>
+	    <item>
+	      <para>Целочисленное деление или деление по модулю на ноль.</para>
+	    </item>
+	    <item>
+	      <para>Переполнение стека.</para>
+	    </item>
+	    <item>
+	      <para>(Только на процессорах Alpha). Операции над
+		числами с плавающей точкой, в которых участвуют
+		бесконечные или денормализованные числа (все остальные
+		процессоры, поддерживаемые <command>ocamlopt</command>
+		работают с такими числами правильно, по стандарту IEEE
+		754).</para>
+	    </item>
+	  </list>
+	  <para>В частности, переполнение стека из-за глубокой
+	    рекурсии на большинстве ядер Unix приводит к сигналу
+	    "нарушение сегментации".</para>
+	</item>
+	<item>
+	  <para>Сигналы отмечены лишь по время выделения кучи
+	    программой. Иными словами, если сигнал возник в части
+	    кода, который не смог выделить память, его обработчик
+	    будет вызван лишь в следующий момент выделения кучи.</para>
+	</item>
+      </list>
+      <para>Лучший способ избежать таких несовместимостей - это
+	никогда не перехватывать исключения
+	<command>Division_by_zero</command> и
+	<command>Stack_overflow</command>, то есть независимо от
+	компилятора считать такие ситуаци ошибками. Зачастую лучше
+	заранее проверить делитель, чем ловить исключение.</para>
     </section>
   </main-matters>
 </chapter>

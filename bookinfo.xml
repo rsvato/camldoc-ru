@@ -10,6 +10,7 @@
 	<!ENTITY chap08 SYSTEM "./chapter08.xml">
 	<!ENTITY chap09 SYSTEM "./chapter09.xml">
 	<!ENTITY chap10 SYSTEM "./chapter10.xml">
+	<!ENTITY chap11 SYSTEM "./chapter11.xml">
 ]>
 <bookinfo>
 <title>Система Objective Caml, релиз 3.06</title>
@@ -42,5 +43,6 @@
 	<chap file="chapter08.html">&chap08;</chap>
 	<chap file="chapter09.html">&chap09;</chap>
 	<chap file="chapter10.html">&chap10;</chap>
+	<chap file="chapter11.html">&chap11;</chap>
 </part>
 </bookinfo>
