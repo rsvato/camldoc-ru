@@ -3,7 +3,7 @@
 <!ENTITY % elem-stuff "#PCDATA|index|power">
 <!ENTITY % section-stuff "para|session|listing|command-session|list|table|bnf|message|command-option-group|dict">
 <!ENTITY % dict-unit "dict-term,dict-art">
-<!ELEMENT abstract (%section-stuff;)+>
+<!ELEMENT abstract (%section-stuff;)*>
 <!ELEMENT chapter (abstract?,main-matters)>
 <!ATTLIST chapter
 	name CDATA #REQUIRED
@@ -80,5 +80,5 @@
 <!ELEMENT option-description (para|listing|list|dict)+>
 <!ELEMENT dict (%dict-unit;)+>
 <!ELEMENT dict-term (%para-stuff;)*>
-<!ELEMENT dict-art (para|listing|list)+>
+<!ELEMENT dict-art (para|listing|list|dict)+>
 <!-- end options -->

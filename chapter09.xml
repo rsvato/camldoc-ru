@@ -1,7 +1,6 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <!DOCTYPE chapter SYSTEM "./core.dtd">
 <chapter name="Интерактивная система (ocaml)" number="9">
-  <abstract/>
   <main-matters>
     <section>
       <para>В этой главе описывается интерактивная система Objective
@@ -143,7 +142,7 @@ ocaml options objects scriptfile # пакетный режим]]></listing>
 	<para> Если параметр <command>scriptfile</command> отсутствует
 	в командной строке, система запускается в интерактивном режиме
 	- фразы читаются из стандартного ввода, результаты выводятся в
-	стандартный вывод, ошибки - в стандратный поток ошибок. Знако
+	стандартный вывод, ошибки - в стандратный поток ошибок. Знак
 	конца файла в стандартном вводе останавливает
 	<command>ocaml</command> (см. также директиву
 	<command>#quit</command> в разделе 9.2).
@@ -177,7 +176,7 @@ ocaml options objects scriptfile # пакетный режим]]></listing>
 	  <para>
 	    Если в командной строке задан параметр
 	    <command>scriptfile</command>, интерактивная система
-	    перехдит в  режим сценария: содержимое файла считывается
+	    переходит в  режим сценария: содержимое файла считывается
 	    как последовательность фраз Objective Caml и выполняется
 	    как при использовании директивы
 	    <command>#use</command>(раздел 9.2).  Результаты
@@ -236,7 +235,8 @@ ocaml options objects scriptfile # пакетный режим]]></listing>
     </dict>
     </section>
     <section name="Опции">
-      <para><command>ocaml</command> распознает следующие опции командной строки:</para>
+      <para><command>ocaml</command> распознает следующие опции командной
+      строки:</para>
       
       <command-option-group>
 	<command-option>
@@ -266,7 +266,96 @@ ocaml options objects scriptfile # пакетный режим]]></listing>
 	    
 	  </option-description>
 	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-nolabels</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>
+	      Игнорировать обязательные метки в типах. В этом
+	    случае метки не могут использоваться в приложениях, и
+	    порядок аргументов становится строгим.
+	    </para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-principal</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Во время проверки типов компилятор проверяет также
+	    информацию о путях, следя чтобы все типы выводились
+	    приниципально, Программы, допустимые в режиме
+	    <command>-principal</command>, допустимы и в режиме по
+	    умолчанию с эквивалентными типами.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-rectypes</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Разрешает во время проверки типа произвольные рекурсивные
+	    типы. По умолчанию поддерживаются только рекурсивные типы с рекурсией
+	    по типу объекта.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-unsafe</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>См. описание соответствующей опции <command>ocamlc</command> в
+	      гл. 8. Отключает проверку границ на массивах и обращении к строкам
+	      (конструкции <command>v.(i)</command> и
+	      <command>s.[i]</command>). Программы, собранные с этой опцией
+	      несколько быстрее, но не являются безопасными: при обращении к
+	      элементу за пределами массива или границы строки может произойти
+	      все, что угодно.
+	    </para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-w</mc-option>
+	    <c-param>warning-list</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>
+	      Включает или выключает предупреждение в соответствие со значением
+	      аргумента <command>warning-list</command>.
+	    </para>
+	  </option-description>
+	</command-option>
       </command-option-group>
+      <dict>
+	<dict-term>Unix</dict-term>
+	<dict-art>
+	  <para>Проверяются также следующие переменные среды:</para>
+	  <dict>
+	    <dict-term>LC_CTYPE</dict-term>
+	    <dict-art>
+	      <para>Если эта переменная установлена в значение
+	      <command>iso8859-1</command>, знаки с акцентам из набора Latin-1 в
+	      строках и символьных литералах выводятся как есть. В противном
+	      случае они печатаются десятичными контрольными последовательностями
+	      (вида \ddd).</para>
+	    </dict-art>
+	    <dict-term>TERM</dict-term>
+	    <dict-art>
+	      <para>При выводе сообщений об ошибках интерпретатор пытается
+	      визуально подчеркивать место обнаружения ошибки. Он проверяет
+		переменную окружения <command>TERM</command>, чтобы определить
+		тип терминала и выяснить его возможности в базе данных
+	      терминалов.</para>
+	    </dict-art>
+	  </dict>
+	</dict-art>
+      </dict>
     </section>
   </main-matters>
 </chapter>
