@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!-- <!DOCTYPE chapter SYSTEM "core.dtd"> -->
+<chapter name="Генератор зависимостей (осаmldep)" number="13">
+  <abstract>
+    <para>Команда <command>ocamldep</command> просматривает наборы
+      исходных текстов Objective Caml (<command>.ml</command> и
+      <command>.mli</command>) в поисках ссылок на внешние единицы
+      компиляции и выводит строки завсисмостей в формате, пригодном
+      для инструмента <command>make</command>. Она обеспечивает
+      правильный порядок компиляции исходных текстов и рекомпиляцию
+      только измененных файлов.</para>
+    <para>Как правило, <command>ocamldep</command> используется
+      следующим образом:</para>
+    <listing>ocamldep &lt;параметры&gt; *.mli *.ml &gt; .depend</listing>
+    <para>где <command>*.mli</command> и <command>*.ml</command>
+      соответсвуют всем файлам с исходным текстом в текущем каталоге,
+      а <command>.depend</command> - файл содержащий список
+      зависимостей (см. ниже типичный
+      <command>Makefile</command>).</para>
+    <para>Зависимости генерируются как для компилятора байткода
+      <command>ocamlc</command>, так и для компилятора внутреннего
+      кода <command>ocamlopt</command>.</para>
+  </abstract>
+  <main-matters>
+    <section name="Параметры">
+      <para><command>ocamldep</command> знает следующие параметры
+	командной строки:</para>
+      <command-option-group>
+	<command-option>
+	  <c-option>
+	    <mc-option>-I</mc-option>
+	    <c-param>directory</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Добавляет <emph>directory</emph> к списку каталогов,
+	      в которых ищутся файлы с исходными текстами. Если файл
+	      <command>foo.ml</command> ссылается на внешнюю единицу
+	      компиляции <keyword>Bar</keyword>, зависимость от
+	      интерфейса <command>bar.cmi</command> устанавливается
+	      только в том случае, когда соответствующий исходный
+	      текст удается обнаружить в либо в текущем каталоге, либо
+	      в одном из указанных с помощью параметра
+	      <command>-I</command>. В противном случае
+	      <keyword>Bar</keyword> считается модулем стандартной
+	      библиотеки, и зависимость не генерируется. Для программ,
+	      исходные тексты которых рассредоточены по разным
+	      каталогам рекомендуется передавать
+	      <command>ocamldep</command> те же параметры
+	      <command>-I</command>, что и компилятору.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-native</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Создaвать зависимости только для программы во
+	      внутреннем коде (без версии в байткоде). Если файл
+	      реалиазции ( <command>.ml</command>) не имеет файла
+	      интерфейса (<command>.mli</command>),
+	      <command>ocamldep</command> генерирует зависимости,
+	      исходя из содержания компилированного файла с байткодом
+	      (<command>.cmo</command>), что позволяет отловить
+	      изменения интерфейса, но может повлечь за собой ненужные
+	      перекомпиляции байткола для программ, которые
+	      предполагается компилировать только во внутренний код.
+	      Параметр <command>-native</command> приводит к тому, что
+	      для генерации зависимостей используются объектные файлы
+	      с внутренним кодом (<command>.cmx</command>). Если у
+	      всех исходных текстов есть файлы интерфейсов, этот
+	      параметр ни на что не влияет.</para>
+	  </option-description>
+	</command-option>
+      </command-option-group>
+    </section>
+    <section name="Типичный Makefile">
+      <para>Ниже приведен шаблон <command>Makefile</command> для программы на Objective Caml.</para>
+      <listing><![CDATA[
+OCAMLC=ocamlc
+OCAMLOPT=ocamlopt
+OCAMLDEP=ocamldep
+INCLUDES=                 # все необходимые параметры -I
+OCAMLFLAGS=$(INCLUDES)    # все остальные параметры ocamlc
+OCAMLOPTFLAGS=$(INCLUDES) # все остальные параметры ocamlopt
+
+# prog1 компилируется в байткод и включает три
+# модуля: mod1, mod2 and mod3.
+
+# Список объектных файлов для prog1
+PROG1_OBJS=mod1.cmo mod2.cmo mod3.cmo
+
+prog1: $(PROG1_OBJS)
+        $(OCAMLC) -o prog1 $(OCAMLFLAGS) $(PROG1_OBJS)
+
+# prog2 компилируется во внутренний код и включает два
+# модуля: mod4 and mod5.
+
+# Список объектных файлов для prog2
+PROG2_OBJS=mod4.cmx mod5.cmx
+
+prog2: $(PROG2_OBJS)
+        $(OCAMLOPT) -o prog2 $(OCAMLFLAGS) $(PROG2_OBJS)
+
+# Общие правила
+.SUFFIXES: .ml .mli .cmo .cmi .cmx
+
+.ml.cmo:
+        $(OCAMLC) $(OCAMLFLAGS) -c $<
+
+.mli.cmi:
+        $(OCAMLC) $(OCAMLFLAGS) -c $<
+
+.ml.cmx:
+        $(OCAMLOPT) $(OCAMLOPTFLAGS) -c $<
+
+# Очистка
+clean:
+        rm -f prog1 prog2
+        rm -f *.cm[iox]
+
+# Зависимости
+depend:
+        $(OCAMLDEP) $(INCLUDES) *.mli *.ml > .depend
+
+include .depend
+      ]]></listing>
+    </section>
+  </main-matters>
+</chapter>

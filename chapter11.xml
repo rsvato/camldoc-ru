@@ -192,7 +192,7 @@
 	<command-option>
 	  <c-option>
 	    <mc-option>-I</mc-option>
-	    <c-param></c-param>
+	    <c-param>directory</c-param>
 	  </c-option>
 	  <option-description>
 	    <para>Добавляет <command>directory</command> к списку
