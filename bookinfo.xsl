@@ -5,6 +5,7 @@
 <xsl:param name="htmlhelp.encoding" select="'windows-1251'"></xsl:param>
 <xsl:param name="saxon.character.representation" select="'native'"/>
 	 <xsl:param name="chunker.output.encoding" select="'windows-1251'"/>
+	 <xsl:param name="site.build" select="false">
 	<xsl:output encoding="windows-1251" method="html" indent="yes"/>
 	
 	<xsl:template match="/">
@@ -41,10 +42,9 @@
 			</head>
 			<body>
 				<div style="margin-top:90px;margin-left:15px;margin-right:15px;background-color:#eee;padding-left:10px;">
-<!--				<xsl:apply-templates select="title"/>
-				<xsl:apply-templates select="subtitle"/> -->
 				<xsl:apply-templates/>
 				</div>
+				<xsl:if test="${site.build} = 'true'">
 				<div id="counter" style="position:relative;margin-top:15px" align="center">
                                   <xsl:text disable-output-escaping="yes"><![CDATA[
 <!-- SpyLOG f:0211 -->
@@ -72,6 +72,7 @@ My+="</a>";Md.write(My);//--></script><noscript>
 <!--Rating@Mail.ru COUNTER--><a target="_top" href="http://top.mail.ru/jump?from=656088"><img src="http://top.list.ru/counter?id=656088;t=217" border="0" height="31" width="88" alt="Рейтинг@Mail.ru"/></a><!--/COUNTER-->]]></xsl:text>
 
 				</div>
+				</xsl:if>
 			</body>
 		</html>
 		<xsl:for-each select="//chap">
