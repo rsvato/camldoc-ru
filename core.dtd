@@ -2,7 +2,7 @@
 <!ENTITY % para-stuff "#PCDATA|command|keyword|mdash|term|sub|%bnf-content;|power|index|emph">
 <!ENTITY % section-stuff "para|session|listing|command-session|list|table|bnf|message|command-option-group|dict">
 <!ENTITY % dict-unit "dict-term,dict-art">
-<!ELEMENT abstract (para)>
+<!ELEMENT abstract (%section-stuff;)+>
 <!ELEMENT chapter (abstract?,main-matters)>
 <!ATTLIST chapter
 	name CDATA #REQUIRED
@@ -65,7 +65,7 @@
 <!ATTLIST or 
 	multiline (0 | 1) "0">
 <!ATTLIST repetitive count NMTOKEN #IMPLIED>
-<!ELEMENT choice (%bnf-content; | repetitve | optional | group)+>
+<!ELEMENT choice (%bnf-content; | repetitive | optional | group)+>
 <!-- end bnf-stuff -->
 <!-- options etc. -->
 <!ELEMENT message (m-name, message-description)>

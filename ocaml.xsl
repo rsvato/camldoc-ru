@@ -284,11 +284,6 @@
 			<xsl:apply-templates/>
 		</ol>
 	</xsl:template>
-	<xsl:template match="item">
-		<li>
-			<xsl:apply-templates/>
-		</li>
-	</xsl:template>
 	<xsl:template match="power">
 		<xsl:apply-templates/><sup><span style="font-size:-2"><xsl:value-of select="@pow"/></span></sup>
 	</xsl:template>

@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE chapter SYSTEM "./core.dtd">
+<chapter name="Интерактивная система (ocaml)" number="9">
+  <abstract>
+    <para>В этой главе описывается интерактивная система Objective
+    Caml, преднзначенная для использования языка в циле
+    чтения-компиляции-вызова. В этом режиме система считывает фразы
+    Caml из ввода, проверяет тип, компилирует и выполняет и, а затем
+    выводит распознанный тип и значение результата, если он
+    есть. Перед чтением каждой фразы система выводит символ
+    <command>#</command> (диез).</para> <para>Ввод моедт занимать
+    несколько строк. Он заканчивается <command>;;</command> (двумя
+    точками с запятыми) и состоит из одной или нескольких фраз со
+    следующим синтаксисом:</para>
+    <bnf>
+      <term>toplevel-input</term>
+      <def>
+	<repetitive>
+	  <term>toplevel-phrase</term>
+	</repetitive>
+	<value>;;</value>
+      </def>
+    </bnf>
+    <bnf>
+      <term>toplevel-phrase</term>
+      <def>
+	<or multiline="1">
+	  <choice>
+	    <term>definition</term>
+	  </choice>
+	  <choice>
+	    <term>expr</term>
+	  </choice>
+	  <choice>
+	    <value>#</value>
+	    <term>ident</term>
+	    <term>directive-argument</term>
+	  </choice>
+	</or>
+      </def>
+    </bnf>
+    <bnf>
+      <term>definition</term>
+      <def>
+	<or multiline="1">
+	  <choice>
+	    <value>let</value>
+	    <optional>
+	      <value>rec</value>
+	    </optional>
+	    <term>let-binding</term>
+	    <repetitive>
+	      <value>and</value>
+	      <term>let-binding</term>
+	    </repetitive>
+	  </choice>
+	  <choice>
+	    
+	</or>
+      </def>
+    </bnf>
+  </abstract>
+  <main-matters>
+    <section name="Опции">
+    </section>
+  </main-matters>
+</chapter>
