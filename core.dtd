@@ -66,7 +66,7 @@
 <!ATTLIST or 
 	multiline (0 | 1) "0">
 <!ATTLIST repetitive count NMTOKEN #IMPLIED>
-<!ELEMENT choice (%bnf-content; | repetitive | optional | group)+>
+<!ELEMENT choice (%bnf-content; | repetitive | optional | group | or)+>
 <!-- end bnf-stuff -->
 <!-- options etc. -->
 <!ELEMENT message (m-name, message-description)>
