@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.1"
-									xmlns:saxon="http://saxon.sf.net">
-									 <xsl:param name="default.encoding" select="'windows-1251'"></xsl:param>
+  xmlns:saxon="http://saxon.sf.net">
+  <xsl:param name="default.encoding" select="'windows-1251'"></xsl:param>
 <xsl:param name="htmlhelp.encoding" select="'windows-1251'"></xsl:param>
 <xsl:param name="saxon.character.representation" select="'native'"/>
 	 <xsl:param name="chunker.output.encoding" select="'windows-1251'"/>
@@ -43,7 +43,30 @@
 				<xsl:apply-templates/>
 				</div>
 				<div id="counter" style="position:relative;margin-top:15px" align="center">
-<!--Rating@Mail.ru COUNTER--><a target="_top" href="http://top.mail.ru/jump?from=656088"><img src="http://top.list.ru/counter?id=656088;t=217" border="0" height="31" width="88" alt="Рейтинг@Mail.ru"/></a><!--/COUNTER-->
+                                  <xsl:text disable-output-escaping="yes"><![CDATA[
+<!-- SpyLOG f:0211 -->
+<script language="javascript"><!--
+Mu="u5437.05.spylog.com";Md=document;Mnv=navigator;Mp=0;
+Md.cookie="b=b";Mc=0;if(Md.cookie)Mc=1;Mrn=Math.random();
+Mn=(Mnv.appName.substring(0,2)=="Mi")?0:1;Mt=(new Date()).getTimezoneOffset();
+Mz="p="+Mp+"&rn="+Mrn+"&c="+Mc+"&t="+Mt;
+if(self!=top){Mfr=1;}else{Mfr=0;}Msl="1.0";
+//--></script><script language="javascript1.1"><!--
+Mpl="";Msl="1.1";Mj = (Mnv.javaEnabled()?"Y":"N");Mz+='&j='+Mj;
+//--></script><script language="javascript1.2"><!--
+Msl="1.2";Ms=screen;Mpx=(Mn==0)?Ms.colorDepth:Ms.pixelDepth;
+Mz+="&wh="+Ms.width+'x'+Ms.height+"&px="+Mpx;
+//--></script><script language="javascript1.3"><!--
+Msl="1.3";//--></script><script language="javascript"><!--
+My="";My+="<a href='http://"+Mu+"/cnt?cid=543705&f=3&p="+Mp+"&rn="+Mrn+"' target='_blank'>";
+My+="<img src='http://"+Mu+"/cnt?cid=543705&"+Mz+"&sl="+Msl+"&r="+escape(Md.referrer)+"&fr="+Mfr+"&pg="+escape(window.location.href);
+My+="' border=0 width=88 height=31 alt='SpyLOG'>";
+My+="</a>";Md.write(My);//--></script><noscript>
+<a href="http://u5437.05.spylog.com/cnt?cid=543705&f=3&p=0" target="_blank">
+<img src="http://u5437.05.spylog.com/cnt?cid=543705&p=0" alt='SpyLOG' border='0' width=88 height=31 >
+</a></noscript>
+<!-- SpyLOG -->&nbsp;
+<!--Rating@Mail.ru COUNTER--><a target="_top" href="http://top.mail.ru/jump?from=656088"><img src="http://top.list.ru/counter?id=656088;t=217" border="0" height="31" width="88" alt="Рейтинг@Mail.ru"/></a><!--/COUNTER-->]]></xsl:text>
 
 				</div>
 			</body>

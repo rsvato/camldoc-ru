@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!-- <!DOCTYPE chapter SYSTEM "core.dtd"> -->
+<chapter name="Броузер/редактор (ocamlbrowser)" number="14">
+  <abstract>
+    <para>В этой главе описывается OCamlBrowser, броузер исходных
+      текстов и компилированных интрефейсов, написанный на LablTk. Он
+      полезен для программиста.</para>
+    <para>Функции OCamlBrowser таковы:</para>
+    <list>
+      <item>
+	<para>Навигация по модулям Objective Caml (через компилированные интерфейсы).</para>
+      </item>
+      <item>
+	<para>Редактирование, проверка типов и просмотр исходного текста.</para>
+      </item>
+      <item>
+	<para>Интегрированная оболочка Objective Caml, работающая как дочерний процесс.</para>
+      </item>
+    </list>
+  </abstract>
+  <main-matters>
+    <section name="Запуск">
+      <para>Броузер запускается командой <command>ocamlbrowser</command>:</para>
+      <listing>ocamlbrowser options</listing>
+      <para>Он распознает следующие параметры командной строки:</para>
+      <command-option-group>
+	<command-option>
+	  <c-option>
+	    <mc-option>-I</mc-option>
+	    <c-param>directory</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Добавляет указанный каталог к списку поиска
+	      компилированных файлов. По умолчанию используется только
+	      каталог стандратной библиотеки, но он может быть также
+	      изменен переменной среды
+	      <command>OCAMLLIB</command>.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-nolabels</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Игнорировать неопциональные метки в типах. В этом
+	    случае метки не могут использоваться в приложениях, и
+	    порядок аргументов становится строгим.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-oldui</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Старый многооконный интерфейс. По умолчанию
+	      используется более близкий к броузеру классов
+	      Smalltalk.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-rectypes</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Разрешает во время проверки типа произвольные
+	    рекурсивные типы. По умолчанию поддерживаются только
+	    рекурсивные типы с рекурсией по типу объекта.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-w</mc-option>
+	    <c-param>warning-list</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Включает или выключает предупреждения согласно
+	    аргументу <command>warning-list</command>.</para>
+	  </option-description>
+	</command-option>
+      </command-option-group>
+      <para>Большинство параметров также изменяется внутри приложения
+	командами <command>Modules - Path editor</command> и
+	<command>Compiler - Preferences</command>. Они наследуются при
+	запускe интерактивной оболочки.</para>
+    </section>
+    <section name="Просмотр">
+      <para>Это первое окно, выводимое при запуске OCamlBrowser. В нем
+	находится поле поиска и список модулей из пути
+	загрузки. В верхней части окна расположена строка меню:</para>
+      <list>
+	<item>
+	  <para><command>File - Open</command> и 
+	    <command>File - Editor</command> открывают редактор.</para>
+	</item>
+	<item>
+	  <para><command>File - Shell</command> запускает дочерний
+	    процесс интерпретатора Objective Caml.</para>
+	</item>
+	<item>
+	  <para><command>View - Show all defs</command> выводит сигнатуру выбраного модуля.</para>
+	</item>
+	<item>
+	  <para><command>View - Search entry</command> выводит или
+	    скрывает поле поиска под меню.</para>
+	</item>
+	<item>
+	  <para><command>Modules - Path editor</command> изменяет путь
+	    загрузки. <command>Modules - Reset cache</command>
+	    повторно просмартивает путь загрузки и обнуляет кэш
+	    модулей. Это полезно, если какой-то интрефейс
+	    перекомпилировался, или неизвестно, что в данный момент
+	    находится в кэше.</para>
+	</item>
+	<item>
+	  <para><command>Modules - Search symbol</command> позволяет
+	    искать символ либо по имени, либо по типу. <command>Exact
+	      type</command> ищет тип с точно такой же информацией как
+	    образец (переменные совпадают только с переменными)
+	    <command>Included type</command> позвоялет вводить
+	    неполные данные: будут найдены так же типы, принимающие
+	    больше аргументов или возвращающие больше данных, а
+	    переменные в образце совпадают с чем угодно. В обоих
+	    случаях аргументы и порядок кортежа не играют роли<note>
+	      <para>Во избежание слишком большого количества вариантов
+		необязательные аргументы типа игнорируются, во-первых,
+		когда их слишком много, и, во-вторых, когда они явно
+		не указаны в образце.</para>
+	    </note>, и аргументы без метки в образце подходят для
+	    любой метки.
+	  </para>
+	</item>
+	<item>
+	  <para>Поле <command>Search</command> под строкой меню
+	    обеспечивает поиск во всех модулях по идентификатору
+	    (разрешены шаблоны "?" и "*"). Если выбрать параметр
+	    <command>type</command>, поиск ведется по включению типа
+	    (cp. <command>Search symbol - Included</command>).</para>
+	</item>
+	<item>
+	  <para>Кнопка <command>Close all</command> закрывает все
+	    окна, созданные кнопкой <command>Detach</command>. При
+	    двойном щелчке на ней закрывается броузер.</para>
+	</item>
+      </list>
+    </section>
+  </main-matters>
+      
+
+</chapter>

@@ -2658,13 +2658,18 @@ with ]]></listing>
 	    входящему в модуль.</para>
 	</subsubsection>
 	<subsubsection name="Выражения в скобках">
+
 	  <para>Выражения <value>(</value> <term>expr</term>
-	    <value>)</value> и 	      <value>begin</value>
-	    <term>expr</term> <value>end</value> означают то же, что и <term>expr</term>. Обе формы семантически экивалентны, но в контрольных стуктурах считается хорошим стилем использовать <value>begin ... end</value>:</para>
+	  <value>)</value> и <value>begin</value> <term>expr</term>
+	  <value>end</value> означают то же, что и
+	  <term>expr</term>. Обе формы семантически экивалентны, но в
+	  контрольных стуктурах считается хорошим стилем использовать
+	  <value>begin ... end</value>:</para>
+
 	  <listing>
 if ... then begin ... ; ... end else begin ... ; ... end
 	  </listing>
-	  <para>А во всех остальных ситуациях, требующих группировки,
+	  <para>а во всех остальных ситуациях, требующих группировки,
 	    использовать круглые скобки.</para>
 	  <para>Также скобки позволяют включать в вырежение
 	    ограничение типа - <value>(</value> <term>expr</term>
@@ -2676,6 +2681,9 @@ if ... then begin ... ; ... end else begin ... ; ... end
 	    <value>:</value> <term>type</term> ]  <value>:&gt;</value>
 	    <term>type</term><value>)</value> (см. раздел 6.8.5).
 	  </para>
+	</subsubsection>
+	<subsubsection name="Применение функций">
+	  <para></para>
 	</subsubsection>
       </subsection>
     </section>
