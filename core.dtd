@@ -1,7 +1,7 @@
 <!ENTITY % bnf-content "term | value">
 <!ENTITY % para-stuff "#PCDATA|command|keyword|mdash|sub|%bnf-content;|power|index|emph|note">
 <!ENTITY % elem-stuff "#PCDATA|index|power">
-<!ENTITY % section-stuff "para|session|listing|command-session|list|table|bnf|message|command-option-group|dict">
+<!ENTITY % section-stuff "para|session|listing|command-session|list|table|bnf|message|command-option-group|dict|note">
 <!ENTITY % dict-unit "dict-term,dict-art">
 <!ELEMENT abstract (%section-stuff;)*>
 <!ELEMENT chapter (abstract?,main-matters)>
