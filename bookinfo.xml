@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE bookinfo SYSTEM "./bookinfo.dtd" [
 	<!ENTITY chap01 SYSTEM "./chapter01.xml">
 	<!ENTITY chap02 SYSTEM "./chapter02.xml">
@@ -39,6 +39,6 @@
 <part>
 	<title>Инструменты Objective Caml</title>
 	<chap file="./chapter08.html">&chap08;</chap>
-	<chap file="./chapter09.html" nf="1">&chap09;</chap>
+	<chap file="./chapter09.html">&chap09;</chap>
 </part>
 </bookinfo>

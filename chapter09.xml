@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!DOCTYPE chapter SYSTEM "./core.dtd">
+<!-- <!DOCTYPE chapter SYSTEM "./core.dtd"> -->
 <chapter name="Интерактивная система (ocaml)" number="9">
   <main-matters>
     <section>
@@ -356,6 +356,335 @@ ocaml options objects scriptfile # пакетный режим]]></listing>
 	  </dict>
 	</dict-art>
       </dict>
+    </section>
+    <section name="Директивы">
+      <para>Ниже перечислены директивы, которые позволяют
+      контролировать работу интерпретатора, загружать в память файлы и
+      отслеживать ход выполнения программы.</para>
+
+      <para>Обратите внимание: все директивы начинаются со знака
+      <keyword>#</keyword> (диез). Он должен печататься перед
+      директивой, но его не следует путать с приглашением
+      интрепретатора. Если, например, напечатать
+      <keyword>#quit;;</keyword>, работа интерпретатора завершится,
+      ввод же <keyword>quit;;</keyword> приведет лишь к ошибке
+      "unbound value <keyword>quit</keyword>".</para>
+      <command-option-group>
+	<command-option>
+	  <c-option>
+	    <mc-option>#quit;;</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Завершает работу интерпретатора
+	    <command>ocaml</command>.
+	    </para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>#labels</mc-option>
+	    <c-param>bool;;</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>
+	      Игнорирует метки в типах функций, если аргумент
+	      установлен в <emph>false</emph>, либо переключает в
+	      режим по умолчанию (коммутирующий), если аргемент
+	      установлен в <emph>true</emph>.
+	    </para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>warnings</mc-option>
+	    <c-param>"warnings-list";;</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Включает или выключает предупреждения согласно
+	      значению аргумента.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>#directory</mc-option>
+	    <c-param>"dir-name";;</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Добавляет указанный каталог к списку директорий, в
+	      которых ищутся исходные тексты и компилированные
+	      файлы.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>#cd</mc-option>
+	    <c-param>"dir-name";;</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Изменяет текущий каталог.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>#load</mc-option>
+	    <c-param>"file-name";;</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Загружает в память байткод из объектного файла
+	      (<command>.cmo</command>), созданного компилятором
+	      <command>ocamlc</command>.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>#use</mc-option>
+	    <c-param>"file-name";;</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>
+	      Читает, компилирует и выполняет фразы из указанного
+	      файла с исходным кодом. Включение буквальное: фразы
+	      обрабатываются так, будто они вводятся со стандатного
+	      ввода. Чтени файла останавливается при первой же
+	      ошибке.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>#install-printer</mc-option>
+	    <c-param>printer-name;;</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Эта директива регистрирует функцию
+	      <emph>printer-name</emph> в качестве принтера для
+	      значений, типы которых совпадают с типом аргумента
+	      функции. Иными словами, интерактивная система будет
+	      вызывать <emph>printer-name</emph>, как только ей
+	      потребуется вывести подобное значение.</para>
+	    <para>Функция должна иметь тип <value>Format.formatter
+		-&gt;</value><term>t</term><value>-&gt; unit</value>,
+	      где <term>t</term> - тип значения, и выводить строковое
+	      представление значения типа <term>t</term> на заданном
+	      форматировщике с помощью функций библиотеки
+	      <keyword>Format</keyword>. Из соображений обратной
+	      совместимости функция должна также иметь тип
+	      <term>t</term><value>-&gt; unit</value> и предоставлять
+	      вывод для стандартного форматировщика, но такое
+	      использование считается устаревшим.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>#remove-printer</mc-option>
+	    <c-param>printer-name;;</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Удаляет указанную функцию из таблицы
+	      принтеров.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>#trace</mc-option>
+	    <c-param>function-name;;</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>После выполнения этой директивы все вызовы функции
+	      <emph>function-name</emph> будут "трассироваться" -
+	      аргументы и результаты, а также исключения, возбужденные
+	      либо самой функией, либо вызываемой ей функцией,
+	      печатаются при каждом ее вызове. Если функция является
+	      производной, каждый аргумент печатается так, будто он
+	      передается функции.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>#untrace</mc-option>
+	    <c-param>function-name;;</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Останавливает трассировку указанной функции.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>#untrace_all;;</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Останавливает трассировку всех функций.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>#print_depth</mc-option>
+	    <c-param>n;;</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Ограничивает вывод значений максимальной глубиной
+	      <emph>n</emph>. Части значений с глубиной, превосходящей
+	      <emph>n</emph> выводятся как <keyword>...</keyword>
+	      (многоточие).</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>#print_length</mc-option>
+	    <c-param>n;;</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Ограничивает количество узлов выводимых значений
+	      максимальным числом <emph>n</emph>. Оставшиеся части
+	      выводятся как <keyword>...</keyword>
+	      (многоточие).</para>
+	  </option-description>
+	</command-option>
+      </command-option-group>
+    </section>
+    <section name="Интерпретатор и система модулей">
+      <para>Фразы в интерактивной системе могут ссылаться на
+	идентификаторы, определенные в единицах компиляции точно так
+	же, как и в отдельных единицах компиляции - либо по полным
+	именам (<keyword>Modulename.localname</keyword>), либо с
+	помощью конструкции <keyword>open</keyword> и неполного имени
+	(см. раздел 6.3).</para>
+      <para>Однако реализация единицы, на имена котрой предполагается
+	ссылаться уже должна быть загружена в память. При запуске
+	интерактивная система включает все реализации модулей
+	стандартной библиотеки, а реализации пользовательскиз модулей
+	загружаются директивой <keyword>#load</keyword>, описанной
+	выше. Ссылка на единицу, реализации которой не найдено,
+	приведет к ошибке "Reference to undefined global
+	`...'".</para>
+      <para>Обратите внимание, что фраза <keyword>open</keyword>
+	<emph>mod</emph> всего лишь обеспечивает доступ к
+	компилированному интерфейсу (<command>.cmi</command>) модуля
+	<emph>mod</emph>, не загружая его реализации и не сообщая об
+	ошибке, если она не будет найдена. Ошибка "reference to
+	undefined global <emph>mod</emph>" возникает только в том
+	случает, если выполняется значение или определение модуля,
+	ссылающегося на <emph>mod</emph>.</para>
+    </section>
+    <section name="Распространенные ошибки">
+      <para>В этом разделе описываются наиболее распространенные
+	сообщения об ошибках.</para>
+      <dict>
+	<dict-term>Cannot find file filename</dict-term>
+	<dict-art>
+	  <para>
+	    Указанный файл не обнаружен в текущем каталоге или
+	    каталогах, входящих в пусть поиска.</para>
+	  <para>Если <command>filename</command> представлен в формате
+	    <command>mod.cmi</command>, то это означает, что
+	    обнаружена ссылка на модуль <command>mod</command>,
+	    который еще не скомпилирован. Чтобы исправить эту ошибку,
+	    достаточно скомпилировать предварительно файл
+	    <command>mod.mli</command> или
+	    <command>mod.ml</command>.</para>
+	  <para>Если <command>filename</command> представлен в формате
+	    <command>mod.cmo</command>, то это означает, что
+	    обнаружена попытка загрузить директивой
+	    <keyword>#load</keyword> несуществующий файл с байткодом.
+	    Чтобы исправить ошибку, надо скомпилировать файл
+	    <command>mod.ml</command>.</para>
+	  <para>Если программа включает несколько каталогов, они могут
+	    не попасть в пусть поиска. В таком случае их надо добавить
+	    директивой <keyword>#directory</keyword>.</para>
+	</dict-art>
+	<dict-term>This expression has type
+	  <emph>t</emph><index>1</index>, but is used with type
+	  <emph>t</emph><index>2</index></dict-term>
+	<dict-art>
+	  <para>См. раздел 8.4.</para>
+	</dict-art>
+	<dict-term>
+	  Reference to undefined global <emph>mod</emph></dict-term>
+	<dict-art>
+	  <para>Реализаци модуля не загружена директивой <keyword>#load</keyword>. См. раздел 9.3.</para>
+	</dict-art>
+      </dict>
+    </section>
+    <section name="Заказные интерпретаторы">
+      <para>Команда <command>ocamlmktop</command> создает
+	интерпретаторы Objective Caml, котрые загружат при запуске
+	пользовательский код.</para>
+      <para>Она принимает в качестве аргумента набор файлов
+	<command>.cmo</command> и <command>.cma</command> и компонует
+	их с объектными файлами, реализующими интреактивную систему
+	Objective Caml. Типичный пример:</para>
+      <listing><![CDATA[ocamlmktop -o mytoplevel foo.cmo bar.cmo gee.cmo]]></listing>
+      <para>Здесь создается файл с байткодом <command>mytoplevel</command>, включающий интерактивную систему Objective Caml и код из трех файлов <command>.cmo</command>. Этот файл уже является исполняемым и запускается так:</para>
+      <listing><![CDATA[./mytoplevel]]></listing>
+      <para>В результате загружается обычный интерпретор, однако код из <command>foo.cmo</command>, <command>bar.cmo</command> и <command>gee.cmo</command> уже находится в памяти, словно были введены директивы</para>
+      <listing><![CDATA[#load "foo.cmo";;
+#load "bar.cmo";;
+#load "gee.cmo";;]]></listing>
+      <para>Впрочем, модули <keyword>Foo</keyword>, <keyword>Bar</keyword> и <keyword>Gee</keyword> не открыты, поэтому надо ввести</para>
+      <listing><![CDATA[open Foo;;]]></listing>
+      <para>если это потребуется.</para>
+    </section>
+    <section name="Опции ocamlmktop">
+      <para>Команда <command>ocamlmktop</command> допускает следующие опции командной строки:</para>
+      <command-option-group>
+	<command-option>
+	  <c-option>
+	    <mc-option>-cclib</mc-option>
+	    <c-param>libname</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Передает компоновщику С опцию
+	      <command>-llibname</command> при компоновке в "заказном"
+	      режиме. См. описание соответствующей опции
+	      <command>ocamlc</command> в гл. 8.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-ccopt</mc-option>
+	    <c-param>option</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Передает указанные опции компилятору и компоновщику
+	      С при компоновке в "заказном" режиме. См. описание
+	      соответствующей опции <command>ocamlc</command> в гл.
+	      8.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-custom</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Компоновка в "заказном" режиме. См. описание
+	      соответствующей опции <command>ocamlc</command> в гл.
+	      8.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-I</mc-option>
+	    <c-param>directory</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Добавяет указанную директорию к списку директорий, в
+	      которых ищутся компилированные файлы
+	      (<command>.cmo</command> и
+	      <command>.cma</command>).</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-o</mc-option>
+	    <c-param>exec-file</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Задает имя файла интерпретатора, создаваемого компоновщиком. По умолчанию это <command>a.out</command>.</para>
+	  </option-description>
+	</command-option>
+      </command-option-group>
     </section>
   </main-matters>
 </chapter>
