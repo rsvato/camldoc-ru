@@ -41,8 +41,8 @@
 			</head>
 			<body>
 				<div style="margin-top:90px;margin-left:15px;margin-right:15px;background-color:#eee;padding-left:10px;">
-				<xsl:apply-templates select="title"/>
-				<xsl:apply-templates select="subtitle"/>
+<!--				<xsl:apply-templates select="title"/>
+				<xsl:apply-templates select="subtitle"/> -->
 				<xsl:apply-templates/>
 				</div>
 				<div id="counter" style="position:relative;margin-top:15px" align="center">
