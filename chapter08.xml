@@ -644,7 +644,69 @@
 	    (все предупреждения, кроме меток).</para>
 	  </option-description>
 	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-warn-error</mc-option>
+	    <c-param>warning-list</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>
+	      Все предупреждения, включенные в аргумент
+	      <command>warning-list</command> считаются ошибками. Компилятор
+	      останавливается на ошибке при появлении одного из предупреждений,
+	      вместо того, чтобы продолжать
+	      выполнение. <command>warning-list</command> является строкой из одной
+	      или нескольких букв того же значения, что и в опции
+	      <command>w</command>: прописная буква превращает предупреждение в
+	      ошибку, строчная оставляет ее предупреждением. Значение по умолчанию
+	      - <command>-warn-error a</command> (все предупреждения не считаются
+	      ошибками).
+	    </para>
+	    <!-- one of (dict list listing para) -->
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-where</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Выводит путь к стандартной библиотеке и прекращает
+	    работу.</para>
+	  </option-description>
+	</command-option>
       </command-option-group>
+    </section>
+    <section name="Модули и файловая система">
+      <para>
+	Этот раздел должен прояснить связь между именами модулей,
+	соответствующих единицам компиляции, и имен файлов, содержащих
+	соответствующие компилированные реализации и интерфейсы.
+      </para>
+      <para>
+	Компилятор всегда выводит имя модуля из имени исходного файла без
+	расширения (<command>.ml</command> или <command>.mli</command>). Таким
+	образом, он удаляет информацию о пути (если она есть) и расширение и
+	преобразует первую букву в верхний регистр (поскольку имена модулей
+	должны быть капитализированы). Например, файл
+	<command>mylib/misc.ml</command> содержит реализацию модуля
+	<command>Misc</command>. Другие единицы компиляции могут ссылаться на
+	компоненты, определенные в <command>mylib/misc.ml</command> по имени типа
+	<command>Misc.name</command> или использовать выражение <command>open
+	  Misc</command>, а затем - неполное имя <command>name</command>.
+      </para>
+      <para>
+	Создаваемые компилятором файлы <command>.cmi</command> и
+	<command>.cmo</command> имеют те же имена, что и файлы с исходным
+	текстом, поскольку компилятор сохраняют для них имя модуля, который они
+	описывают (для файлов <command>.cmi</command>) или реализуют (для файлов
+	<command>.cmo</command>).
+      </para>
+      <para>
+	Встречая ссылку на идентификатор модуля <command>Mod</command>,
+	компилятор просматривает путь поиска, ища файл <command>mod.cmi</command>
+	(обратите внимание, что первая буква строчная), и загружает
+	компилированный интерфейс, содержащийся в этом файле. </para>
     </section>
   </main-matters>
 </chapter>
