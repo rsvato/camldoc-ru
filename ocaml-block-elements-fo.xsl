@@ -56,13 +56,14 @@
 				background-color="#EEEEEE"
 				linefeed-treatment="preserve"
 				wrap-option="no-wrap"
-				text-align-last="left">
+				text-align-last="start">
 			<xsl:apply-templates/>
 		</fo:block>
 	</xsl:template>
 	<xsl:template match="thead/trow/tcell/para">
 		<fo:block
-				text-align-last="justify"
+				text-align="justify"
+				text-align-last="start"
 				font-size="10pt"
 				font-family="Times"
 				line-height="12pt"
@@ -74,7 +75,8 @@
 	</xsl:template>
 	<xsl:template match="para" mode="thead">
 		<fo:block
-				text-align-last="justify"
+				text-align="justify"
+				text-align-last="start"
 				font-size="10pt"
 				font-family="Times"
 				line-height="12pt"
@@ -86,7 +88,8 @@
 	</xsl:template>
 	<xsl:template match="para">
 		<fo:block
-				text-align-last="justify"
+				text-align="justify"
+				text-align-last="start"
 				font-size="10pt"
 				font-weight="normal"
 				font-family="Times"

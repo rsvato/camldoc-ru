@@ -5,7 +5,7 @@
   >
   <xsl:template match="table">
     <fo:block  space-before.optimum="14pt" space-after.optimum="14pt">
-      <fo:table border-color="black" border-width="1pt" border-style="solid" space-before.optimum="14pt" space-after.optimum="14pt" table-layout="fixed">
+      <fo:table border-color="black" border-width="1pt" border-style="solid" space-before.optimum="14pt" space-after.optimum="14pt" table-layout="fixed" width="100%">
         <xsl:for-each select="tbody/trow[1]/tcell">
           <fo:table-column column-width="8cm" fotex:column-align="|l|">
             <xsl:attribute name="column-number">

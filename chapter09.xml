@@ -594,8 +594,8 @@ ocaml options objects scriptfile # пакетный режим]]></listing>
 	    директивой <keyword>#directory</keyword>.</para>
 	</dict-art>
 	<dict-term>This expression has type
-	  <emph>t</emph><index>1</index>, but is used with type
-	  <emph>t</emph><index>2</index></dict-term>
+	  <emph>t</emph><index ind="1"/>, but is used with type
+	  <emph>t</emph><index ind="2"/></dict-term>
 	<dict-art>
 	  <para>См. раздел 8.4.</para>
 	</dict-art>

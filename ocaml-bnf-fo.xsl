@@ -4,13 +4,13 @@
   xmlns:fotex="http://www.tug.org/fotex"
   >
   <xsl:template match="bnf">
-    <fo:table  space-before.optimum="14pt" space-after.optimum="14pt">
+    <fo:table  space-before.optimum="14pt" space-after.optimum="14pt" width="100%">
       <fo:table-column column-number="1" fotex:column-align="r" column-width="25%"/>
       <fo:table-column column-number="2" fotex:column-align="l" column-width="75%"/>
       <fo:table-body>
-        <fo:table-row>
+        <fo:table-row keep-together="auto">
           <fo:table-cell>
-            <fo:block text-align-last="end" font-weight="normal" font-size="10pt">
+            <fo:block text-align="end" font-weight="normal" font-size="10pt">
               <xsl:apply-templates select="term"/>
               <xsl:text>::=</xsl:text>
             </fo:block>

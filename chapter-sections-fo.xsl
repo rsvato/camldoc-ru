@@ -15,6 +15,9 @@
       language="ru"
 			text-align-last="left"
       >
+			<xsl:attribute name="id">
+				<xsl:value-of select="generate-id(.)"/>
+			</xsl:attribute>
       <xsl:value-of select="ancestor::node()/@number"/>.<xsl:call-template name="NumberSection"/>
       <xsl:text>&#160;</xsl:text>
       <xsl:value-of select="@name"/>
@@ -30,6 +33,7 @@
 		</xsl:if>
     <xsl:apply-templates/>
   </xsl:template>
+	
    <xsl:template match="subsection[@neednumber=1]">
     <fo:block
       space-before.optimum="14pt"
@@ -94,6 +98,13 @@
       line-height="24pt"
 			text-align-last="left"
       break-before="page">
+			<xsl:attribute name="id">
+				<xsl:value-of select="generate-id(.)"/>
+			</xsl:attribute>
+			<!-- <fo:marker marker-class-name="chap-head">
+					<xsl:value-of select="@number"/>.
+					<xsl:value-of select="@name"/>
+			</fo:marker> -->
       Глава<xsl:text>&#160;</xsl:text>
       <xsl:value-of select="@number"/>.
       <xsl:value-of select="@name"/>
