@@ -114,7 +114,46 @@
          <command>argn</command>. (Дополнительно см. главу 10.)</para>
          <para>В большинстве систем файл, созданный на стадии
          компоновки можно запускать непосредственно:</para>
-      <listing><![CDATA[./caml.out arg1 arg2 ... argn]]></listing>
-     </section>
+         <listing><![CDATA[./caml.out arg1 arg2 ... argn]]></listing>
+         <para>Бит исполнения обычно уже установлен, поэтому
+         интерпретатор байткода запустится автоматически.</para>
+    </section>
+    <section name="Опции">
+      <para><command>ocamlc</command> разпознает следующие опции
+      командной строки:</para>
+      <command-option-group>
+	<command-option>
+	  <c-option>
+	    <mc-option>-a</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Создает библиотеку (файл <command>.cma</command>) из
+	    объектных файлов <command>.cmo</command>, заданных в
+	    командной строке. Имя библиотеки может быть задано с
+	    помощью опции <command>-o</command>. Имя по умолчанию -
+	    <command>library.cma</command></para>
+	    
+	    <para>Если в командной строке присутствуют опции
+	    <command>-custom</command>, <command>-cclib</command> или
+	    <command>-ccopt</command>, то они сохраняются в библиотеке
+	    и затем автоматически добавляются при компоновке с этой
+	    библиотекой к командной строке в исходном порядке, если
+	    только не было задано опции
+	    <command>-noautolink</command>.</para>
+	    
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option></mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <!-- one of (dict list listing para) -->
+	  </option-description>
+	</command-option>
+      </command-option-group>
+    </section>
   </main-matters>
 </chapter>

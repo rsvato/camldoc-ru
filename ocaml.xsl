@@ -382,6 +382,31 @@
 <xsl:template match="optional">
 	[ <xsl:apply-templates/> ]
 </xsl:template>
+<xsl:template match="command-option-group|dict">
+	<dl compact="compact">
+		<xsl:apply-templates/>
+	</dl>
+</xsl:template>
+<xsl:template match="command-option">
+	<dt>
+		<xsl:apply-templates/>
+	</dt>
+</xsl:template>
+<xsl:template match="mc-option">
+	<span style="font-weight:bold;font-family:monospaced">
+		<xsl:apply-templates/>
+	</span>
+</xsl:template>
+<xsl:template match="c-param">
+	<span style="font-weight:bold;font-style:italic">
+		<xsl:apply-templates/>
+	</span>
+</xsl:template>
+<xsl:template match="option-description">
+	<dd>
+		<xsl:apply-templates/>
+	</dd>
+</xsl:template>
 	<xsl:template name="notes">
 		<xsl:for-each select="//note">
 		<div style="border: black solid thin;padding:10px 10px 10px 10px">
