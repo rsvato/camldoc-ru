@@ -13,9 +13,12 @@
 							color:black;
 							background-color:white;
 							}
+                                                * {
+                                                        font-size:12px;
+                                                }
 						p{
 							font-family:Verdana,Helvetica,sans-serif,*;
-							font-size:10pt;
+							font-size:12px;
 							text-align:justify;
 							}
 						h1,h2,h3,h4,h5{
@@ -24,17 +27,17 @@
 							background-color:#eee;
 						}
 						h1{
-							font-size:18pt;
+							font-size:18px;
 							}
 
 							h2{
-							font-size:16pt;
+							font-size:16px;
 							}
 						h3{
-							font-size:14pt;
+							font-size:14px;
 							}
 						h4{
-							font-size:12pt;
+							font-size:12px;
 							}
 
 						#abstract{

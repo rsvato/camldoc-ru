@@ -26,4 +26,8 @@
 	<chap file="./chapter06.html" nf="1">&chap06;</chap>
 	<chap file="./chapter07.html">&chap07;</chap>
 </part>
+<part>
+	<title>Инструменты Objective Caml</title>
+	<chap file="./chapter08.html" nf="1">&chap08;</chap>
+</part>
 </bookinfo>

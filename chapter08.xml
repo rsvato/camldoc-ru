@@ -146,11 +146,134 @@
 	</command-option>
 	<command-option>
 	  <c-option>
-	    <mc-option></mc-option>
+	    <mc-option>-c</mc-option>
 	    <c-param></c-param>
 	  </c-option>
 	  <option-description>
-	    <!-- one of (dict list listing para) -->
+	    <!-- one of (dict list listing para) --> <para>Только
+	    компиляция. Фаза компоновки опускается. Файлы с исходным
+	    текстом преобразуются в компилированные файлы, но
+	    исполняемый файл не создается. Эта опция полезна для
+	    раздельной компиляции модулей.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-cc</mc-option>
+	    <c-param>ccomp</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Использовать <command>ccomp</command> в качестве
+	    компоновщика и компилятора С для компиляции файлов с
+	    исходными текстами <command>.c</command> при вызове
+	    <command>ocamlc -custom</command>.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-cclib</mc-option>
+	    <c-param>-llibname</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Передать компоновщику С опцию
+	    <command>-llibname</command> при компиляции в "заказном"
+	    режиме (см. описание опции <command>-custom</command>). В
+	    результате данная библиотека С будет скомпонована с
+	    программой.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-ccopt</mc-option>
+	    <c-param>option</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Передать данную опцию компилятору и компоновщику С
+	    при сборке в "заказном" режиме (см. описание опции
+	    <command>-custom</command>). Например, при задании
+	    <command>-ccopt -Ldir</command> компоновщик С будет искать
+	    библиотеки С в каталоге <command>dir</command>.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-custom</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Сборка в "заказном" режиме. В режиме по умолчанию
+	    компоновщик создает байткод, предназначенный для
+	    исполнения разделямой системой
+	    <command>camlrun</command>. В заказном режиме
+	    результирующий файл содержит как байткод, так и систему
+	    времени выполнения. Он становится больше, но может
+	    выполняться сам, даже если команда
+	    <command>ocamlrun</command> не установлена. Кроме того,
+	    заказной режим позволяет статически компоновать код Caml c
+	    пользовательскими функциями на С, как описано в
+	    гл. 18. Под Unix не используйте команду
+	    <command>strip</command> для файлов, созданных
+	    <command>ocamlc -custom</command>. Она удаляет байкод из
+	    исполняемого файла.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-dllib</mc-option>
+	    <c-param>-llibname</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Разделяемая библиотека С
+	    <command>libname.so</command>
+	    (<command>libname.dll</command> под Windows) будет
+	    загружена динамически системой времени исполнения
+	    <command>ocamlrun</command> при старте программы.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-dllpath</mc-option>
+	    <c-param>dir</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Добавляет каталог <command>dir</command> к пути
+	    поиска времени исполнения для разделяемых библиотек С. При
+	    компоновке разделяемые библиотеки ищутся в стандартном
+	    пути поиска (он соответсвует опции
+	    <command>-I</command>). Опция <command>-dllpath</command>
+	    просто сохраняет <command>dir</command> в исполняемом
+	    файле, где <command>ocamlrun</command> может найти ее и
+	    использовать, как описано в разделе 10.3.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-g</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Добавляет отладочную информацию во время компиляции
+	    и компоновки. Эта опция необходима для того, чтобы
+	    отлажиать программу с помощью
+	    <command>ocamldebug</command> (см. гл. 16).</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-i</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Компилятор выводит все определенные имена (а также
+	    автоматически распознанные типы или их определения) при
+	    компиляции реализации (файл <command>.ml</command>. Это
+	    бывает полезно для проверки типов, распознанных
+	    компилятором. Кроме того, поскольку вывод соответствует
+	    синтаксису интерфейсов, он может помочь явно написать
+	    интерфейс (файл <command>.mli</command>) для файла:
+	    достаточно перенаправить вывод компилятора в файл
+	    <command>.mli</command> и убрать из результата декларации
+	    имен, экспорт которых не предполагается.</para>
 	  </option-description>
 	</command-option>
       </command-option-group>
