@@ -24,7 +24,9 @@
             <xsl:value-of select="@name"/>
 						</h1>
 					</a>
+					<xsl:if test="abstract">
 					<xsl:apply-templates select="abstract"/>
+					</xsl:if>
 					<xsl:apply-templates select="main-matters"/>
 					<xsl:if test="node()/note">
 						<h3>Примечания</h3>
@@ -50,11 +52,9 @@
 		</p>
 	</xsl:template>
 	<xsl:template match="abstract">
-		<xsl:if test="abstract">
-			<div style="padding-left:20px;padding-right:20px" id="abstract">
-				<xsl:apply-templates/>
-			</div>
-		</xsl:if>
+		<div style="padding-left:20px;padding-right:20px" id="abstract">
+			<xsl:apply-templates/>
+		</div>
 	</xsl:template>
 	<xsl:template match="main-matters">
 		<xsl:apply-templates select="section"/>
