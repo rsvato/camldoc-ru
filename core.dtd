@@ -1,30 +1,21 @@
-<?xml version="1.0" encoding="UTF-8"?>
+<!ENTITY % bnf-content "term | value">
 <!ELEMENT abstract (para)>
-
 <!ELEMENT chapter (abstract,main-matters)>
 <!ATTLIST chapter
 	name CDATA #REQUIRED
 	number NMTOKEN #REQUIRED
 >
-
 <!ELEMENT command (#PCDATA)>
-
 <!ELEMENT eval-step (user-input,system-response?)>
-
 <!ELEMENT keyword (#PCDATA)>
-
 <!ELEMENT lb EMPTY>
-
 <!ELEMENT main-matters (section+)>
-
 <!ELEMENT mdash EMPTY>
-
 <!ELEMENT para (#PCDATA|command|keyword|mdash|term|sub)*>
-
-<!ELEMENT section (subsection|subsection-nonumber|para|session|listing|command-session|list|table)*>
+<!ELEMENT section (subsection|subsection-nonumber|para|session|listing|command-session|list|table|bnf)*>
 <!ATTLIST section name CDATA #REQUIRED>
-<!ELEMENT subsection (para|session|listing|command-session|list|table)*>
-<!ELEMENT subsection-nonumber (para|session|listing|command-session|list|table)*>
+<!ELEMENT subsection (para|session|listing|command-session|list|table|bnf)*>
+<!ELEMENT subsection-nonumber (para|session|listing|command-session|list|table|bnf)*>
 <!ATTLIST subsection name CDATA #REQUIRED
 		     neednumber NMTOKEN #REQUIRED>
 <!ELEMENT session (eval-step+)>
@@ -34,19 +25,34 @@
 <!ELEMENT list (item)+>
 <!ATTLIST list type CDATA #REQUIRED>
 <!ELEMENT item (para)+>
+<!--tables-->
 <!ELEMENT table (thead,tbody)>
 <!ELEMENT thead (trow)+>
 <!ELEMENT tbody (trow)+>
 <!ELEMENT trow (tcell)+>
 <!ELEMENT tcell (para)+>
+<!--end tables-->
 <!ELEMENT tab EMPTY>
 
 <!ELEMENT user-input (#PCDATA|lb|tab)*>
 <!ELEMENT listing (#PCDATA|lb|tab)*>
 <!ELEMENT command-line (input?|response?)*>
 <!ELEMENT input (#PCDATA|lb|tab)*>
-<!ATTLIST input prompt  CDATA '$'>
+<!ATTLIST input prompt  CDATA "$">
 <!ELEMENT response (#PCDATA|lb|tab)*>
 <!ELEMENT sub (#PCDATA)>
 <!ELEMENT term (#PCDATA)>
 
+<!-- bnf stuff -->
+<!ELEMENT bnf (term,def)>
+<!ELEMENT term (#PCDATA)>
+<!ELEMENT value (#PCDATA)>
+<!ELEMENT def (%bnf-content; | or | group | repetitive | optional)+>
+<!ELEMENT repetitive (%bnf-content; | or)+>
+<!ELEMENT optional (%bnf-content;)+>
+<!ELEMENT group (%bnf-content; | or)+>
+<!ELEMENT or (choice)+>
+<!ATTLIST or 
+	multiline (0 | 1) "0">
+<!ELEMENT choice (%bnf-content; | repetitve | optional | group)+>
+<!-- end bnf-stuff -->
