@@ -3,11 +3,15 @@
 <!-- <!DOCTYPE chapter SYSTEM "core.dtd"> -->
 <chapter name="Объекты в OCaml" number="3">
   <abstract>
-    <para>В этой главе дается обзор объектно-ориентированных возможностей Objective Caml. </para>
+    <para>В этой главе дается обзор объектно-ориентированных
+    возможностей Objective Caml. </para>
   </abstract>
   <main-matters>
     <section name="Классы и объекты">
-      <para> Класс <keyword>point</keyword> ниже определяет одну переменную класса <keyword>x</keyword> с начальным значением 0 и метод <keyword>move</keyword>. Переменная объявлена как изменяемая, поэтому метод может менять ее значение. </para>
+      <para> Класс <keyword>point</keyword> ниже определяет одну
+      переменную класса <keyword>x</keyword> с начальным значением 0 и
+      метод <keyword>move</keyword>. Переменная объявлена как
+      изменяемая, поэтому метод может менять ее значение. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class point =
@@ -20,14 +24,20 @@
   object val mutable x : int method get_x : int method move : int -> unit end]]></system-response>
         </eval-step>
       </session>
-      <para> Новая точка <keyword>p</keyword> является экземпляром класса <keyword>point</keyword>. </para>
+      <para> Новая точка <keyword>p</keyword> является экземпляром
+      класса <keyword>point</keyword>. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#let p = new point;;]]></user-input>
           <system-response><![CDATA[val p : point = <obj>]]></system-response>
         </eval-step>
       </session>
-      <para> Тип <keyword>p</keyword> указан как <keyword>point</keyword>. Это сокращение, автоматически созданное при определении класса выше, и расшифровывается как <keyword>&lt;get_x : int; move : int -&gt; unit&gt;</keyword>, то есть методы класса <keyword>point</keyword> и их типы. </para>
+      <para> Тип <keyword>p</keyword> указан как
+      <keyword>point</keyword>. Это сокращение, автоматически
+      созданное при определении класса выше, и расшифровывается как
+      <keyword>&lt;get_x : int; move : int -&gt; unit&gt;</keyword>,
+      то есть методы класса <keyword>point</keyword> и их
+      типы. </para>
       <para>Вызовем методы <keyword>p</keyword>.</para>
       <session>
         <eval-step>
@@ -43,7 +53,10 @@
           <system-response><![CDATA[- : int = 3]]></system-response>
         </eval-step>
       </session>
-      <para>Тело класса вычисляется только во время создания объекта. Однако в следующем примере переменная класса <keyword>x</keyword> инициализируется разными значениями для двух разных объектов. </para>
+      <para>Тело класса вычисляется только во время создания
+      объекта. Однако в следующем примере переменная класса
+      <keyword>x</keyword> инициализируется разными значениями для
+      двух разных объектов. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#let x0 = ref 0;;]]></user-input>
@@ -68,7 +81,8 @@
           <system-response><![CDATA[- : int = 2]]></system-response>
         </eval-step>
       </session>
-      <para> Класс <keyword>point</keyword> можно абстрагировать от начального значения координаты <keyword>x</keyword>. </para>
+      <para> Класс <keyword>point</keyword> можно абстрагировать от
+      начального значения координаты <keyword>x</keyword>. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class point = fun x_init -> 
@@ -82,7 +96,8 @@
   object val mutable x : int method get_x : int method move : int -> unit end]]></system-response>
         </eval-step>
       </session>
-      <para>Как и в случае с функциями это определение можно записать в сокращенной форме. </para>
+      <para>Как и в случае с функциями это определение можно записать
+      в сокращенной форме. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class point x_init =
@@ -96,7 +111,9 @@
   object val mutable x : int method get_x : int method move : int -> unit end]]></system-response>
         </eval-step>
       </session>
-      <para> Теперь экземпляр класса <keyword>point</keyword> является функцией и требует начальный параметр для создания нового объекта. </para>
+      <para> Теперь экземпляр класса <keyword>point</keyword> является
+      функцией и требует начальный параметр для создания нового
+      объекта. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#new point;;]]></user-input>
@@ -107,7 +124,10 @@
           <system-response><![CDATA[val p : point = <obj>]]></system-response>
         </eval-step>
       </session>
-      <para> Параметр <keyword>x_init</keyword> видим во всем определении класса, включая методы. Метод <keyword>get_offset</keyword> возвращает положение объекта относительно начальной точки. </para>
+      <para> Параметр <keyword>x_init</keyword> видим во всем
+      определении класса, включая методы. Метод
+      <keyword>get_offset</keyword> возвращает положение объекта
+      относительно начальной точки. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class point x_init =
@@ -127,7 +147,10 @@
   end]]></system-response>
         </eval-step>
       </session>
-      <para> До определения тела класса могут вычисляться и связываться различные выражения, что бывает полезно для форсирования инвариантов. Например, точка может принудительно размещаться на ближайшем узле решетки: </para>
+      <para>До определения тела класса могут вычисляться и
+      связываться различные выражения, что бывает полезно для
+      форсирования инвариантов. Например, точка может принудительно
+      размещаться на ближайшем узле решетки: </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class adjusted_point x_init =
@@ -148,25 +171,38 @@
   end]]></system-response>
         </eval-step>
       </session>
-      <para>(Если координата <keyword>x_init</keyword> не попадает на решетку, можно возбудить исключение.) На самом деле, тот эже эффект дает вызов опеределения класса <keyword>point</keyword> со значением <keyword>origin</keyword>. </para>
+      <para>(Если координата <keyword>x_init</keyword> не попадает на
+      решетку, можно возбудить исключение.) На самом деле, тот эже
+      эффект дает вызов опеределения класса <keyword>point</keyword>
+      со значением <keyword>origin</keyword>. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class adjusted_point x_init =  point ((x_init / 10) * 10);;]]></user-input>
           <system-response><![CDATA[class adjusted_point : int -> point]]></system-response>
         </eval-step>
       </session>
-      <para> Еще один способ - поместить поправку в специальную функцию размещения. </para>
+      <para> Еще один способ - поместить поправку в специальную
+      функцию размещения. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#let new_adjusted_point x_init = new point ((x_init / 10) * 10);;]]></user-input>
           <system-response><![CDATA[val new_adjusted_point : int -> point = <fun>]]></system-response>
         </eval-step>
       </session>
-      <para> Впрочем, первый способ, как правило, предпочтительнее, поскольку код поправки входит в определение класса и наследуется. </para>
-      <para> Эта возможность позволяет создавать нножественные конструкторы одного класса с разными начальными параметрами, как в других языках, а альтернативой ей являются инициализаторы, о которых речь пойдет в разделе 3.3. </para>
+      <para> Впрочем, первый способ, как правило, предпочтительнее,
+      поскольку код поправки входит в определение класса и
+      наследуется. </para>
+      <para> Эта возможность позволяет создавать множественные
+      конструкторы одного класса с разными начальными параметрами, как
+      в других языках, а альтернативой ей являются инициализаторы, о
+      которых речь пойдет в разделе 3.3. </para>
     </section>
     <section name="Ссылка на себя">
-      <para> Метод или инициализатор может посылать сообщения самому себе, то есть текущему объекту. Соответствующая переменная должна быть явно связана (в примере ниже - переменная <keyword>s</keyword>, но имя может быть любым; чаще всего используется <keyword>self</keyword>). </para>
+      <para> Метод или инициализатор может посылать сообщения самому
+      себе, то есть текущему объекту. Соответствующая переменная
+      должна быть явно связана (в примере ниже - переменная
+      <keyword>s</keyword>, но имя может быть любым; чаще всего
+      используется <keyword>self</keyword>). </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class printable_point x_init =
@@ -194,10 +230,18 @@
           <system-response><![CDATA[7- : unit = ()]]></system-response>
         </eval-step>
       </session>
-      <para> Переменная <keyword>s</keyword> связывается динамически при вызове метода. В частности, при наследовании класса <keyword>printable_point</keyword> переменная <keyword>s</keyword> связывается с объектом субкласса. </para>
+      <para>Переменная <keyword>s</keyword> связывается динамически
+      при вызове метода. В частности, при наследовании класса
+      <keyword>printable_point</keyword> переменная
+      <keyword>s</keyword> связывается с объектом субкласса. </para>
     </section>
     <section name="Инициализаторы">
-      <para> Связывания <keyword>let</keyword> вычисляются при создании объекта, но есть также возможность вочислять выражения непосредственно после его конструирования. Такие выражения записываются как анонимные скрытые методы и называются инициализаторами. Они имеют доступ к самим себе и переменным класса. </para>
+      <para> Связывания <keyword>let</keyword> вычисляются при
+      создании объекта, но есть также возможность вочислять выражения
+      непосредственно после его конструирования. Такие выражения
+      записываются как анонимные скрытые методы и называются
+      инициализаторами. Они имеют доступ к самим себе и переменным
+      класса. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class printable_point x_init =
@@ -224,10 +268,18 @@
 val p : printable_point = <obj>]]></system-response>
         </eval-step>
       </session>
-      <para> Инициализаторы нельзя переопределять. С другой стороны, они вычисляются последовательно. Удобнее всего инициализаторы для форсирования инвариантов. Еще один пример приведен в разделе 5.1. </para>
+      <para> Инициализаторы нельзя переопределять. С другой стороны,
+      они вычисляются последовательно. Удобнее всего инициализаторы
+      для форсирования инвариантов. Еще один пример приведен в разделе
+      5.1. </para>
     </section>
     <section name="Виртуальные методы">
-      <para> Ключевое слово <keyword>virtual</keyword> позволяет объявить метод, не определяя его. Реализация метода дается в субклассах. Класс с виртуальными методами помечается как <keyword>virtual</keyword> и не может инстациироваться (то есть создавать объекты этого класса нельзя). Он также определяет сокращение типа (вместе с виртуальными методами). </para>
+      <para> Ключевое слово <keyword>virtual</keyword> позволяет
+      объявить метод, не определяя его. Реализация метода дается в
+      субклассах. Класс с виртуальными методами помечается как
+      <keyword>virtual</keyword> и не может инстациироваться (то есть
+      создавать объекты этого класса нельзя). Он также определяет
+      сокращение типа (вместе с виртуальными методами). </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class virtual abstract_point x_init =
@@ -265,7 +317,9 @@ val p : printable_point = <obj>]]></system-response>
       </session>
     </section>
     <section name="Приватные методы">
-      <para> Приватные методы не отображаются в интерфейсах объектов и могут быть вызваны только из других методов этих объектов. </para>
+      <para> Приватные методы не отображаются в интерфейсах объектов и
+      могут быть вызваны только из других методов этих
+      объектов. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class restricted_point x_init =
@@ -298,7 +352,9 @@ It has no method move]]></system-response>
           <system-response><![CDATA[- : unit = ()]]></system-response>
         </eval-step>
       </session>
-      <para>Приватные методы видны в субклассах и наследуются, если только они не скрыты сигнатурой, и могут стать в субклассах публичными.</para>
+      <para>Приватные методы видны в субклассах и наследуются, если
+      только они не скрыты сигнатурой, и могут стать в субклассах
+      публичными.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class point_again x =
@@ -316,7 +372,10 @@ It has no method move]]></system-response>
   end]]></system-response>
         </eval-step>
       </session>
-      <para>Метка <keyword>virtual</keyword> добавлена здесь лишь для того, чтобы декларировать метод, не определяя его. Поскольку метки<keyword>private</keyword> нет, метод становится публичным, сохраняя прежнее определение.</para>
+      <para>Метка <keyword>virtual</keyword> добавлена здесь лишь для
+      того, чтобы декларировать метод, не определяя его. Поскольку
+      метки<keyword>private</keyword> нет, метод становится публичным,
+      сохраняя прежнее определение.</para>
       <para>Альтернативное определение таково:</para>
       <session>
         <eval-step>
@@ -334,8 +393,12 @@ It has no method move]]></system-response>
   end]]></system-response>
         </eval-step>
       </session>
-      <para>Ограничение типа требует сделать метод <keyword>move</keyword> публичным, и этого достаточно, чтобы переопределить спецификатор <keyword>private</keyword>.</para>
-      <para>Возможно, потребуется оставить приватный метод приватным. Поскольку он все же виден в субклассе, можно определить метод с тем же именем, выполняющий его код.</para>
+      <para>Ограничение типа требует сделать метод
+      <keyword>move</keyword> публичным, и этого достаточно, чтобы
+      переопределить спецификатор <keyword>private</keyword>.</para>
+      <para>Возможно, потребуется оставить приватный метод
+      приватным. Поскольку он все же виден в субклассе, можно
+      определить метод с тем же именем, выполняющий его код.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class point_again x =
@@ -353,10 +416,14 @@ It has no method move]]></system-response>
   end]]></system-response>
         </eval-step>
       </session>
-      <para>Естественно, приватные методы могут быть виртуальными. Ключевые слова в этом случае идут в таком порядке: <keyword>method private virtual</keyword>.</para>
+      <para>Естественно, приватные методы могут быть
+      виртуальными. Ключевые слова в этом случае идут в таком порядке:
+      <keyword>method private virtual</keyword>.</para>
     </section>
     <section name="Интерфейсы классов">
-      <para>Интерфейсы классов выводятся из определения классов, но их можно определять явно, накладывая ограничения на тип класса. Как и определения класса, интерфейс создает сокращение типа.</para>
+      <para>Интерфейсы классов выводятся из определения классов, но их
+      можно определять явно, накладывая ограничения на тип класса. Как
+      и определения класса, интерфейс создает сокращение типа.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class type restricted_point_type = 
@@ -372,7 +439,10 @@ It has no method move]]></system-response>
           <system-response><![CDATA[- : restricted_point_type -> restricted_point_type = <fun>]]></system-response>
         </eval-step>
       </session>
-      <para>Интерфейсы могут использоваться как для документирования класса, так и для ограничения его типа. Можно скрыть переменные класса и приватные методы. Публичные и виртуальные методы, однако, останутся доступными.</para>
+      <para>Интерфейсы могут использоваться как для документирования
+      класса, так и для ограничения его типа. Можно скрыть переменные
+      класса и приватные методы. Публичные и виртуальные методы,
+      однако, останутся доступными.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class restricted_point' x = (restricted_point x : restricted_point_type);;]]></user-input>
@@ -386,7 +456,8 @@ It has no method move]]></system-response>
           <system-response><![CDATA[class restricted_point' : int -> restricted_point_type]]></system-response>
         </eval-step>
       </session>
-      <para>Также интерфейс класса указывается в сигнатуре модуля и в этом случает ограничивает ее.</para>
+      <para>Также интерфейс класса указывается в сигнатуре модуля и в
+      этом случает ограничивает ее.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#module type POINT = sig 
@@ -411,7 +482,11 @@ It has no method move]]></system-response>
       </session>
     </section>
     <section name="Наследование">
-      <para>Для демонстрации механизмов наследования мы создадим класс цветной точки, унаследовав его от точки. У нового класса будут все переменные класса и методы старого, и в придачу еще переменная класса <keyword>c</keyword> и метод <keyword>color</keyword>.</para>
+      <para>Для демонстрации механизмов наследования мы создадим класс
+      цветной точки, унаследовав его от точки. У нового класса будут
+      все переменные класса и методы старого, и в придачу еще
+      переменная класса <keyword>c</keyword> и метод
+      <keyword>color</keyword>.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class colored_point x (c : string) =
@@ -441,7 +516,12 @@ It has no method move]]></system-response>
           <system-response><![CDATA[val p' : colored_point = <obj>]]></system-response>
         </eval-step>
       </session>
-      <para>Точка и цветная точка несовместимы по типу, поскольку у точки нет метода <keyword>color</keyword>. Однако ниже приведена обобщенная функция <keyword>get_succ_x</keyword>, которая вызывает одноименный метод для любого объекта <keyword>p</keyword>, для которого он определен. Поэтому она будет работать и с точкой, и с цветной точкой.</para>
+      <para>Точка и цветная точка несовместимы по типу, поскольку у
+      точки нет метода <keyword>color</keyword>. Однако ниже приведена
+      обобщенная функция <keyword>get_succ_x</keyword>, которая
+      вызывает одноименный метод для любого объекта
+      <keyword>p</keyword>, для которого он определен. Поэтому она
+      будет работать и с точкой, и с цветной точкой.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#let get_succ_x p = p#get_x + 1;;]]></user-input>
@@ -465,7 +545,15 @@ It has no method move]]></system-response>
       </session>
     </section>
     <section name="Множественное наследование">
-      <para>Множественное наследование допускается. Сохраняется только последнее определение метода. Определяя метод, видимый в родительском классе, субкласс подменяет его. Определения родительских методов можно использовать повторно, явно указав предка. Ниже переменная <keyword>super</keyword> связана с <keyword>printable_point</keyword>. Имя <keyword>super</keyword> является псевдоидентификатором, который может использоваться только для вызова методов суперкласса, как в <keyword>super#print</keyword>.</para>
+      <para>Множественное наследование допускается. Сохраняется только
+      последнее определение метода. Определяя метод, видимый в
+      родительском классе, субкласс подменяет его. Определения
+      родительских методов можно использовать повторно, явно указав
+      предка. Ниже переменная <keyword>super</keyword> связана с
+      <keyword>printable_point</keyword>. Имя <keyword>super</keyword>
+      является псевдоидентификатором, который может использоваться
+      только для вызова методов суперкласса, как в
+      <keyword>super#print</keyword>.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class printable_colored_point y c = 
@@ -502,10 +590,14 @@ val p' : printable_colored_point = <obj>]]></system-response>
           <system-response><![CDATA[(10, red)- : unit = ()]]></system-response>
         </eval-step>
       </session>
-      <para>Приватный метод, скрытый в родительском классе, в дочернем уже невидим, поэтому переопределить его нельзя. Инициализаторы считаются приватными методами, поэтому исполняются во всех классах иерархии в том порядке, как они были добавлены.</para>
+      <para>Приватный метод, скрытый в родительском классе, в дочернем
+      уже невидим, поэтому переопределить его нельзя. Инициализаторы
+      считаются приватными методами, поэтому исполняются во всех
+      классах иерархии в том порядке, как они были добавлены.</para>
     </section>
     <section name="Параметризованные классы">
-      <para>Ссылки можно определить как классы. Наивное определение, впрочем, не проходит проверку типов.</para>
+      <para>Ссылки можно определить как классы. Наивное определение,
+      впрочем, не проходит проверку типов.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class ref x_init =
@@ -522,7 +614,11 @@ The method get has type 'a where 'a is unbound
 ]]></system-response>
         </eval-step>
       </session>
-      <para>Причина в том, что по крайней мере один метод имеет полиморфный тип (в данном случае, тип значения, хранимого в ссылке), поэтому либо класс должен быть параметризован, либо метод ограничен по типу. Мономорфная реализация записывается так:</para>
+      <para>Причина в том, что по крайней мере один метод имеет
+      полиморфный тип (в данном случае, тип значения, хранимого в
+      ссылке), поэтому либо класс должен быть параметризован, либо
+      метод ограничен по типу. Мономорфная реализация записывается
+      так:</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class ref (x_init:int) =
@@ -537,7 +633,9 @@ The method get has type 'a where 'a is unbound
    end]]></system-response>
         </eval-step>
       </session>
-      <para>Класс для полиморфной ссылке должен явно перечислять типы параметров в квадратных скобках в своем объявлении. Кроме того, эти типы должны быть связаны в теле класса ограничением. </para>
+      <para>Класс для полиморфной ссылке должен явно перечислять типы
+      параметров в квадратных скобках в своем объявлении. Кроме того,
+      эти типы должны быть связаны в теле класса ограничением. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class ['a] ref x_init = 
@@ -554,7 +652,10 @@ The method get has type 'a where 'a is unbound
           <system-response><![CDATA[- : int = 2]]></system-response>
         </eval-step>
       </session>
-      <para>Тип параметра в объявлении может быть ограничен в теле определения класса. В описании типа класса окончательное значение типа параметра выводится оператором <keyword>constraint</keyword>.</para>
+      <para>Тип параметра в объявлении может быть ограничен в теле
+      определения класса. В описании типа класса окончательное
+      значение типа параметра выводится оператором
+      <keyword>constraint</keyword>.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class ['a] ref_succ (x_init:'a) = 
@@ -573,7 +674,11 @@ The method get has type 'a where 'a is unbound
   end]]></system-response>
         </eval-step>
       </session>
-      <para> Рассмотрим более сложный пример: определим круг, центр которого может быть точкой любого типа. Дoполнительное ограничение типа мы поместим в метод <keyword>move</keyword>, так как свободных переменных среди параметров класса быть не должно. </para>
+      <para> Рассмотрим более сложный пример: определим круг, центр
+      которого может быть точкой любого типа. Дoполнительное
+      ограничение типа мы поместим в метод <keyword>move</keyword>,
+      так как свободных переменных среди параметров класса быть не
+      должно. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class ['a] circle (c : 'a) =
@@ -594,7 +699,19 @@ The method get has type 'a where 'a is unbound
   end]]></system-response>
         </eval-step>
       </session>
-      <para>Альтернативное определение с ключевым словом <keyword>constraint</keyword> в теле определения класса, приведено ниже. Тип <keyword>#point</keyword> здесь - это сокращение, созданное при определении класса <keyword>point</keyword>. Такая форма записи позволяет использовать любой объект, являющийся субклассом <keyword>point</keyword>. На самом деле она переводится в <keyword>&lt;get_x: int; move: int -&gt; unit; ...&gt;</keyword>. Таким образом мы получаем альтернативное определение класса <keyword>circle</keyword> с чуть более строгим ограничением, предполагающим, что <keyword>center</keyword> имеет метод <keyword>move</keyword>.</para>
+      <para>Альтернативное определение с ключевым словом
+      <keyword>constraint</keyword> в теле определения класса,
+      приведено ниже. Тип <keyword>#point</keyword> здесь - это
+      сокращение, созданное при определении класса
+      <keyword>point</keyword>. Такая форма записи позволяет
+      использовать любой объект, являющийся субклассом
+      <keyword>point</keyword>. На самом деле она переводится в
+      <keyword>&lt;get_x: int; move: int -&gt; unit;
+      ...&gt;</keyword>. Таким образом мы получаем альтернативное
+      определение класса <keyword>circle</keyword> с чуть более
+      строгим ограничением, предполагающим, что
+      <keyword>center</keyword> имеет метод
+      <keyword>move</keyword>.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class ['a] circle (c : 'a) =
@@ -616,7 +733,12 @@ The method get has type 'a where 'a is unbound
   end]]></system-response>
         </eval-step>
       </session>
-      <para>Класс <keyword>colored_circle</keyword> - это особая версия <keyword>circle</keyword>, ее центр должен быть объектом класса <keyword>colored_point</keyword>, кроме того добавляется метод <keyword>color</keyword>. При определении параметризованного класса экземпляр типа параметра должен быть задан явно (он записывается в квадратных скобках).</para>
+      <para>Класс <keyword>colored_circle</keyword> - это особая
+      версия <keyword>circle</keyword>, ее центр должен быть объектом
+      класса <keyword>colored_point</keyword>, кроме того добавляется
+      метод <keyword>color</keyword>. При определении
+      параметризованного класса экземпляр типа параметра должен быть
+      задан явно (он записывается в квадратных скобках).</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class ['a] colored_circle c =
@@ -639,7 +761,8 @@ The method get has type 'a where 'a is unbound
       </session>
     </section>
     <section name="Полиморфные методы">
-      <para>Классы могут быть полиморфными по своему содержанию, однако для полиморфизма методов этого недостаточно.</para>
+      <para>Классы могут быть полиморфными по своему содержанию,
+      однако для полиморфизма методов этого недостаточно.</para>
       <para>Классический пример - итератор.</para>
       <session>
         <eval-step>
@@ -657,7 +780,8 @@ The method get has type 'a where 'a is unbound
   object method empty : bool method fold : ('a -> int -> 'a) -> 'a -> 'a end]]></system-response>
         </eval-step>
       </session>
-      <para> Кажется, что этот итератор полиморфный, но на самом деле, это не так. </para>
+      <para> Кажется, что этот итератор полиморфный, но на самом деле,
+      это не так.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#let l = new intlist [1; 2; 3];;]]></user-input>
@@ -676,8 +800,15 @@ The method get has type 'a where 'a is unbound
           <system-response><![CDATA[This expression has type int but is here used with type string]]></system-response>
         </eval-step>
       </session>
-      <para>Итератор работает, как показывает первый пример со сложением чисел. Однако поскольку сами объекты не полиморфны (полиморфны только их конструкторы), в методе <keyword>fold</keyword> их тип фиксируется. Использование в итераторе строк приводит к ошибке.</para>
-      <para>Проблема в том, что квантификация размещена неправильно: полиморфность требуется не от класса, а от метода <keyword>fold</keyword>. Для этого в определении метода надо явно указать полиморфный тип.</para>
+      <para>Итератор работает, как показывает первый пример со
+      сложением чисел. Однако поскольку сами объекты не полиморфны
+      (полиморфны только их конструкторы), в методе
+      <keyword>fold</keyword> их тип фиксируется. Использование в
+      итераторе строк приводит к ошибке.</para>
+      <para>Проблема в том, что квантификация размещена неправильно:
+      полиморфность требуется не от класса, а от метода
+      <keyword>fold</keyword>. Для этого в определении метода надо
+      явно указать полиморфный тип.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class intlist (l : int list) =
@@ -703,8 +834,13 @@ The method get has type 'a where 'a is unbound
           <system-response><![CDATA[- : string = "1 2 3 "]]></system-response>
         </eval-step>
       </session>
-      <para>Как видно из типа, показанного компилятором, типы полиморфных методов должны быть явно указаны в определении класса(сразу после имени метода), но могут остаться неявными в описании класса.</para>
-      <para>Тип бывает и вовсе опущен, если он уже известен благодаря наследованию или ограничениям. Вот пример переопределения метода:</para>
+      <para>Как видно из типа, показанного компилятором, типы
+      полиморфных методов должны быть явно указаны в определении
+      класса(сразу после имени метода), но могут остаться неявными в
+      описании класса.</para>
+      <para>Тип бывает и вовсе опущен, если он уже известен благодаря
+      наследованию или ограничениям. Вот пример переопределения
+      метода:</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class intlist_rev l =
@@ -727,8 +863,15 @@ The method get has type 'a where 'a is unbound
    end;;]]></user-input>
         </eval-step>
       </session>
-      <para>Идиома <keyword>(self : int #iterator)</keyword> дает гарантию, что объект реализует интерфейс <keyword>iterator</keyword>.</para>
-      <para>Полиморфные методы вызываются точно так же, как и обычные, надо только знать о некоторых ограничениях того, как система устанавливает тип объекта. Полиморфный метод может быть вызван только в том случае, если его тип известен в момент вызова. В противном случае он считается мономорфным, что может привести к ошибке несовместимости типов. </para>
+      <para>Идиома <keyword>(self : int #iterator)</keyword> дает
+      гарантию, что объект реализует интерфейс
+      <keyword>iterator</keyword>.</para>
+      <para>Полиморфные методы вызываются точно так же, как и обычные,
+      надо только знать о некоторых ограничениях того, как система
+      устанавливает тип объекта. Полиморфный метод может быть вызван
+      только в том случае, если его тип известен в момент вызова. В
+      противном случае он считается мономорфным, что может привести к
+      ошибке несовместимости типов. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#let sum lst = lst#fold (fun x y -> x+y) 0;;]]></user-input>
@@ -749,7 +892,9 @@ but is here used with type
           <system-response><![CDATA[val sum : int #iterator -> int = <fun>]]></system-response>
         </eval-step>
       </session>
-      <para>Разумеется, ограничения могут быть явно указаны в типах метода. При этом требуется перечислить только квантифицированные переменные.</para>
+      <para>Разумеется, ограничения могут быть явно указаны в типах
+      метода. При этом требуется перечислить только квантифицированные
+      переменные.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#let sum lst =
@@ -757,7 +902,11 @@ but is here used with type
           <system-response><![CDATA[val sum : < fold : 'a. ('a -> int -> 'a) -> 'a -> 'a; .. > -> int = <fun>]]></system-response>
         </eval-step>
       </session>
-      <para>Еще одно применение полиморфных методов состоит в том, что с их помощью можно добиться некоторого подобия выделения подтипов аргументов. В разделе 3.7 показывалось, что функция может быть полиморфичной в классе своих аргументов. То же самое касается и методов.</para>
+      <para>Еще одно применение полиморфных методов состоит в том, что
+      с их помощью можно добиться некоторого подобия выделения
+      подтипов аргументов. В разделе 3.7 показывалось, что функция
+      может быть полиморфичной в классе своих аргументов. То же самое
+      касается и методов.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class type point0 = object method get_x : int end;;]]></user-input>
@@ -786,7 +935,11 @@ but is here used with type
           <system-response><![CDATA[- : int * int = (5, 2)]]></system-response>
         </eval-step>
       </session>
-      <para>Следует обратить внимание на специальный синтаксис <keyword>(#point0 as 'a)</keyword> - он используется для квантификации расширяемой части <keyword>#point0</keyword>. Если требуется полиморфизм в поле объекта, оно должно квантифицироваться отдельно.</para>
+      <para>Следует обратить внимание на специальный синтаксис
+      <keyword>(#point0 as 'a)</keyword> - он используется для
+      квантификации расширяемой части <keyword>#point0</keyword>. Если
+      требуется полиморфизм в поле объекта, оно должно
+      квантифицироваться отдельно.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class multi_poly =
@@ -803,11 +956,23 @@ but is here used with type
   end]]></system-response>
         </eval-step>
       </session>
-      <para> В методе <keyword>m1</keyword> объект <keyword>o</keyword> должен по крайней мере иметь полиморфный метод <keyword>n1</keyword>. В методе <keyword>m2</keyword> аргументы <keyword>n2</keyword> и <keyword>x</keyword> должны иметь один и тот же тип, квантифицируемый на том же уровне, что и <keyword>'a</keyword>. </para>
+      <para> В методе <keyword>m1</keyword> объект
+      <keyword>o</keyword> должен по крайней мере иметь полиморфный
+      метод <keyword>n1</keyword>. В методе <keyword>m2</keyword>
+      аргументы <keyword>n2</keyword> и <keyword>x</keyword> должны
+      иметь один и тот же тип, квантифицируемый на том же уровне, что
+      и <keyword>'a</keyword>. </para>
     </section>
     <section name="Приведение типов">
-      <para>Выделение подтипов не бывает неявным. Однако осуществляется онo двумя способами. Наиболее общий подход является полностью явным: должны быть заданы как область определения (domain), так и область значения (codomain) приведения типов.</para>
-      <para>Точка и цветная точка несовместимы по типу и не могут, например, входить в один и тот же список. Однако цветная точка может быть приведена к точке путем сокрытия метода <keyword>color</keyword>.</para>
+      <para>Выделение подтипов не бывает неявным. Однако
+      осуществляется онo двумя способами. Наиболее общий подход
+      является полностью явным: должны быть заданы как область
+      определения (domain), так и область значения (codomain)
+      приведения типов.</para>
+      <para>Точка и цветная точка несовместимы по типу и не могут,
+      например, входить в один и тот же список. Однако цветная точка
+      может быть приведена к точке путем сокрытия метода
+      <keyword>color</keyword>.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#let colored_point_to_point cp = (cp : colored_point :> point);;]]></user-input>
@@ -823,7 +988,11 @@ val q : colored_point = <obj>]]></system-response>
           <system-response><![CDATA[val l : point list = [<obj>; <obj>]]]></system-response>
         </eval-step>
       </session>
-      <para> Объект типа <keyword>t</keyword> может отображаться как объект типа <keyword>t'</keyword> только в том случае, если <keyword>t</keyword> является подтипом <keyword>t'</keyword>. Например, к точке нельзя обратиться как к цветной точке.</para>
+      <para> Объект типа <keyword>t</keyword> может отображаться как
+      объект типа <keyword>t'</keyword> только в том случае, если
+      <keyword>t</keyword> является подтипом
+      <keyword>t'</keyword>. Например, к точке нельзя обратиться как к
+      цветной точке.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#(p : point :> colored_point);;]]></user-input>
@@ -833,30 +1002,47 @@ is not a subtype of type
     < color : string; get_offset : int; get_x : int; move : int -> unit > ]]></system-response>
         </eval-step>
       </session>
-      <para> Поэтому конкретизация приведения может быть небезопасной, должна по идее сочетаться с точным указанием типа и может привести к ошибке времени исполнения. Впрочем, в Objective Caml такая операция невозможна.</para>
-      <para> Следует знать, что выделение подтипов и наследование не связаны между собой. Наследование - это синтаксическое отношение классов, а выделение подтипов - семантическое. Например, класс цветной точки может быть определен напрямую, без наследования от класса точки, и все равно остаться его подтипом.</para>
-      <para> Область определения в приведении типа обычно опускается. Например, возможна такая конструкция: </para>
+      <para> Поэтому конкретизация приведения может быть небезопасной,
+      должна по идее сочетаться с точным указанием типа и может
+      привести к ошибке времени исполнения. Впрочем, в Objective Caml
+      такая операция невозможна.</para>
+      <para> Следует знать, что выделение подтипов и наследование не
+      связаны между собой. Наследование - это синтаксическое отношение
+      классов, а выделение подтипов - семантическое. Например, класс
+      цветной точки может быть определен напрямую, без наследования от
+      класса точки, и все равно остаться его подтипом.</para>
+      <para> Область определения в приведении типа обычно
+      опускается. Например, возможна такая конструкция: </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#let to_point cp = (cp :> point);;]]></user-input>
           <system-response><![CDATA[val to_point : #point -> point = <fun>]]></system-response>
         </eval-step>
       </session>
-      <para> В этом случае функция <keyword>colored_point_to_point</keyword> является частным случаем функции <keyword>to_point</keyword>. Однако так бывает не всегда. Явное приведение более точно. Возьмем для примера следующий класс: </para>
+      <para> В этом случае функция
+      <keyword>colored_point_to_point</keyword> является частным
+      случаем функции <keyword>to_point</keyword>. Однако так бывает
+      не всегда. Явное приведение более точно. Возьмем для примера
+      следующий класс: </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class c0 = object method m = {< >} method n = 0 end;;]]></user-input>
           <system-response><![CDATA[class c0 : object ('a) method m : 'a method n : int end]]></system-response>
         </eval-step>
       </session>
-      <para> Объект типа <keyword>c</keyword> - это сокращение для <keyword>&lt;m : 'a&gt; as 'a</keyword>. Теперь возьмем декларацию типа: </para>
+      <para> Объект типа <keyword>c</keyword> - это сокращение для
+      <keyword>&lt;m : 'a&gt; as 'a</keyword>. Теперь возьмем
+      декларацию типа: </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class type c1 =  object method m : c1 end;;]]></user-input>
           <system-response><![CDATA[class type c1 = object method m : c1 end]]></system-response>
         </eval-step>
       </session>
-      <para> Объект типа <keyword>c1</keyword> - сокращение для <keyword>&lt;m : 'a&gt; as 'a</keyword>. Приведение объекта типа <keyword>c1</keyword> к типу <keyword>c0</keyword> допустимо: </para>
+      <para> Объект типа <keyword>c1</keyword> - сокращение для
+      <keyword>&lt;m : 'a&gt; as 'a</keyword>. Приведение объекта типа
+      <keyword>c1</keyword> к типу <keyword>c0</keyword> допустимо:
+      </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#fun (x:c0) -> (x : c0 :> c1);;]]></user-input>
@@ -876,7 +1062,8 @@ Only the first object type has a method n.
 This simple coercion was not fully general. Consider using a double coercion.]]></system-response>
         </eval-step>
       </session>
-      <para>Выход в использовании явной формы. Иногда проблему помогает разрешить изменение определения класса.</para>
+      <para>Выход в использовании явной формы. Иногда проблему
+      помогает разрешить изменение определения класса.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class type c2 =  object ('a) method m : 'a end;;]]></user-input>
@@ -887,7 +1074,15 @@ This simple coercion was not fully general. Consider using a double coercion.]]>
           <system-response><![CDATA[- : c0 -> c2 = <fun>]]></system-response>
         </eval-step>
       </session>
-      <para>Несмотря на свои различия, классы <keyword>c1</keyword> и <keyword>c2</keyword> расширяются в один и тот же тип объекта (общие имена и типы методов). Кроме того, когда область определения остается неявной, а область значения является сокращением известного типа класса, для функции приведения используется тип класса, а не объекта. Поэтому при приведении субкласса к суперклассу в большинстве случаев можно оставлять область определения неявной. Тип приведения всегда можно посмотреть:</para>
+      <para>Несмотря на свои различия, классы <keyword>c1</keyword> и
+      <keyword>c2</keyword> расширяются в один и тот же тип объекта
+      (общие имена и типы методов). Кроме того, когда область
+      определения остается неявной, а область значения является
+      сокращением известного типа класса, для функции приведения
+      используется тип класса, а не объекта. Поэтому при приведении
+      субкласса к суперклассу в большинстве случаев можно оставлять
+      область определения неявной. Тип приведения всегда можно
+      посмотреть:</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#let to_c1 x = (x :> c1);;]]></user-input>
@@ -898,15 +1093,43 @@ This simple coercion was not fully general. Consider using a double coercion.]]>
           <system-response><![CDATA[val to_c2 : #c2 -> c2 = <fun>]]></system-response>
         </eval-step>
       </session>
-      <para>Обратите внимание на различие приведений: во втором случае тип <keyword>#c2 = &lt; m : 'a; .. &gt; as 'a</keyword> полиморфически рекурсивен (согласно явной рекурсии в типе класса <keyword>c2</keyword>), потому и возможно преобразование к объекту класса <keyword>c0</keyword>. С другой стороны, <keyword>c1</keyword> в первом случае расширяется только до <keyword> m : &lt; m : c1; .. &gt;; .. &gt;</keyword> (вспомним <keyword>#c1 = &lt; m : c1; .. &gt;</keyword>, причем рекурсия не появляется. Кроме того, можно заметить, что тип <keyword>to_c2</keyword> - <keyword>#c2 -&gt; c2</keyword>, хотя тип <keyword>to_c1</keyword> более общий, чем <keyword>#c1 -&gt; c1</keyword>. Это не совсем так, поскольку возможны типы классов, для которых некоторые экземляры <keyword>#c</keyword> не будут подтипами <keyword>c</keyword> (это объясняется в разделе 3.15). Кроме того, для класса без парамтеров приведение <keyword>(_ :&gt; c)</keyword> будет более общим, чем <keyword>(_ : #c :&gt; c)</keyword>.</para>
-      <para>Зачастую ошибочно пытаются определить функцию приведения во время определения класса. Проблема в том, что в этом случае сокращение типа еше не сформировано, потому и субтипы его неизвестны. Так что функция приведения <keyword>(_ :&gt; c)</keyword> или <keyword>(_ : #c :&gt; c)</keyword> становится функцией идентичности. </para>
+      <para>Обратите внимание на различие приведений: во втором случае
+      тип <keyword>#c2 = &lt; m : 'a; .. &gt; as 'a</keyword>
+      полиморфически рекурсивен (согласно явной рекурсии в типе класса
+      <keyword>c2</keyword>), потому и возможно преобразование к
+      объекту класса <keyword>c0</keyword>. С другой стороны,
+      <keyword>c1</keyword> в первом случае расширяется только до
+      <keyword> m : &lt; m : c1; .. &gt;; .. &gt;</keyword> (вспомним
+      <keyword>#c1 = &lt; m : c1; .. &gt;</keyword>, причем рекурсия
+      не появляется. Кроме того, можно заметить, что тип
+      <keyword>to_c2</keyword> - <keyword>#c2 -&gt; c2</keyword>, хотя
+      тип <keyword>to_c1</keyword> более общий, чем <keyword>#c1 -&gt;
+      c1</keyword>. Это не совсем так, поскольку возможны типы
+      классов, для которых некоторые экземляры <keyword>#c</keyword>
+      не будут подтипами <keyword>c</keyword> (это объясняется в
+      разделе 3.15). Кроме того, для класса без парамтеров приведение
+      <keyword>(_ :&gt; c)</keyword> будет более общим, чем
+      <keyword>(_ : #c :&gt; c)</keyword>.</para>
+      <para>Зачастую ошибочно пытаются определить функцию приведения
+      во время определения класса. Проблема в том, что в этом случае
+      сокращение типа еше не сформировано, потому и субтипы его
+      неизвестны. Так что функция приведения <keyword>(_ :&gt;
+      c)</keyword> или <keyword>(_ : #c :&gt; c)</keyword> становится
+      функцией идентичности. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#function x -> (x :> 'a);;]]></user-input>
           <system-response><![CDATA[- : 'a -> 'a = <fun>]]></system-response>
         </eval-step>
       </session>
-      <para>Таким образом, если приведение применяется, как в примере ниже к <keyword>self</keyword>, тип <keyword>self</keyword> объединяется с закрытым типом <keyword>c</keyword> (закрытый тип - это объектный тип без многоточия). В результате тип <keyword>self</keyword> должен быть также закрыт, что недопустимо, поскольку не позволит в дальнейшем расширять его. Поэтому в случаях, когда при объединении двух типов получучается закрытый объектный тип, генерируется ошибка.</para>
+      <para>Таким образом, если приведение применяется, как в примере
+      ниже к <keyword>self</keyword>, тип <keyword>self</keyword>
+      объединяется с закрытым типом <keyword>c</keyword> (закрытый тип
+      - это объектный тип без многоточия). В результате тип
+      <keyword>self</keyword> должен быть также закрыт, что
+      недопустимо, поскольку не позволит в дальнейшем расширять
+      его. Поэтому в случаях, когда при объединении двух типов
+      получучается закрытый объектный тип, генерируется ошибка.</para>
       <para></para>
       <session>
         <eval-step>
@@ -923,7 +1146,9 @@ Self type cannot be unified with a closed object type
 ]]></system-response>
         </eval-step>
       </session>
-      <para>Однако, наиболее распространенный случай, а именно приведение <keyword>self</keyword> к текущему классу рапознается мехнизмом проверки типов и типизируется правильно.</para>
+      <para>Однако, наиболее распространенный случай, а именно
+      приведение <keyword>self</keyword> к текущему классу рапознается
+      мехнизмом проверки типов и типизируется правильно.</para>
       <para></para>
       <session>
         <eval-step>
@@ -931,7 +1156,9 @@ Self type cannot be unified with a closed object type
           <system-response><![CDATA[class c : object method m : c end]]></system-response>
         </eval-step>
       </session>
-      <para>В результате становится возможной идиома, сохраняющая список всех объектов, принадлежащих к некоему классу или его субклассам:</para>
+      <para>В результате становится возможной идиома, сохраняющая
+      список всех объектов, принадлежащих к некоему классу или его
+      субклассам:</para>
       <para></para>
       <session>
         <eval-step>
@@ -947,7 +1174,8 @@ Self type cannot be unified with a closed object type
           <system-response><![CDATA[class c : int -> object method m : int end]]></system-response>
         </eval-step>
       </session>
-      <para>Эта идиома позволяет получить объект, тип которого был приведен к суперклассу:</para>
+      <para>Эта идиома позволяет получить объект, тип которого был
+      приведен к суперклассу:</para>
       <para></para>
       <session>
         <eval-step>
@@ -961,8 +1189,12 @@ Self type cannot be unified with a closed object type
           <system-response><![CDATA[val lookup_c : < .. > -> < m : int > = <fun>]]></system-response>
         </eval-step>
       </session>
-      <para>Тип <keyword>&lt; m : int &gt;</keyword> является просто расширением <keyword>с</keyword>, поскольку используется ссылка. Словом, функция действительно вернула объект класса <keyword>c</keyword>.</para>
-      <para>Проблемы, описанной выше можно и вовсе избежать, определив сначала сокращение с помощью типа класса.</para>
+      <para>Тип <keyword>&lt; m : int &gt;</keyword> является просто
+      расширением <keyword>с</keyword>, поскольку используется
+      ссылка. Словом, функция действительно вернула объект класса
+      <keyword>c</keyword>.</para>
+      <para>Проблемы, описанной выше можно и вовсе избежать, определив
+      сначала сокращение с помощью типа класса.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class type c' = object method m : int end;;]]></user-input>
@@ -979,7 +1211,10 @@ Self type cannot be unified with a closed object type
 class d : object method as_c : c' method m : int method n : int end]]></system-response>
         </eval-step>
       </session>
-      <para>Другой способ состоит в том, чтобы воспользоваться виртуальным классом - при наследовании от него все методы <keyword>c</keyword> будут иметь тот же тип, что и методы <keyword>c'</keyword>.</para>
+      <para>Другой способ состоит в том, чтобы воспользоваться
+      виртуальным классом - при наследовании от него все методы
+      <keyword>c</keyword> будут иметь тот же тип, что и методы
+      <keyword>c'</keyword>.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class virtual c' = object method virtual m : int end;;]]></user-input>
@@ -996,16 +1231,25 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
           <user-input><![CDATA[#type c' = <m : int>;;]]></user-input>
         </eval-step>
       </session>
-      <para>Впрочем сокращение <keyword>#c'</keyword> так определить не получится. Оно задается определением либо класса, либо типа класса. Сокращения со знаком диеза <keyword>#</keyword> неявно включют анонимную переменную <keyword>..</keyword>, а ее явно именовать нельзя. Наиболее близок к цели следующий код:</para>
+      <para>Впрочем сокращение <keyword>#c'</keyword> так определить
+      не получится. Оно задается определением либо класса, либо типа
+      класса. Сокращения со знаком диеза <keyword>#</keyword> неявно
+      включют анонимную переменную <keyword>..</keyword>, а ее явно
+      именовать нельзя. Наиболее близок к цели следующий код:</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#type 'a c'_class = 'a constraint 'a = < m : int; .. >;;]]></user-input>
         </eval-step>
       </session>
-      <para>Здесь появляется дополнительная переменная типа, фиксирующая открытость объекта.</para>
+      <para>Здесь появляется дополнительная переменная типа,
+      фиксирующая открытость объекта.</para>
     </section>
     <section name="Функциональные объекты">
-      <para>Можно написать версию класса <keyword>point</keyword> без присвоения переменной экземпляра. Конструкция <keyword>{&lt;...&gt;}</keyword> возвращает копию <keyword>self</keyword> (то есть текущего объекта) и способная изменять некторые переменные экземпляра.</para>
+      <para>Можно написать версию класса <keyword>point</keyword> без
+      присвоения переменной экземпляра. Конструкция
+      <keyword>{&lt;...&gt;}</keyword> возвращает копию
+      <keyword>self</keyword> (то есть текущего объекта) и способная
+      изменять некторые переменные экземпляра.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class functional_point y =
@@ -1035,8 +1279,15 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
           <system-response><![CDATA[- : int = 7]]></system-response>
         </eval-step>
       </session>
-      <para>Обратите внимание, что сокращение типа <keyword>functional_point</keyword> рекурсивно, что видно в типе класса <keyword>functional_point</keyword>: тип <keyword>self</keyword> - <keyword>'a</keyword>, а кроме того <keyword>'a</keyword> появляется внутри типа метода <keyword>move</keyword>.</para>
-      <para>Вышеприведенное определение <keyword>functional_point</keyword> не эквивалентно следующему:</para>
+      <para>Обратите внимание, что сокращение типа
+      <keyword>functional_point</keyword> рекурсивно, что видно в типе
+      класса <keyword>functional_point</keyword>: тип
+      <keyword>self</keyword> - <keyword>'a</keyword>, а кроме того
+      <keyword>'a</keyword> появляется внутри типа метода
+      <keyword>move</keyword>.</para>
+      <para>Вышеприведенное определение
+      <keyword>functional_point</keyword> не эквивалентно
+      следующему:</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class bad_functional_point y =
@@ -1070,11 +1321,24 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
           <system-response>- : int = 7</system-response>
         </eval-step>
       </session>
-      <para>Объекты обоих классов ведут себя одинаково, но объекты их субклассов будут различаться. Субкласс второго класса в методе <keyword>move</keyword> будет по-прежнему возвращать объект родительского класса, а в первом случае метод вернет объект субкласса.</para>
-      <para>Такая техника часто используется вместе с бинарными методами, что показано в разделе 5.2.1.</para>
+      <para>Объекты обоих классов ведут себя одинаково, но объекты их
+      субклассов будут различаться. Субкласс второго класса в методе
+      <keyword>move</keyword> будет по-прежнему возвращать объект
+      родительского класса, а в первом случае метод вернет объект
+      субкласса.</para>
+      <para>Такая техника часто используется вместе с бинарными
+      методами, что показано в разделе 5.2.1.</para>
     </section>
     <section name="Клонирование объектов">
-      <para>Как императивные, так и функциональные объекты можно клонировать. Библиотечная функция <keyword>OO.copy</keyword> создает поверхностную копию объекта, то есть возвращает объект, равный предыдущему. Переменные экземпляра копируются, однако их содержание разделяется между оригиналом и копией. Присвоение значения переменной через вызов метода у копии не затрагивает оригинал и наоброт. Более глубокое присвоение (если, например, переменная является ссылкой), разумеется, затронет оба объекта.</para>
+      <para>Как императивные, так и функциональные объекты можно
+      клонировать. Библиотечная функция <keyword>OO.copy</keyword>
+      создает поверхностную копию объекта, то есть возвращает объект,
+      равный предыдущему. Переменные экземпляра копируются, однако их
+      содержание разделяется между оригиналом и копией. Присвоение
+      значения переменной через вызов метода у копии не затрагивает
+      оригинал и наоброт. Более глубокое присвоение (если, например,
+      переменная является ссылкой), разумеется, затронет оба
+      объекта.</para>
       <para>Тип <keyword>OO.copy</keyword> таков:</para>
       <session>
         <eval-step>
@@ -1082,7 +1346,15 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
           <system-response><![CDATA[- : (< .. > as 'a) -> 'a = <fun>]]></system-response>
         </eval-step>
       </session>
-      <para>Ключевое слово <keyword>as</keyword> в данном случае связывает переменную типа <keyword>'a</keyword> с объектом типа <keyword>&lt; .. &gt;</keyword>. Таким образом, <keyword>OO.copy</keyword> принимает объект с любыми методами (что соотвествует многоточию) и возвращает объект того же типа. Тип функции отличается от <keyword>&lt; .. &gt; -&gt; &lt; .. &gt;</keyword>, поскольку каждое многоточие соответствует разным наборам методов - оно ведет себя как переменная типа.</para>
+      <para>Ключевое слово <keyword>as</keyword> в данном случае
+      связывает переменную типа <keyword>'a</keyword> с объектом типа
+      <keyword>&lt; .. &gt;</keyword>. Таким образом,
+      <keyword>OO.copy</keyword> принимает объект с любыми методами
+      (что соотвествует многоточию) и возвращает объект того же
+      типа. Тип функции отличается от <keyword>&lt; .. &gt; -&gt; &lt;
+      .. &gt;</keyword>, поскольку каждое многоточие соответствует
+      разным наборам методов - оно ведет себя как переменная
+      типа.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#let p = new point 5;;]]></user-input>
@@ -1097,8 +1369,14 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
           <system-response><![CDATA[- : int * int = (5, 12)]]></system-response>
         </eval-step>
       </session>
-      <para><keyword>OO.copy p</keyword> работает как <keyword>p#copy</keyword>, если в классе <keyword>p</keyword> определен публичный метод <keyword> copy</keyword> с телом <keyword>{&lt; &gt;}</keyword>.</para>
-      <para>Объекты сравниваются с помощью обобщенных функций <keyword>=</keyword> и <keyword>&lt;&gt;</keyword>. Два объекты равны тогда и только тогда, когда имеет место их физическое равенство. В частности, объект и его копия не равны.</para>
+      <para><keyword>OO.copy p</keyword> работает как
+      <keyword>p#copy</keyword>, если в классе <keyword>p</keyword>
+      определен публичный метод <keyword> copy</keyword> с телом
+      <keyword>{&lt; &gt;}</keyword>.</para>
+      <para>Объекты сравниваются с помощью обобщенных функций
+      <keyword>=</keyword> и <keyword>&lt;&gt;</keyword>. Два объекты
+      равны тогда и только тогда, когда имеет место их физическое
+      равенство. В частности, объект и его копия не равны.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#let q = Oo.copy p;;]]></user-input>
@@ -1109,8 +1387,13 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
           <system-response>- : bool * bool = (false, true)</system-response>
         </eval-step>
       </session>
-      <para>Можно использовать и другие обобщенные операторы сравнения (<keyword>&lt;, &lt;=</keyword> и т.д.). Отношение <keyword>&lt;</keyword> задает неопределенный, но строгий порядок объектов. Он фиксируется раз и навсегда после создания объектов и в дальнейшем не подвергается изменениям.</para>
-      <para>Клонирование и переопределение взаимозаменяемы, когда используются внутри объекта и не переопределяют полей.</para>
+      <para>Можно использовать и другие обобщенные операторы сравнения
+      (<keyword>&lt;, &lt;=</keyword> и т.д.). Отношение
+      <keyword>&lt;</keyword> задает неопределенный, но строгий
+      порядок объектов. Он фиксируется раз и навсегда после создания
+      объектов и в дальнейшем не подвергается изменениям.</para>
+      <para>Клонирование и переопределение взаимозаменяемы, когда
+      используются внутри объекта и не переопределяют полей.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class copy =
@@ -1127,8 +1410,11 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
           <system-response><![CDATA[class copy : object ('a) method copy : 'a end]]></system-response>
         </eval-step>
       </session>
-      <para>Только переопределение позволяет переопределять поля, и только примитив <keyword>OO.copy</keyword> может использоваться извне.</para>
-      <para>Клонирование также помогает сохранять и восстанавливать состояние объектов.</para>
+      <para>Только переопределение позволяет переопределять поля, и
+      только примитив <keyword>OO.copy</keyword> может использоваться
+      извне.</para>
+      <para>Клонирование также помогает сохранять и восстанавливать
+      состояние объектов.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class backup = 
@@ -1145,7 +1431,9 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
   end]]></system-response>
         </eval-step>
       </session>
-      <para>Такой класс допускает сохранение только одного уровня, но множественное наследование позволяет добавить возможность сохранения в любой класс.</para>
+      <para>Такой класс допускает сохранение только одного уровня, но
+      множественное наследование позволяет добавить возможность
+      сохранения в любой класс.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class ['a] backup_ref x = object inherit ['a] ref x inherit backup end;;]]></user-input>
@@ -1171,7 +1459,8 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
           <system-response><![CDATA[- : int list = [2; 1; 1; 1; 1]]]></system-response>
         </eval-step>
       </session>
-      <para>Один из вариантов может сохранять все копии (метод <keyword>clear</keyword> позвляет вручную удалять их).</para>
+      <para>Один из вариантов может сохранять все копии (метод
+      <keyword>clear</keyword> позвляет вручную удалять их).</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class backup = 
@@ -1212,7 +1501,8 @@ class d : object method as_c : c' method m : int method n : int end]]></system-r
       </session>
     </section>
     <section name="Рекурсивные классы">
-      <para>Рекурсивные классы позволяют опеределить объекты со взаимно рекурсивными типами.</para>
+      <para>Рекурсивные классы позволяют опеределить объекты со
+      взаимно рекурсивными типами.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class window =
@@ -1234,10 +1524,21 @@ class widget :
   window -> object val window : window method window : window end]]></system-response>
         </eval-step>
       </session>
-      <para>Несмотря на взаимную рекурсивность типов, классы <keyword>window</keyword> и <keyword>widget</keyword> сами по себе независимы.</para>
+      <para>Несмотря на взаимную рекурсивность типов, классы
+      <keyword>window</keyword> и <keyword>widget</keyword> сами по
+      себе независимы.</para>
     </section>
     <section name="Бинарные методы">
-      <para>Бинарным называется метод, аргумент которого имеет тот же тип, что и сам объект. Класс <keyword>comparable</keyword> ниже представляет собой шаблон для классов с методом <keyword>leq</keyword> типа <keyword>'a -&gt; bool</keyword>, где <keyword>'a</keyword> связывается с типом самого объекта. Таким образом, <keyword>#comparable</keyword> разворачивается в <keyword>&lt; leq : 'a -&gt; bool; .. &gt; as 'a</keyword>. Здесь же показано, что связка <keyword>as</keyword> позволяет писать рекурсивные классы.</para>
+      <para>Бинарным называется метод, аргумент которого имеет тот же
+      тип, что и сам объект. Класс <keyword>comparable</keyword> ниже
+      представляет собой шаблон для классов с методом
+      <keyword>leq</keyword> типа <keyword>'a -&gt; bool</keyword>,
+      где <keyword>'a</keyword> связывается с типом самого
+      объекта. Таким образом, <keyword>#comparable</keyword>
+      разворачивается в <keyword>&lt; leq : 'a -&gt; bool; .. &gt; as
+      'a</keyword>. Здесь же показано, что связка
+      <keyword>as</keyword> позволяет писать рекурсивные
+      классы.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class virtual comparable = 
@@ -1247,7 +1548,15 @@ class widget :
           <system-response>class virtual comparable : object ('a) method virtual leq : 'a -&gt; bool end</system-response>
         </eval-step>
       </session>
-      <para>Ниже приведено определение класса <keyword>money</keyword> как субкласса <keyword>comparable</keyword>. На самом деле это просто обертка для чисел с плавающей точкой, позволяющая сравнивать их как объекты. Дополнительные операции появятся позже. Параметр класса <keyword>x</keyword> ограничен по типу, так как примитив <keyword>&lt;=</keyword> в Objective Caml является полиморфной функцией сравнения. Конструкция <keyword>inherit</keyword> гарантирует, что экземпляры класса будут также экземплярами <keyword>#comparable</keyword>. </para>
+      <para>Ниже приведено определение класса <keyword>money</keyword>
+      как субкласса <keyword>comparable</keyword>. На самом деле это
+      просто обертка для чисел с плавающей точкой, позволяющая
+      сравнивать их как объекты. Дополнительные операции появятся
+      позже. Параметр класса <keyword>x</keyword> ограничен по типу,
+      так как примитив <keyword>&lt;=</keyword> в Objective Caml
+      является полиморфной функцией сравнения. Конструкция
+      <keyword>inherit</keyword> гарантирует, что экземпляры класса
+      будут также экземплярами <keyword>#comparable</keyword>. </para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class money (x : float) =
@@ -1266,8 +1575,19 @@ class widget :
   end]]></system-response>
         </eval-step>
       </session>
-      <para>Обратите внимание, что тип <keyword>money</keyword> нельзя считать подтипом <keyword>comparable</keyword>, так как в методе <keyword>leq</keyword> тип объекта находится в контравариантной позиции. Действительно, объект <keyword>m</keyword> класса <keyword>money</keyword> включает метод <keyword>leq</keyword>, который ожидает аргумента типа <keyword>money</keyword>, так как пользуется его методом <keyword>value</keyword>. Если принять тип <keyword>m</keyword> как <keyword>comparable</keyword>, то это значит, что метод <keyword>leq</keyword> может быть вызван с объектом, не имеющим метода <keyword>value</keyword>, а это приведет к ошибке.</para>
-      <para>Аналогично, тип <keyword>money2</keyword> ниже не является подтипом <keyword>money</keyword>.</para>
+      <para>Обратите внимание, что тип <keyword>money</keyword> нельзя
+      считать подтипом <keyword>comparable</keyword>, так как в методе
+      <keyword>leq</keyword> тип объекта находится в контравариантной
+      позиции. Действительно, объект <keyword>m</keyword> класса
+      <keyword>money</keyword> включает метод <keyword>leq</keyword>,
+      который ожидает аргумента типа <keyword>money</keyword>, так как
+      пользуется его методом <keyword>value</keyword>. Если принять
+      тип <keyword>m</keyword> как <keyword>comparable</keyword>, то
+      это значит, что метод <keyword>leq</keyword> может быть вызван с
+      объектом, не имеющим метода <keyword>value</keyword>, а это
+      приведет к ошибке.</para>
+      <para>Аналогично, тип <keyword>money2</keyword> ниже не является
+      подтипом <keyword>money</keyword>.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class money2 x =
@@ -1285,7 +1605,15 @@ class widget :
   end]]></system-response>
         </eval-step>
       </session>
-      <para>Возможно, однако, определить функции, работающие с объектами обоих типов: функция <keyword>min</keyword> будет возвращать меньший их объектов, типы которых объединяются с помощью <keyword>#comparable</keyword>. Тип этой функции отличается от <keyword>#comparable -&gt; #comparable -&gt; #comparable</keyword>, поскольку сокращение <keyword>#comparable</keyword> скрывает переменную типа (многоточие). Всякий раз это сокращение порождает новую переменную.</para>
+      <para>Возможно, однако, определить функции, работающие с
+      объектами обоих типов: функция <keyword>min</keyword> будет
+      возвращать меньший их объектов, типы которых объединяются с
+      помощью <keyword>#comparable</keyword>. Тип этой функции
+      отличается от <keyword>#comparable -&gt; #comparable -&gt;
+      #comparable</keyword>, поскольку сокращение
+      <keyword>#comparable</keyword> скрывает переменную типа
+      (многоточие). Всякий раз это сокращение порождает новую
+      переменную.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#let min (x : #comparable) y =
@@ -1293,7 +1621,8 @@ class widget :
           <system-response><![CDATA[val min : (#comparable as 'a) -> 'a -> 'a = <fun>]]></system-response>
         </eval-step>
       </session>
-      <para>Эта функция работает как с <keyword>money</keyword>, так и с <keyword>money2</keyword>.</para>
+      <para>Эта функция работает как с <keyword>money</keyword>, так и
+      с <keyword>money2</keyword>.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#(min (new money  1.3) (new money 3.1))#value;;]]></user-input>
@@ -1304,9 +1633,17 @@ class widget :
           <system-response><![CDATA[- : float = 3.14]]></system-response>
         </eval-step>
       </session>
-      <para>Другие примеры бинарных методов можно найти в разделах 5.2.1 и 5.2.3.</para>
-      <para>В методе <keyword>times</keyword> используется функциональное обновление. Определение <keyword>new money2 (k *. repr)</keyword> (вместо <keyword>{&lt; repr = k *. repr &gt;}</keyword>) будет неправильно работать в случае наследования: для субкласса <keyword>money2 money3</keyword> такой метод вместо <keyword>money3</keyword> вернул бы объект класса <keyword>money2</keyword>.</para>
-      <para>Классу <keyword>money</keyword> не помешал бы еще один бинарный метод:</para>
+      <para>Другие примеры бинарных методов можно найти в разделах
+      5.2.1 и 5.2.3.</para>
+      <para>В методе <keyword>times</keyword> используется
+      функциональное обновление. Определение <keyword>new money2 (k
+      *. repr)</keyword> (вместо <keyword>{&lt; repr = k *. repr
+      &gt;}</keyword>) будет неправильно работать в случае
+      наследования: для субкласса <keyword>money2 money3</keyword>
+      такой метод вместо <keyword>money3</keyword> вернул бы объект
+      класса <keyword>money2</keyword>.</para>
+      <para>Классу <keyword>money</keyword> не помешал бы еще один
+      бинарный метод:</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class money x =
@@ -1332,7 +1669,17 @@ class widget :
       </session>
     </section>
     <section name="Друзья">
-      <para>В классе <keyword>money</keyword> заметна проблема, зачастую присущая бинарным методам. Ради взаимодействия с другими объектами того же класса представление <keyword>money</keyword> должно быть открыто с помощью методов типа <keyword>value</keyword>. Если убрать все бинарные методы (в данном случае, <keyword>leq</keyword> и <keyword>plus</keyword>), представление может быть скрыто внутри объекта, и метод <keyword>value</keyword> будет ненужен. Однако, это невозможно, так как бинарный метод требует доступа к объектам того же класса, но отличающимся от текущего экземпляра.</para>
+      <para>В классе <keyword>money</keyword> заметна проблема,
+      зачастую присущая бинарным методам. Ради взаимодействия с
+      другими объектами того же класса представление
+      <keyword>money</keyword> должно быть открыто с помощью методов
+      типа <keyword>value</keyword>. Если убрать все бинарные методы
+      (в данном случае, <keyword>leq</keyword> и
+      <keyword>plus</keyword>), представление может быть скрыто внутри
+      объекта, и метод <keyword>value</keyword> будет ненужен. Однако,
+      это невозможно, так как бинарный метод требует доступа к
+      объектам того же класса, но отличающимся от текущего
+      экземпляра.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#class safe_money x =
@@ -1350,7 +1697,11 @@ class widget :
   end]]></system-response>
         </eval-step>
       </session>
-      <para>Здесь внутреннее представление объекта известно только текущему объекту. Чтобы сделать его видимым для других объектов того же класса, приходится открывать его всем. Но видимость представления легко ограничивается с помощью системы модудей.</para>
+      <para>Здесь внутреннее представление объекта известно только
+      текущему объекту. Чтобы сделать его видимым для других объектов
+      того же класса, приходится открывать его всем. Но видимость
+      представления легко ограничивается с помощью системы
+      модудей.</para>
       <session>
         <eval-step>
           <user-input><![CDATA[#module type MONEY = 
@@ -1382,7 +1733,13 @@ class widget :
    end;;]]></user-input>
         </eval-step>
       </session>
-      <para>Другие примеры функций-друзей приведены в разделе 5.2.3. Подобная техника применяется, когда внутри группы объектов (в данном случае - объектов одного класса) и функций должно быть доступна внутреннее представление, скрытое при этом от внешнего мира. Решение в таких ситуациях одно: объявлять всех друзей в одном модуле и с помощью ограничения сигнатуры делать представление абстрактным за пределами модуля.</para>
+      <para>Другие примеры функций-друзей приведены в разделе
+      5.2.3. Подобная техника применяется, когда внутри группы
+      объектов (в данном случае - объектов одного класса) и функций
+      должно быть доступна внутреннее представление, скрытое при этом
+      от внешнего мира. Решение в таких ситуациях одно: объявлять всех
+      друзей в одном модуле и с помощью ограничения сигнатуры делать
+      представление абстрактным за пределами модуля.</para>
     </section>
   </main-matters>
 </chapter>

@@ -21,7 +21,7 @@
 	external input: in_channel -&gt; string -&gt; int -&gt; int -&gt; int
 	              = "input"
       </listing>
-      <para>ѕримитивы с несколькими аргументами всегда 
+      <para>ѕримитивы с несколькими аргументами всегда</para>
     </section>
   </main-matters>
 </chapter>
