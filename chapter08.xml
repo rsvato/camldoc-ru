@@ -276,6 +276,206 @@
 	    имен, экспорт которых не предполагается.</para>
 	  </option-description>
 	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-I</mc-option>
+	    <c-param>directory</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Добавляет <command>directory</command> к списку
+	    каталогов, в которых ищутся компилированные файлы
+	    интерфейсов (<command>.mli</command>), компилированные
+	    объектные файлы (<command>.cml</command>), библиотеки
+	    (<command>.cma</command>) и библиотеки С, заданнын в
+	    опциях <command>-cclib -lxxx</command>. По умолчанию в
+	    первую очередь файлы ищутся в текущем каталоге, затем - в
+	    каталоге стандартной библиотеки. Каталоги, заданные опцией
+	    <command>-I</command> учитываются после текущего, в том же
+	    порядке, как они заданы в командной строке, но перед
+	    стандартной библиотекой.</para> <para>Если каталог
+	    начиначается со знака <command>+</command>, то он
+	    считается заданным относительно каталога стандартной
+	    библиотеки. Например, <command>-I +labltk</command>
+	    добавляет к списку поиска подкаталог
+	    <command>labltk</command> стандартной библиотеки.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-impl</mc-option>
+	    <c-param>filename</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Компилировать указанный файл как реализацию, даже
+	    если его расширение отличается от
+	    <command>.ml</command>.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-intf</mc-option>
+	    <c-param>filename</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Компилировать указанный файл как интерфейс, даже
+	    если его расширение отличается от
+	    <command>.mli</command>.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-linkall</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Принудительно компоновать все модули в
+	    библиотеках. При отсутствии этой опции компонуются только
+	    модули, на которые есть ссылки. При построении библиотеки
+	    (флаг <command>-a</command>) установка флага
+	    <command>-linkall</command> приводит к тому, что в
+	    последующем при компиляции программ, использующих эту
+	    библиотеку, все модули библиотеки будут компоноваться
+	    заново.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-make-runtime</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Создает пользовательскую систему времени выполнения
+	    (в файле, заданном опцией <command>-o</command>), внедряя
+	    объектные файлы С и библитеки, указанные в командной
+	    строке. Полученная система может быть использована позднее
+	    для запуская исполняемого байткода, скомпилированного
+	    командой <command>ocamlc -use-runtime
+	    runtime-name</command>. Более подробная информация
+	    содержится в разделе 18.1.6.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-noassert</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Отключает проверку утверждений, и утверждения не
+	    компилируются. При компоновке ранее скомпилированных
+	    файлов этот флаг не работает.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-noautolink</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>При компоновке библиотек <command>.cma</command>
+	    опции <command>-custom</command>,
+	    <command>-cclib</command> и <command>-ccopt</command>,
+	    вероятно хранящиеся в библиотеках (если они были указаны
+	    при построении библиотек), игнорируются. Этот флаг
+	    полезен, если библиотека содержит неправильные
+	    спецификации библиотек или опций С. В этом случае надо
+	    указать в командлной строке правильные библиотеки и опции
+	    С.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-nolabels</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Игнорировать обязательные метки в типах. В этом
+	    случае метки не могут использоваться в приложениях, и
+	    порядок аргументов становится строгим.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-o</mc-option>
+	    <c-param>exec-file</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Имя файла, создаваемого компоновщиком. По умолчанию
+	    по традициям Unix создается файл
+	    <command>a.out</command>. Если используется опция
+	    <command>-a</command>, укажите имя библиотеки. Если
+	    используется опция <command>-output-obj</command>, укажите
+	    имя объектного файла.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-output-obj</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Вместо исполняемого байткода компоновщик создает
+	    объектный файл С. Это позволяет при необходимости оформить код
+	    Caml как библиотеку С, которую можно вызывать из любой
+	    программы С. Более подробно см. раздел 18.7.5. По
+	    умолчанию создается файл <command>camlprog.o</command>, но
+	    имя может быть задано с помощью опции
+	    <command>-o</command>.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-pack</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Создает объектный файл с байткодом
+	    (<command>.cmo</command>) и связанный с с ним
+	    скомпилированный интерфейс (<command>.cmi</command>),
+	    которые включают все объектные файлы, перечисленные в
+	    командной строке. Эти файлы становятся субмодулями
+	    результирующего файла <command>.cmo</command>. Имя
+	    последнего задается опцией
+	    <command>-o</command>. Например, </para>
+
+	    <listing>ocamlc -pack -o p.cmo a.cmo b.cmo c.cmo</listing>
+
+	    <para>создает компилированные файлы
+	    <command>p.cmo</command> и <command>p.cmi</command>,
+	    описывающие единицу компиляции, включающую субмодули A, B
+	    и C, соотвествующие содержанию объектных файлов
+	    <command>a.cmo</command>, <command>b.cmo</command> и
+	    <command>c.cmo</command>. В дальнейшем на них можно
+	    ссылаться как <command>P.A</command>,
+	    <command>P.B</command> и <command>P.C</command>.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-pp</mc-option>
+	    <c-param>command</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Компилятр вызывает заданную команду
+	    <command>command</command> как препроцессор для каждого
+	    исходного файла. Вывод команды перенаправляется в
+	    промежуточный файл, который и компилируется. Если
+	    компиляция проходит без ошибок, по ее завершении
+	    промежуточный файл удаляется. Имя файла конструируется на
+	    основе имени исходного файла и получает расширение
+	    <command>.ppi</command> для интерфейса
+	    (<command>.mli</command>) или <command>.ppo</command> для
+	    реализации (<command>.ml</command>).</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-principal</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para></para>
+	  </option-description>
+	</command-option>
       </command-option-group>
     </section>
   </main-matters>
