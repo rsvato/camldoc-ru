@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="windows-1251"?>
+<?xml version="1.0" encoding="cp1251"?>
 <!DOCTYPE chapter SYSTEM "core.dtd">
 <chapter name="Язык Objective Caml" number="6">
   <main-matters>
@@ -1837,6 +1837,164 @@ with ]]></listing>
 	базовых типов (целые, числа с плавающей точкой, символы,
 	симовольные строки) и константные конструкторы как нормальных,
 	так и полиморфных вариантов.</para>
+    </section>
+    <section name="Образцы">
+      <bnf>
+	<term>pattern</term>
+	<def>
+	  <or multiline="1">
+	    <choice>
+	      <term>value-name</term>
+	    </choice>
+	    <choice>
+	      <value>_</value>
+	    </choice>
+	    <choice>
+	      <term>constant</term>
+	    </choice>
+	    <choice>
+	      <term>pattern</term>
+	      <value>as</value>
+	      <term>value-name</term>
+	    </choice>
+	    <choice>
+	      <value>(</value>
+	      <term>pattern</term>
+	      <value>)</value>
+	    </choice>
+	    <choice>
+	      <value>(</value>
+	      <term>pattern</term>
+	      <value>:</value>
+	      <term>typexpr</term>
+	      <value>)</value>
+	    </choice>
+	    <choice>
+	      <term>pattern</term>
+	      <value>|</value>
+	      <term>pattern</term>
+	    </choice>
+	    <choice>
+	      <term>ncconstr</term>
+	      <term>pattern</term>
+	    </choice>
+	    <choice>
+	      <value>`</value>
+	      <term>tag-name</term>
+	      <term>pattern</term>
+	    </choice>
+	    <choice>
+	      <value>#</value>
+	      <term>typeconstr-name</term>
+	    </choice>
+	    <choice>
+	      <term>pattern</term>
+	      <repetitive>
+		<value>,</value>
+		<term>pattern</term>
+	      </repetitive>
+	    </choice>
+	    <choice>
+	      <value>{</value>
+	      <term>field</term>
+	      <value>=</value>
+	      <term>pattern</term>
+	      <repetitive>
+		<value>;</value>
+		<term>field</term>
+		<value>=</value>
+		<term>pattern</term>
+	      </repetitive>
+	      <value>}</value>
+	    </choice>
+	    <choice>
+	      <value>[</value>
+	      <term>pattern</term>
+	      <repetitive>
+		<value>;</value>
+		<term>pattern</term>
+	      </repetitive>
+	      <value>]</value>
+	    </choice>
+	    <choice>
+	      <term>pattern</term>
+	      <value>::</value>
+	      <term>pattern</term>
+	    </choice>
+	    <choice>
+	      <value>[|</value>
+	      <term>pattern</term>
+	      <repetitive>
+		<value>;</value>
+		<term>pattern</term>
+	      </repetitive>
+	      <value>|]</value>
+	    </choice>
+	  </or>
+	</def>
+      </bnf>
+      <para>В таблице ниже показан относительный приоритет и ассоциативность незакрытых конструкций образцов. Элементы с высшим приоритетом помещены в таблицу первыми.</para>
+      <table cols="2">
+	<thead>
+	  <trow>
+	    <tcell>
+	      <para>Оператор</para>
+	    </tcell>
+	    <tcell>
+	      <para>Ассоциативность</para>
+	    </tcell>
+	  </trow>
+	</thead>
+	<tbody>
+	  <trow>
+	    <tcell>
+	      <para>Вызов конструктора</para>
+	    </tcell>
+	    <tcell>
+	      <para>--</para>
+	    </tcell>
+	  </trow>
+	  <trow>
+	    <tcell>
+	      <para>::</para>
+	    </tcell>
+	    <tcell>
+	      <para>правая</para>
+	    </tcell>
+	  </trow>
+	  <trow>
+	    <tcell>
+	      <para>,</para>
+	    </tcell>
+	    <tcell>
+	      <para>--</para>
+	    </tcell>
+	  </trow>
+	  <trow>
+	    <tcell>
+	      <para>|</para>
+	    </tcell>
+	    <tcell>
+	      <para>левая</para>
+	    </tcell>
+	  </trow>
+	  <trow>
+	    <tcell>
+	      <para>as</para>
+	    </tcell>
+	    <tcell>
+	      <para>--</para>
+	    </tcell>
+	  </trow>
+	</tbody>
+      </table>
+      <para>Образцы - это шаблоны, позволяющие выбирать структуры
+	данных определенной формы и связывать идентификаторы с
+	компонентами структуры данных. Операция выбора называется
+	сопоставлением по образцу; ее результат - либо "это значение
+	не подходит для этого образца", либо "значение подходит для
+	образца, что дает в резулльтате связывание имен со
+	значениями".</para>
     </section>
   </main-matters>
 </chapter>
