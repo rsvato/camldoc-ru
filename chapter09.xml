@@ -1,110 +1,108 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!DOCTYPE chapter SYSTEM "./core.dtd">
+<!-- <!DOCTYPE chapter SYSTEM "./core.dtd"> -->
 <chapter name="Интерактивная система (ocaml)" number="9">
   <abstract/>
   <main-matters>
     <section>
-    <para>В этой главе описывается интерактивная система Objective
-    Caml, преднзначенная для использования языка в циле
-    чтения-компиляции-вызова. В этом режиме система считывает фразы
-    Caml из ввода, проверяет тип, компилирует и выполняет и, а затем
-    выводит распознанный тип и значение результата, если он
-    есть. Перед чтением каждой фразы система выводит символ
-    <command>#</command> (диез).</para> <para>Ввод может занимать
-    несколько строк. Он заканчивается <command>;;</command> (двумя
-    точками с запятыми) и состоит из одной или нескольких фраз со
-    следующим синтаксисом:</para>
-    <bnf>
-      <term>toplevel-input</term>
-      <def>
-	<repetitive>
-	  <term>toplevel-phrase</term>
-	</repetitive>
-	<value>;;</value>
-      </def>
-    </bnf>
-    <bnf>
-      <term>toplevel-phrase</term>
-      <def>
-	<or multiline="1">
-	  <choice>
-	    <term>definition</term>
-	  </choice>
-	  <choice>
-	    <term>expr</term>
-	  </choice>
-	  <choice>
-	    <value>#</value>
-	    <term>ident</term>
-	    <term>directive-argument</term>
-	  </choice>
-	</or>
-      </def>
-    </bnf>
-    <bnf>
-      <term>definition</term>
-      <def>
-	<or multiline="1">
-	  <choice>
-	    <value>let</value>
-	    <optional>
-	      <value>rec</value>
-	    </optional>
-	    <term>let-binding</term>
-	    <repetitive>
-	      <value>and</value>
+      <para>В этой главе описывается интерактивная система Objective
+	Caml, преднзначенная для использования языка в циле
+	чтения-компиляции-вызова. В этом режиме система считывает фразы
+	Caml из ввода, проверяет тип, компилирует и выполняет и, а затем
+	выводит распознанный тип и значение результата, если он
+	есть. Перед чтением каждой фразы система выводит символ
+	<command>#</command> (диез).</para> <para>Ввод может занимать
+	несколько строк. Он заканчивается <command>;;</command> (двумя
+	точками с запятыми) и состоит из одной или нескольких фраз со
+	следующим синтаксисом:</para>
+      <bnf>
+	<term>toplevel-input</term>
+	<def>
+	  <repetitive>
+	    <term>toplevel-phrase</term>
+	  </repetitive>
+	  <value>;;</value>
+	</def>
+      </bnf>
+      <bnf>
+	<term>toplevel-phrase</term>
+	<def>
+	  <or multiline="1">
+	    <choice>
+	      <term>definition</term>
+	    </choice>
+	    <choice>
+	      <term>expr</term>
+	    </choice>
+	    <choice>
+	      <value>#</value>
+	      <term>ident</term>
+	      <term>directive-argument</term>
+	    </choice>
+	  </or>
+	</def>
+      </bnf>
+      <bnf>
+	<term>definition</term>
+	<def>
+	  <or multiline="1">
+	    <choice>
+	      <value>let</value>
+	      <optional>
+		<value>rec</value>
+	      </optional>
 	      <term>let-binding</term>
-	    </repetitive>
-	  </choice>
-	  <choice>
-<<<<<<< chapter09.xml
-	    <term>type-definition</term>
-	  </choice>
-	  <choice>
-	    <term>exception-definition</term>
-	  </choice>
-	  <choice>
-	    <value>module</value>
-	    <term>module-name</term>
-	    <group>
-	      <value>:</value>
+	      <repetitive>
+		<value>and</value>
+		<term>let-binding</term>
+	      </repetitive>
+	    </choice>
+	    <choice>
+	      <term>type-definition</term>
+	    </choice>
+	    <choice>
+	      <term>exception-definition</term>
+	    </choice>
+	    <choice>
+	      <value>module</value>
+	      <term>module-name</term>
+	      <group>
+		<value>:</value>
+		<term>module-type</term>
+	      </group>
+	      <value>=</value>
+	      <term>module-expr</term>
+	    </choice>
+	    <choice>
+	      <value>module type</value>
+	      <term>modtype-name</term>
+	      <value>=</value>
 	      <term>module-type</term>
-	    </group>
-	    <value>=</value>
-	    <term>module-expr</term>
-	  </choice>
-	  <choice>
-	    <value>module type</value>
-	    <term>modtype-name</term>
-	    <value>=</value>
-	    <term>module-type</term>
-	  </choice>
-	  <choice>
-	    <value>open</value>
-	    <term>module-path</term>
-	  </choice>  
-=======
-			<value>external</value>
-			<term>value-name</term>
-			<value>:</value>
-			<term>typexpr</term><value>=</value><term>external-decalaration</term>
-	  </choice>
-		<choice><term>type-definition</term></choice>
-		<choice><term>exception-definition</term></choice>
->>>>>>> 1.2
-	</or>
-      </def>
-    </bnf>
-    <bnf>
-      <term>directive-argument</term>
-      <def>
-	<or multiline="1">
-	  <choice><term>nothing</term></choice>
-	  <choice><term>string-literal</term></choice>
-	  <choice><term>integer-literal</term></choice>
-	  <choice><term>value-path</term></choice>
-	</or>
-      </def>
+	    </choice>
+	    <choice>
+	      <value>open</value>
+	      <term>module-path</term>
+	    </choice>
+	    <choice>
+	      <value>external</value>
+	      <term>value-name</term>
+	      <value>:</value>
+	      <term>typexpr</term><value>=</value><term>external-decalaration</term>
+	    </choice>
+	    <choice><term>type-definition</term></choice>
+	    <choice><term>exception-definition</term></choice>
+	  </or>
+	</def>
+      </bnf>
+      <bnf>
+	<term>directive-argument</term>
+	<def>
+	  <or multiline="1">
+	    <choice><term>nothing</term></choice>
+	    <choice><term>string-literal</term></choice>
+	    <choice><term>integer-literal</term></choice>
+	    <choice><term>value-path</term></choice>
+	  </or>
+	</def>
     </bnf>
     <para>
     	Фраза состоит из определений, подобных тем, что включаются в
@@ -175,10 +173,100 @@ ocaml options objects scriptfile # пакетный режим]]></listing>
 	  случае немедленно возвращается к приглашению
 	  <command>#</command>.
         </para>
+
+	  <para>
+	    Если в командной строке задан параметр
+	    <command>scriptfile</command>, интерактивная система
+	    перехдит в  режим сценария: содержимое файла считывается
+	    как последовательность фраз Objective Caml и выполняется
+	    как при использовании директивы
+	    <command>#use</command>(раздел 9.2).  Результаты
+	    компиляции не выводятся. По окончании файла работа команды
+	    <command>caml</command> завершается. Команды из
+	    стандартного ввода не
+	    читаются. <keyword>Sys.argv</keyword> модифицируется,
+	    причем все параметры Objective Caml игнорируются, а в
+	    <keyword>Sys.argv.(0)</keyword> помещается имя файла сценария.</para>
+	  
+	  <para>
+	    Если первая строка файла сценария начинается с символов
+	    <keyword>#!</keyword>, она пропускается. Таким образом,
+	    теоретически возможно делать файлы сценариев исполняемыми
+	    и помещать в первую строку что-то вроде <keyword>#!
+	    /usr/local/bin/ocaml</keyword>. Однако в большинстве
+	    инсталляций команда <command>ocaml</command> сама является
+	    сценарием командной оболочки, а операционные системы Unix
+	    как правило не умеют работать с вложенными сценариями.
+	  </para>
+
     	</dict-art>
+	<dict-term>Windows</dict-term>
+	
+	<dict-art>
+	  <para>Кроме команды текстового режима
+	  <command>ocaml</command>, которая работает точно так же, как
+	  и под Unix, существует графический интерфейс интерактивной
+	  системы. Он называется <command>ocamlwin.exe</command> и
+	  может запускаться как из файлового менеджера, так и из
+	  оболочки Windows.</para>
+	  
+	  <para>Окно "Terminal" разделено на две области. В нижней
+	  вводятся и редактируются фразы, верхняя содержит копию ввода
+	  и вывод интерпретатора. Клавиша "Return" пересылает ввод
+	  интерпретатору, клавиша "Enter" просто добавляет символ
+	  новой строки (назначение клавиш конфигурируется в меню
+	  "Preferences").</para>
+
+	  <para>Содержимое окна ввода может быть изменено в любой
+	  момент через стандартный интерфейс Windows. В отдельном окне
+	  показаны ранее введенные фразы.</para>
+
+	  <para>Для выхода из приложения <command>Ocamlwin</command>
+	  используется либо пункт меню <command>File|Exit</command>,
+	    либо функция <keyword>quit</keyword>, описанная ниже.
+	  </para>
+	  <para>
+	  Анализ, компиляция и выполнение текущей фразы в любой момент
+	  могут быть прерваны командой меню <command>Interrupt
+	  Objective Caml</command>. Интерактивная система в этом
+	  случае немедленно возвращается к приглашению
+	  <command>#</command>.
+	  </para>
+	</dict-art>
     </dict>
     </section>
     <section name="Опции">
+      <para><command>ocaml</command> распознает следующие опции командной строки:</para>
+      
+      <command-option-group>
+	<command-option>
+	  <c-option>
+	    <mc-option>-I</mc-option>
+	    <c-param>directory</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Добавяет указанную директорию к списку директорий, в
+	    которых ищутся исходные тексты и компилированные файлы. По
+	    умолчанию сначала используется текущий каталог, затем
+	    стандартная библиотека. Директории, заданные этой опцией
+	    помещаются в список поиска после текущего каталога, в том
+	    порядке, как они указаны, но до стандартной
+	    библиотеки.</para>
+	    
+	    <para>Если перед <command>directory</command> стоит знак
+	    <command>+</command>, путь берется относительно
+	    стандартной библоитеки. Например, <command>-I
+	    +labltk</command> добавит к пути поиска подкаталог
+	    <command>labltk</command> каталога стандартной
+	    библиотеки.</para>
+	    
+	    <para>Кроме того, каталоги можно добавить к пути поиска
+	    непосредственно после запуска интрепретатора директивой
+	    <keyword>#directory</keyword>.</para>
+	    
+	  </option-description>
+	</command-option>
+      </command-option-group>
     </section>
   </main-matters>
 </chapter>

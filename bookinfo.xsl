@@ -88,7 +88,7 @@
 			</xsl:if>
 		</h2></a>
 		<ul>
-			<xsl:for-each select="./chapter/main-matters/section">
+			<xsl:for-each select="./chapter/main-matters/section[@name]">
 				<li><xsl:value-of select="@name"/></li>
 			</xsl:for-each>
 		</ul>
