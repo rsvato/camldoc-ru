@@ -16,7 +16,7 @@
 <part>
 <title>Введение в Objective Caml</title>
 <chap file="./chapter01.html">&chap01;</chap>
-<chap file="./chapter01.html">&chap02;</chap>
+<chap file="./chapter02.html">&chap02;</chap>
 <chap file="./chapter03.html">&chap03;</chap>
 <chap file="./chapter04.html">&chap04;</chap>
 <chap file="./chapter05.html">&chap05;</chap>

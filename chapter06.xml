@@ -983,8 +983,84 @@
 				</def>
 			</bnf>
 			<bnf>
-				
+				<term>poly-typexpr</term>
+				<def>
+					<or multiline="1">
+						<choice><term>typexpr</term></choice>
+						<choice>
+							<repetitive count="1">
+								<value>'</value>
+								<term>ident</term>
+							</repetitive>
+							<value>.</value>
+							<term>typexpr</term>
+						</choice>
+					</or>
+				</def>
 			</bnf>
+			<bnf>
+				<term>method-type</term>
+				<def>
+					<term>method-name</term>
+					<value>:</value>
+					<term>poly-typexpr</term>
+				</def>
+			</bnf>
+			<para>
+				В таблице ниже привены относительные приоритет и ассоциативность операторов
+				и конструкций незакрытых типов. Операторы с высшим приоритетом помещены
+				в таблицу первыми.
+			</para>
+			<table>
+				<thead>
+					<trow>
+						<tcell><para>Оператор</para></tcell>
+						<tcell><para>Ассоциативность</para></tcell>
+					</trow>
+				</thead>
+				<tbody>
+					<trow>
+						<tcell><para>Вызов конструктора типа</para></tcell>
+						<tcell><para>--</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para>*</para></tcell>
+						<tcell><para>--</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para>-&gt;</para></tcell>
+						<tcell><para>правая</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para>as</para></tcell>
+						<tcell><para>--</para></tcell>
+					</trow>
+				</tbody>
+			</table>
+			<para>
+				Выражения типа обозначают типы в определениях типов данных, а
+				также в ограничениях типа в образцах и выражениях.
+			</para>
+			<subsection name="Переменные типа" neednumber="0">
+				<para>
+					Выражение типа <value>'</value><term>ident</term> означает
+					переменную типа с именем <term>ident</term>. Выражение <value>_</value>
+					означает аномную переменную типа. В определениях типов данных
+					переменные являются именами параметров этих типов. В ограничениях
+					они соответствуют непредусмотренным типам, которые могут быть
+					созданы любым типом, чтобы соответствовать ограничению. Область 
+					действия именованной переменной как правило ограничивается типом,
+					в котором она определена, а за его пределами она может быть только
+					обобщенной. Анонимые переменные такого ограничения не имеют.
+				</para>
+			</subsection>
+			<subsection name="Типы в скобках" neednumber="0">
+				<para>Выражение <value>(</value><term>typexpr</term><value>)</value>
+				означает то же самое, что и <term>typexpr</term>.</para>
+			</subsection>
+			<subsection name="Типы функций" neednumber="0">
+				
+			</subsection>
 	</section>
 	</main-matters>
 </chapter>
