@@ -164,6 +164,7 @@ and ...
 	    <para>(Вариант.) Пустая стока или строка, совпадающая с
 	      <term>regexp</term></para>
 	  </dict-art>
+	  <dict-term><term>regexp</term><sub>1</sub><value>|</value><term>regexp</term><sub>2</sub></dict-term>
 	</dict>
       </subsection>
     </section>
