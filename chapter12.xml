@@ -1,5 +1,5 @@
-<?xml version="1.0"?>
-<!DOCTYPE chapter SYSTEM "core.dtd">
+<?xml version="1.0" encoding="windows-1251"?>
+<!-- <!DOCTYPE chapter SYSTEM "core.dtd"> -->
 <chapter name="Генераторы синаксических и лексических анализаторов (ocamllex, ocamlyacc)" number="12">
   <abstract>
     <para>В этой главе описываются два генератора -
@@ -66,24 +66,106 @@ and ...
 ]]></listing>
       <para>Комментарии ограничиваются <keyword>(*</keyword> и
 	<keyword>*)</keyword> как обычно в Caml.</para>
-    </section>
-    <section name="Заголовок и концевик">
-      <para>
-	<emph>Заголовок</emph> и <emph>концевик</emph> - это
-	произвольный текст Caml и фигурных скобках. Оба раздела
-	необязательны. Если они заданы, текст заголовка копируется в
-	начало генерируемого файла, а текст концевика - в конец.
-	Обычно заголовок содержит директивы <command>open</command>,
-	необходимые для действий, и при необходимости вспомогательные
-	функии.</para>
-    </section>
-    <section name="Именованные регулярные выражения">
-      <para>Между заголовком и вхождениями можно определить по именам
-	часто используемые регулярные выражения. Они записываются в
-	форме <value>let</value> <term>ident</term> <value>=</value>
-	<term>regexp</term>. В этом случае идентификатор
-	<emph>ident</emph> в дальнейшем будет использоваться как
-	сокращение для <emph>regexp</emph>.</para>
+      <subsection name="Заголовок и концевик">
+	<para>
+	  <emph>Заголовок</emph> и <emph>концевик</emph> - это
+	  произвольный текст Caml и фигурных скобках. Оба раздела
+	  необязательны. Если они заданы, текст заголовка копируется в
+	  начало генерируемого файла, а текст концевика - в конец.
+	  Обычно заголовок содержит директивы <command>open</command>,
+	  необходимые для действий, и при необходимости вспомогательные
+	  функии.</para>
+      </subsection>
+      <subsection name="Именованные регулярные выражения">
+	<para>Между заголовком и вхождениями можно определить по именам
+	  часто используемые регулярные выражения. Они записываются в
+	  форме <value>let</value> <term>ident</term> <value>=</value>
+	  <term>regexp</term>. В этом случае идентификатор
+	  <emph>ident</emph> в дальнейшем будет использоваться как
+	  сокращение для <emph>regexp</emph>.</para>
+      </subsection>
+      <subsection name="Вхождения">
+	<para>Имена вхождений должны быть допустимыми идентификаторами
+	  для значений Caml (начинающимися с буквы в строчном
+	  регистре). Каждое вхождение сановится функцией Caml,
+	  принимающей один аргумент типа
+	  <keyword>Lexing.lexbuf</keyword> - из него читаются и
+	  сравниваются с регулярным выражением, соответсвующим
+	  правилу, символы, пока префикс не совпадет с одним из
+	  правил. Затем вычисляется соответствующее действие, которое
+	  и будет значением, возвращаемым функией.</para>
+	<para>Если префикс ввода совпадет с несколькими регулярными
+	  выражениями, результат опредялется правилось "длиннейшего
+	  совпаления" - выбирается регулярное выражение,
+	  удовлетворяющее максимальному количеству символов. При
+	  связке выбирается ранее совпавшее регулярное
+	  выражение.</para>
+      </subsection>
+      <subsection name="Регулярные выражения">
+	<para>Регулярные выражения записываются в стиле
+	  <command>lex</command> с добавками Caml-подобного
+	  синтаксиса.</para>
+	<dict>
+	  <dict-term><value>'</value><term>char</term><value>'</value></dict-term>
+	  <dict-art>
+	    <para>Символьная константа с тем же синтаксисом, что и
+	      соответствующий класс Objective Caml. Совпадает с
+	      указанным символом.</para>
+	  </dict-art>
+	  <dict-term><value>_</value></dict-term>
+	  <dict-art>
+	    <para>(Подчеркивание.) Совпадает с любым символом.</para>
+	  </dict-art>
+	  <dict-term>eof</dict-term>
+	  <dict-art>
+	    <para>Совпадает с концом ввода лексического
+	      анализатора.</para>
+	    <para>На некоторых системах с интерактивным вводом, за
+	      концом файла могут следовать дополнительные символы.
+	      <command>ocamllex</command> не сможет правильно
+	      обработать регулярное выражение для такой
+	      ситуации.</para>
+	  </dict-art>
+	  <dict-term><value>"</value><term>string</term><value>"</value></dict-term>
+	  <dict-art>
+	    <para>Строковая константа с тем же синтаксисом, что и
+	      соответствующий класс Objective Caml. Совпадает с
+	      указанной последовательностью символов.</para>
+	  </dict-art>
+	  <dict-term><value>[</value><term>character-set</term><value>]</value></dict-term>
+	  <dict-art>
+	    <para>Совпадает с любым единичным символом из набора.
+	      Допустимые наборы таковы: единичные символьные константы
+	      <value>'</value><term>c</term><value>'</value>,
+	      диапазоны символов
+	      <value>'</value><term>c</term><sub>1</sub><value>'</value> 
+	      <value>-</value>
+	      <value>'</value><term>c</term><sub>2</sub><value>'</value> 
+	      (все символы от <emph>c</emph><sub>1</sub> до
+	      <emph>c</emph><sub>2</sub> включительно) или объединение
+	      двух и больше наборов.</para>
+	  </dict-art>
+	  <dict-term>
+	    <value>[^</value><term>character-set</term><value>]</value>
+	  </dict-term>
+	  <dict-art>
+	    <para>Любой символ, не входящий в данный набор.</para>
+	  </dict-art>
+	  <dict-term><term>regexp</term><value>*</value></dict-term>
+	  <dict-art>
+	    <para>(Повторение.) Ноль и более совпадающих строк.</para>
+	  </dict-art>
+	  <dict-term><term>regexp</term><value>+</value></dict-term>
+	  <dict-art>
+	    <para>(Строгое повторение.) Одна и более совпадающая строка.</para>
+	  </dict-art>
+	  <dict-term><term>regexp</term><value>?</value></dict-term>
+	  <dict-art>
+	    <para>(Вариант.) Пустая стока или строка, совпадающая с
+	      <term>regexp</term></para>
+	  </dict-art>
+	</dict>
+      </subsection>
     </section>
   </main-matters>
 </chapter>

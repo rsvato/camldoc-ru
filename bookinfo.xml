@@ -11,6 +11,7 @@
 	<!ENTITY chap09 SYSTEM "./chapter09.xml">
 	<!ENTITY chap10 SYSTEM "./chapter10.xml">
 	<!ENTITY chap11 SYSTEM "./chapter11.xml">
+	<!ENTITY chap12 SYSTEM "./chapter12.xml">
 	<!ENTITY char13 SYSTEM "./chapter13.xml">
 ]>
 <bookinfo>
@@ -45,6 +46,7 @@
 	<chap file="chapter09.html">&chap09;</chap>
 	<chap file="chapter10.html">&chap10;</chap>
 	<chap file="chapter11.html">&chap11;</chap>
+	<chap file="chapter12.html">&chap12;</chap>
 	<chap file="chapter13.html">&char13;</chap>
 </part>
 </bookinfo>
