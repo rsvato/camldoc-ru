@@ -74,13 +74,19 @@
 		<xsl:apply-templates select="chap"/>
 	</xsl:template>
 	<xsl:template match="chap">
+		<xsl:variable name="nf" select="@nf"/>
 		<a>
 			<xsl:attribute name="href">
 				<xsl:value-of select="@file"/>
 			</xsl:attribute>
 			<h2>Глава <xsl:call-template name="NumberChaps"/>.
-			<xsl:value-of select="chapter/@name"/></h2>
-		</a>
+			<xsl:value-of select="chapter/@name"/>
+			<xsl:if test="$nf &gt; 0">
+				<span style="color:red">
+					не закончено
+				</span>
+			</xsl:if>
+		</h2></a>
 		<ul>
 			<xsl:for-each select="./chapter/main-matters/section">
 				<li><xsl:value-of select="@name"/></li>

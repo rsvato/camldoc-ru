@@ -23,6 +23,7 @@
 </part>
 <part>
 	<title>Язык Оbjective Caml</title>
-	<chap file="./chapter06.html">&chap06;</chap>
+	<chap file="./chapter06.html" nf="1">&chap06;</chap>
+	<chap file="./chapter07.html">&chap07;</chap>
 </part>
 </bookinfo>

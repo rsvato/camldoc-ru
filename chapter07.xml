@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!-- <!DOCTYPE chapter SYSTEM "core.dtd">-->
+<?xml-stylesheet type="text/xml" href="./ocaml.xsl"?>
+<chapter number="7" name="Расширения языка">
+  <abstract>
+    <para>В этой главе описываются синтаксические расширения и
+    усовершенствования, введенные в Objective Caml, но не описанные в
+    справочном руководстве.</para>
+  </abstract>
+  <main-matters>
+    <section neednumber="1" name="Потоки и анализаторы потоков">
+      <para>Потоки и анализаторы потоков больше не входят в язык
+      Objective Caml, но доступны в синтаксическом расширениия
+      CamlP4. Дополнительная информация приведена в справочном
+      руководстве CamlP4. Программы, использующие потоки и анализаторы
+      потоков должны компилироватся <command>ocamlc</command> и
+      <command>ocamlopt</command> c ключами <command>-pp
+      camlp4o</command>. В интерактивном режиме после запуска
+      Б<command>ocaml</command> необходимо ввести команду
+      <command>#load "camlp4o.cma";;</command>.</para>
+    </section>
+    <section name="Диапазоны в образцах">
+      <para>В образцах Objective Caml распознает форму
+      <value>'</value><term>c1</term><value>'
+      .. '</value><term>d</term><value>'</value> (два символьных
+      литерала, разделенных ..) как сокращение для</para>
+      <bnf>
+	<term></term>
+	<def>
+	  <or>
+	    <choice>
+	      <value>'</value><term>c</term><value>'</value>
+	    </choice>
+	    <choice>
+	      <value>'</value><term>c1</term><value>'</value>
+	    </choice>
+	    <choice>
+	      <value>'</value><term>c2</term><value>'</value>
+	    </choice> 
+	    <choice>
+	      <value>...</value>
+	    </choice>
+	    <choice>
+	      <value>'</value><term>cn</term><value>'</value>
+	    </choice>
+	    <choice>
+	      <value>'</value><term>d</term><value>'</value>
+	    </choice>
+	  </or>
+	</def>
+      </bnf>
+      <para>где c<sub>1</sub>, c<sub>2</sub>, ..., c<sub>n</sub>
+      являются символами, находящимися в наборе символов ASCII между c
+      и d. Например, образец <command>'0' .. '9'</command>
+      соотвествует любым цифровым символам.</para>
+    </section>
+    <section name="Проверка утверждений" neednumber="1">
+      <para>Для проверки утверждений во время отладки Objective Caml
+      поддерживает конструкцию <command>assert</command>. Выражение
+      <value>assert</value> <term>expr</term> вычисляет
+      <term>expr</term> и возвращает (), если в результате получено
+      <command>true</command>. В противном случае возбуждается
+      исключение <command>Assert_failure</command> с именем файла, в
+      котором содержится исходный текст программы и номером строки,
+      где находится <term>expr</term>, в качестве аргуметов. Проверка
+      утверждений отключается с помощью директивы компилятора
+      <command>-noassert</command>.</para> <para>Выражение
+      <command>assert false</command> представляет особый случай - это
+      полиморфное сокращение для <command>raise(Assert_failure
+      ...)</command> (оно также отключается с помощью директивы
+      компилятора <command>-noassert</command>). </para>
+    </section>
+    <section name="Отложенные вычисления">
+      <para>Выражение <value>lazy</value> <term>expr</term> возвращает
+      значение <command>v</command> типа <command>Lazy.t</command>,
+      которое инкапсулирует вычисление <term>expr</term>. Аргумент
+      <term>expr</term> не вычисляется до первого вызова
+      <command>Lazy.force</command> с аргументом <command>v</command>,
+      и только в этом случае возвращается результат
+      <term>expr</term>. Последующие вызовы
+      <command>Lazy.force</command> с аргументом <command>v</command>
+      не приводят к повторному выполнению
+      <term>expr</term>. Дополнительная информация содержится в
+      документации модуля <command>Lazy</command> стандартной
+      библиотеки.</para>
+    </section>
+    <section name="Локальные модули">
+      <para>Выражение <value>let module</value>
+      <term>module-name</term> <value>=</value>
+      <term>module-expr</term> <value>in</value> <term>expr</term>
+      локально связывает выражение <term>module-expr</term> с именем
+      <term>module-name</term> на время вычисления выражения
+      <term>expr</term>. Затем оно возвращает результат
+      <term>expr</term>. Пример:</para>
+      <listing><![CDATA[let remove_duplicates comparison_fun string_list =
+          let module StringSet =
+            Set.Make(struct type t = string
+                            let compare = comparison_fun end) in
+          StringSet.elements
+            (List.fold_right StringSet.add string_list StringSet.empty)
+]]></listing>
+    </section>
+    <section name="Группировка в численных литералах">
+      <para>В целочисленных литералах и литералах для чисел с плавающей точкой знак _ (подчеркивание) может использоваться как разделитель числовыз групп, например, 1_000_000, 0x45_FF или 1_234.567_89. При чтении таких литералов знак подчекивания просто игнорируется.</para>
+    </section>
+    
+  </main-matters>
+</chapter>
