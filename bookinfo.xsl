@@ -33,6 +33,14 @@
 				<xsl:apply-templates select="subtitle"/>
 				<xsl:apply-templates/>
 				</div>
+				<div id="counter" style="position:relative;margin-top:15px" align="center">
+<!--Rating@Mail.ru COUNTER--><a target="_top"
+href="http://top.mail.ru/jump?from=656088"><img
+src="http://top.list.ru/counter?id=656088;t=217"
+border="0" height="31" width="88"
+alt="Рейтинг@Mail.ru"/></a><!--/COUNTER-->
+
+				</div>
 			</body>
 		</html>
 	</xsl:template>
