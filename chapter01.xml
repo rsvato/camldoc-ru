@@ -27,32 +27,20 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>1+2*3;;</user-input>
+					<user-input># 1+2*3;;</user-input> 
 					<system-response>- : int = 7</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						let pi = 4.0 *. atan 1.0;;
-					</user-input>
-					<system-response>
-						val pi : float = 3.14159265359
-					</system-response>
+					<user-input># let pi = 4.0 *. atan 1.0;;</user-input> 
+					<system-response>val pi : float = 3.14159265359</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						let square x = x *. x;;
-					</user-input>
-					<system-response>
-						val square : float -&gt; float = &lt;fun&gt;
-					</system-response>
+					<user-input># let square x = x *. x;;</user-input> 
+					<system-response>#val square : float -&gt; float = &lt;fun&gt;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						square(sin pi) +. square(cos pi);;
-					</user-input>
-					<system-response>
-						- : float = 1.
-					</system-response>
+					<user-input># square(sin pi) +. square(cos pi);;</user-input> 
+					<system-response>- : float = 1.</system-response>
 				</eval-step>
 			</session>
 			<para>
@@ -65,12 +53,8 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						1.0 * 2;;
-					</user-input>
-					<system-response>
-						This expression has type float but is here used with type int
-					</system-response>
+					<user-input># 1.0 * 2;;</user-input> 
+					<system-response>This expression has type float but is here used with type int</system-response>
 				</eval-step>
 			</session>
 			<para>
@@ -78,20 +62,12 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						let rec fib n = if n &lt; 2 then 1 else fib(n - 1) + fib(n -2);;
-					</user-input>
-					<system-response>
-						val fib: int -&gt; = &lt;fun&gt;
-					</system-response>
+					<user-input># #	let rec fib n = if n &lt; 2 then 1 else fib(n - 1) + fib(n -2);;</user-input> 
+					<system-response>val fib: int -&gt; = &lt;fun&gt;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						fib 10;;
-					</user-input>
-					<system-response>
-						-: int = 89
-					</system-response>
+					<user-input># #	fib 10;;</user-input> 
+					<system-response>-: int = 89</system-response>
 				</eval-step>
 			</session>
 		</section>
@@ -102,28 +78,16 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						(1 &lt; 2) = false;;
-					</user-input>
-					<system-response>
-						- : bool = false
-					</system-response>
+					<user-input># (1 &lt; 2) = false;;</user-input> 
+					<system-response>- : bool = false</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						'a';;
-					</user-input>
-					<system-response>
-						- : char = 'a'
-					</system-response>
+					<user-input># 'a';;	</user-input> 
+					<system-response>- : char = 'a'</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						"Hello world";;
-					</user-input>
-					<system-response>
-						- : string = "Hello world"
-					</system-response>
+					<user-input># #	"Hello world";;</user-input> 
+					<system-response>- : string = "Hello world"</system-response>
 				</eval-step>
 			</session>
 			<para>
@@ -139,20 +103,13 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						let l = ["is"; "a"; "tale"; "told"; "etc."];;
-					</user-input>
-					<system-response>
-						val l : string list = ["is"; "a"; "tale"; "told"; "etc."]
-					</system-response>
+					<user-input># let l = ["is"; "a"; "tale"; "told"; "etc."];;</user-input> 
+					<system-response>val l : string list = ["is"; "a"; "tale"; "told"; "etc."]</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						"Life" :: l;;
-					</user-input>
-					<system-response>
-						- :  string list = ["Life"; "is"; "a"; "tale"; "told"; "etc."]
-					</system-response>
+					<user-input># "Life" :: l;;
+					</user-input> 
+					<system-response>- :  string list = ["Life"; "is"; "a"; "tale"; "told"; "etc."]</system-response>
 				</eval-step>
 			</session>
 			<para>
@@ -169,28 +126,12 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-					let rec sort lst = <lb/>
-						<tab/>match lst with <lb/>
-							<tab/><tab/>[] -&gt; []<lb/>
-						<tab/>| head :: tail -&gt; insert head (sort tail)<lb/>
-					and insert elt lst = <lb/>
-						<tab/>match lst with<lb/>
-							<tab/><tab/>[] -&gt; [elt]<lb/>
-						<tab/>| head :: tail -&gt; if elt &lt;= head then elt :: lst else head :: insert elt tail;;
-				</user-input>
-				<system-response>
-					val sort: 'a list -&gt; 'a list = &lt;fun&gt;<lb/>
-					val insert 'a -&gt; 'a list -&gt; 'a list = &lt;fun&gt;
-				</system-response>
+					<user-input># let rec sort lst = <lb/><tab/>match lst with <lb/><tab/><tab/>[] -&gt; []<lb/><tab/>| head :: tail -&gt; insert head (sort tail)<lb/>and insert elt lst = <lb/><tab/>match lst with<lb/><tab/><tab/>[] -&gt; [elt]<lb/><tab/>| head :: tail -&gt; if elt &lt;= head then elt :: lst else head :: insert elt tail;;</user-input> 
+				<system-response>val sort: 'a list -&gt; 'a list = &lt;fun&gt;<lb/>val insert 'a -&gt; 'a list -&gt; 'a list = &lt;fun&gt;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						sort l;;
-					</user-input>
-					<system-response>
-						-: string list = ["a"; "etc."; "is"; "tale"; "told"]
-					</system-response>
+					<user-input># sort l;;</user-input> 
+					<system-response>-: string list = ["a"; "etc."; "is"; "tale"; "told"]</system-response>
 				</eval-step>
 			</session>
 			<para>
@@ -204,20 +145,12 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						sort [6;2;5;3;];;
-					</user-input>
-					<system-response>
-						- : int list = [2; 3; 5; 6]
-					</system-response>
+					<user-input># sort [6;2;5;3;];;</user-input> 
+					<system-response>- : int list = [2; 3; 5; 6]</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						sort [3.14; 2.718];;
-					</user-input>
-					<system-response>
-						- : float list = [2.718; 3.14]
-					</system-response>
+					<user-input># sort [3.14; 2.718];;</user-input> 
+					<system-response>- : float list = [2.718; 3.14]</system-response>
 				</eval-step>
 			</session>
 			<para>
@@ -236,29 +169,27 @@
 				числами с плавающей точкой, и возвращает ее производную:</para>
 			<session>
 				<eval-step>
-					<user-input>let deriv f dx = function x -&gt; (f (x +. dx)
-						-. f(x)) /. dx;;</user-input>
-					<system-response>val deriv: (float -&gt; float) -&gt; float
-						-&gt; float -&gt; float = &lt;fun&gt; </system-response>
+					<user-input># let deriv f dx = function x -&gt; (f (x +. dx) -. f(x)) /. dx;;</user-input> 
+					<system-response>val deriv: (float -&gt; float) -&gt; float -&gt; float -&gt; float = &lt;fun&gt; </system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>let sin' = deriv sin 1e-6;;</user-input>
+					<user-input># let sin' = deriv sin 1e-6;;</user-input> 
 					<system-response>val sin' : float -> float = &lt;fun&gt; </system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>sin' pi;;</user-input>
+					<user-input># sin' pi;;</user-input> 
 					<system-response>-: float = -1.00000000014</system-response>
 				</eval-step>
 			</session>
 			<para>Можно определять даже составные функции:</para>
 			<session>
 				<eval-step>
-					<user-input>let compose f g = function x -&gt; f(g(x));;</user-input>
+					<user-input># let compose f g = function x -&gt; f(g(x));;</user-input> 
 					<system-response>val compose: ('a -&gt; 'b) -> ('c ->&gt; 
 						'a) -&gt; 'c -&gt; 'b = &lt;fun&gt; </system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>let cos2 = compose square cos;;</user-input>
+					<user-input># let cos2 = compose square cos;;</user-input> 
 					<system-response>val cos2: float -&gt; float = &lt;fun&gt; </system-response>
 				</eval-step>
 			</session>
@@ -271,7 +202,7 @@
 				список, составленный из результатов функции.</para>
 			<session>
 				<eval-step>
-					<user-input>List.map(function n -&gt; n*2 + 1) [0;1;2;3;4];;</user-input>
+					<user-input># List.map(function n -&gt; n*2 + 1) [0;1;2;3;4];;</user-input> 
 					<system-response>- : int list = [1; 3; 5; 7; 9] </system-response>
 				</eval-step>
 			</session>
@@ -281,11 +212,8 @@
 				записан следующим образом:</para>
 			<session>
 				<eval-step>
-					<user-input>let rec map f l = <lb/> <tab/>match l with 
-						<tab/><tab/>[] -&gt; [] <tab/> | hd :: tl -&gt; f hd ::
-						map f tl;;</user-input>
-					<system-response>val map: ('a -&gt; 'b) -&gt; 'a list 'b
-						list = &lt;fun&gt; </system-response>
+					<user-input># let rec map f l = <lb/> <tab/>match l with <tab/><tab/>[] -&gt; [] <tab/> | hd :: tl -&gt; f hd :: map f tl;;</user-input> 
+					<system-response>val map: ('a -&gt; 'b) -&gt; 'a list 'b list = &lt;fun&gt; </system-response>
 				</eval-step>
 			</session>
 		</section>
@@ -295,30 +223,16 @@
 				приведено определение типа рационального числа в виде записи.</para>
 			<session>
 				<eval-step>
-					<user-input>
-						type ratio = {num: int; denum: int};;
-					</user-input>
-					<system-response>
-						type ratio =  {num: int; denum: int};;
-					</system-response>
+					<user-input># type ratio = {num: int; denum: int};;</user-input> 
+					<system-response>type ratio =  {num: int; denum: int};;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						let add_ratio r1 r2 =<lb/>
-						<tab/>{num = r1.num * r2.denum + r2.num * r1.denum;
-						<tab/>{denum = r1.denum * r2.denum};;
-					</user-input>
-					<system-response>
-						val add_ratio : ratio -&gt; ratio -&gt; ratio = &lt;fun&gt;
-					</system-response>
+					<user-input># let add_ratio r1 r2 =<lb/><tab/>{num = r1.num * r2.denum + r2.num * r1.denum;<tab/>{denum = r1.denum * r2.denum};;</user-input> 
+					<system-response>val add_ratio : ratio -&gt; ratio -&gt; ratio = &lt;fun&gt;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						add_ratio {num = 1; denum =3} {num = 2; denum =5};;
-					</user-input>
-					<system-response>
-						- : ratio = {num=11; denum=15}
-					</system-response>
+					<user-input># add_ratio {num = 1; denum =3} {num = 2; denum =5};;</user-input> 
+					<system-response>- : ratio = {num=11; denum=15}</system-response>
 				</eval-step>
 			</session>
 			<para>
@@ -332,12 +246,8 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						type number = Int of int | Float of float | Error;;
-					</user-input>
-					<system-response>
-						type number = Int of int | Float of float | Error
-					</system-response>
+					<user-input># type number = Int of int | Float of float | Error;;</user-input> 
+					<system-response>type number = Int of int | Float of float | Error</system-response>
 				</eval-step>
 			</session>
 			<para>
@@ -351,11 +261,11 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>type sign = Positive | Negative;;</user-input>
+					<user-input># type sign = Positive | Negative;;</user-input> 
 					<system-response>type sign = Positive | Negative</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>let sign_int n = if n =&gt; 0 then Positive else Negative;;</user-input>
+					<user-input># let sign_int n = if n =&gt; 0 then Positive else Negative;;</user-input> 
 					<system-response>val sign_int: int -&gt; sign = &lt;fun&gt;</system-response>
 				</eval-step>
 			</session>
@@ -365,24 +275,11 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						let add_num n1 n2 = <lb/>
-						<tab/>match (n1, n2) with<lb/>
-						<tab/><tab/>(Int i1, Int i2) -&gt;<lb/>
-						<tab/><tab/><tab/>(* Проверка на переполнение при сложении целых *)<lb/>
-						<tab/><tab/><tab/>if sign_int i1 = sign_int i2 &amp;&amp; sign_int(i1 + i2) &lt;&gt; sign_int i1<lb/>
-						<tab/><tab/><tab/>then Float(float i1 +. float i2)<lb/>
-						<tab/><tab/><tab/>else Int(i1 + i2)<lb/>
-						<tab/>| (Int i1, Float f2) -&gt; Float(float i1 +. f2)<lb/>
-						<tab/>| (Float f1, Int i2) -&gt; Float(f1 +. float i2)<lb/>
-						<tab/>| (Float f1, Float f2) -&gt; Float(f1 +. f2)<lb/>
-						<tab/>| (Error, _) -&gt; Error<lb/>
-						<tab/>| (_, Error) -&gt; Error;;
-					</user-input>
+					<user-input># let add_num n1 n2 = <lb/><tab/>match (n1, n2) with<lb/><tab/><tab/>(Int i1, Int i2) -&gt;<lb/><tab/><tab/><tab/>(* Проверка на переполнение при сложении целых *)<lb/><tab/><tab/><tab/>if sign_int i1 = sign_int i2 &amp;&amp; sign_int(i1 + i2) &lt;&gt; sign_int i1<lb/><tab/><tab/><tab/>then Float(float i1 +. float i2)<lb/><tab/><tab/><tab/>else Int(i1 + i2)<lb/><tab/>| (Int i1, Float f2) -&gt; Float(float i1 +. f2)<lb/><tab/>| (Float f1, Int i2) -&gt; Float(f1 +. float i2)<lb/><tab/>| (Float f1, Float f2) -&gt; Float(f1 +. f2)<lb/><tab/>| (Error, _) -&gt; Error<lb/><tab/>| (_, Error) -&gt; Error;;</user-input> 
 					<system-response>val add_num: number -&gt; number -&gt; number = &lt;fun&gt;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>add_num Int(123) Float(3.14159);;</user-input>
+					<user-input># add_num Int(123) Float(3.14159);;</user-input> 
 					<system-response>-: number Float 126.14159</system-response>
 				</eval-step>
 			</session>
@@ -392,9 +289,7 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						type 'a btree = Empty | Node of 'a * 'a btree * 'a btree;;
-					</user-input>
+					<user-input># type 'a btree = Empty | Node of 'a * 'a btree * 'a btree;;</user-input> 
 					<system-response>type 'a btree = Empty | Node of 'a * 'a btree * 'a btree</system-response>
 				</eval-step>
 				
@@ -412,25 +307,11 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						let rec member x btree = <lb/>
-						<tab/>match btree with<lb/>
-						<tab/><tab/>Empty -&gt; false
-						<tab/><tab/>| Node(y, left, right) -&gt;
-						<tab/><tab/><tab/>if x = y then true else
-						<tab/><tab/><tab/>if x &lt; y then member x left else member x right;;
-					</user-input>
+					<user-input># let rec member x btree = <lb/><tab/>match btree with<lb/><tab/><tab/>Empty -&gt; false<lb/><tab/><tab/>| Node(y, left, right) -&gt;<lb/><tab/><tab/><tab/>if x = y then true else<lb/><tab/><tab/><tab/>if x &lt; y then member x left else member x right;;</user-input> 
 					<system-response>val member : 'a -&gt; 'a btree -&gt; bool = &lt;fun&gt;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						let insert x btree = <lb/>
-						<tab/>match btree with<lb/>
-						<tab/><tab/>Empty -&gt; Node (x, Empty, Empty)<lb/>
-						<tab/><tab/>| Node(y, left, right) -&gt; <lb/>
-						<tab/><tab/><tab/>if x &lt;= y then Node(y, insert x left, right)<lb/>
-						<tab/><tab/><tab/>else Node(y, left, insert x right);;
-					</user-input>
+					<user-input># let insert x btree = <lb/><tab/>match btree with<lb/><tab/><tab/>Empty -&gt; Node (x, Empty, Empty)<lb/><tab/><tab/>| Node(y, left, right) -&gt; <lb/><tab/><tab/><tab/>if x &lt;= y then Node(y, insert x left, right)<lb/><tab/><tab/><tab/>else Node(y, left, insert x right);;</user-input> 
 					<system-response>val insert : 'a -&gt; 'a btree -&gt; 'a btree = &lt;fun&gt;</system-response>
 				</eval-step>
 			</session>
@@ -446,23 +327,11 @@
 			</para> 
 			<session>
 				<eval-step>
-					<user-input>
-							let add_vect v1 v2 = <lb/>
-							<tab/> let len = min (Array.length v1) (Array.length v2) in<lb/>
-							<tab/> let res = Array.create len 0.0 in<lb/>
-							<tab/> for i = 0 to len - 1 do<lb/>
-							<tab/><tab/>res.(i) &lt;- v1.(i) + v2.(1)<lb/>
-							<tab/>done;
-							<tab/>res;;
-					</user-input>
-					<system-response>
-						val add_vect : float_array -&gt; float_array -&gt; float_array = &lt;fun&gt;
-					</system-response>
+					<user-input># let add_vect v1 v2 = <lb/><tab/> let len = min (Array.length v1) (Array.length v2) in<lb/><tab/> let res = Array.create len 0.0 in<lb/><tab/> for i = 0 to len - 1 do<lb/><tab/><tab/>res.(i) &lt;- v1.(i) + v2.(1)<lb/><tab/>done;<tab/>res;;</user-input> 
+					<system-response>val add_vect : float_array -&gt; float_array -&gt; float_array = &lt;fun&gt;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						add_vect [| 1.0; 2.0 |] [| 3.0; 4.0|];;
-					</user-input>
+					<user-input># add_vect [| 1.0; 2.0 |] [| 3.0; 4.0|];;</user-input> 
 					<system-response>- : float_array[| 4.0; 6.0 |]</system-response>
 				</eval-step>
 			</session>
@@ -472,45 +341,24 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						type mutable_point = { mutable x : float; mutable y : float };;
-					</user-input>
-					<system-response>
-						type mutable_point = { mutable x : float; mutable y : float }
-					</system-response>
+					<user-input># type mutable_point = { mutable x : float; mutable y : float };;</user-input> 
+					<system-response>type mutable_point = { mutable x : float; mutable y : float }</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						let translate p dx dy = <lb/>
-						<tab/>p.x &lt;- p.x +. dx; p.y &lt;- p.y +. dy;;
-					</user-input>
-					<system-response>
-						val translate : mutable_point -&gt; float -&gt; float -&gt; unit = &lt;fun&gt;
-					</system-response>
+					<user-input># let translate p dx dy = <lb/><tab/>p.x &lt;- p.x +. dx; p.y &lt;- p.y +. dy;;</user-input> 
+					<system-response>val translate : mutable_point -&gt; float -&gt; float -&gt; unit = &lt;fun&gt;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						let mypoint = { x = 0.0; y = 0.0 };;
-					</user-input>
-					<system-response>
-						val mypoint : mutable_point =  { x = 0.  ; y = 0. }
-					</system-response>
+					<user-input># let mypoint = { x = 0.0; y = 0.0 };;</user-input> 
+					<system-response>val mypoint : mutable_point =  { x = 0.  ; y = 0. }</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						translate mypoint 1.0 2.0;;
-					</user-input>
-					<system-response>
-						- : unit = ()
-					</system-response>
+					<user-input># translate mypoint 1.0 2.0;;</user-input> 
+					<system-response>- : unit = ()</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						mypoint;;
-					</user-input>
-					<system-response>
-						-  : mypoint = { x = 1. ; y = 2. }
-					</system-response>
+					<user-input># mypoint;;</user-input> 
+					<system-response>-  : mypoint = { x = 1. ; y = 2. }</system-response>
 				</eval-step>
 			</session>
 			<para>
@@ -526,18 +374,7 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						let insertion_sort a = <lb/>
-						<tab/>for i = 1 to Array.length a - 1 do<lb/>
-						<tab/><tab/>let val_i = a.(i) in<lb/>
-						<tab/><tab/>let j = ref i in <lb/>
-						<tab/><tab/>while !j &gt; 0 &amp;&amp; val_i &lt; a.(!j - 1) do<lb/>
-						<tab/><tab/><tab/>a.(!j) &lt;- a.(!j - 1)<lb/>
-						<tab/><tab/><tab/>j := j - 1<lb/>
-						<tab/><tab/>done;<lb/>
-						<tab/><tab/>a.(!j) &lt;- val_i
-						done;;
-					</user-input>
+					<user-input># let insertion_sort a = <lb/><tab/>for i = 1 to Array.length a - 1 do<lb/><tab/><tab/>let val_i = a.(i) in<lb/><tab/><tab/>let j = ref i in <lb/><tab/><tab/>while !j &gt; 0 &amp;&amp; val_i &lt; a.(!j - 1) do<lb/><tab/><tab/><tab/>a.(!j) &lt;- a.(!j - 1)<lb/><tab/><tab/><tab/>j := j - 1<lb/><tab/><tab/>done;<lb/><tab/><tab/>a.(!j) &lt;- val_i<lb/>done;;</user-input> 
 					<system-response>val insertion_sort : 'a array = &lt;fun&gt;</system-response>
 				</eval-step>
 			</session>
@@ -546,20 +383,12 @@
 				последнее возвращенное значение:</para>
 			<session>
 				<eval-step>
-					<user-input>
-						let current_rand = ref 0;;
-					</user-input>
-					<system-response>
-						val current_rand : int ref = { contents = 0 }
-					</system-response>
+					<user-input># let current_rand = ref 0;;</user-input> 
+					<system-response>val current_rand : int ref = { contents = 0 }</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						let random () = <lb/>
-						<tab/>current_rand := !current_rand * 25713 + 1345;
-						<tab/>!current_rand;;
-					</user-input>
-					<system-response>val random : unit -&gt; int = &lt;fun&gt;</system-response>
+					<user-input># let random () = <lb/><tab/>current_rand := !current_rand * 25713 + 1345;<lb/><tab/>!current_rand;;
+					</user-input> <system-response>val random : unit -&gt; int = &lt;fun&gt;</system-response>
 				</eval-step>
 			</session>
 			<para>
@@ -568,28 +397,16 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						type 'a ref = { mutable contents : 'a };;
-					</user-input>
-					<system-response>
-						type 'a ref = { mutable contents : 'a; }
-					</system-response>
+					<user-input># type 'a ref = { mutable contents : 'a };;</user-input> 
+					<system-response>type 'a ref = { mutable contents : 'a; }</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						let (!) r = r.contents;;
-					</user-input>
-					<system-response>
-						val ( ! ) : 'a ref -&gt; 'a = &lt;fun&gt;
-					</system-response>
+					<user-input># let (!) r = r.contents;;</user-input> 
+					<system-response>val ( ! ) : 'a ref -&gt; 'a = &lt;fun&gt;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						let (:=) r newval = r.contents &lt;- newval;;
-					</user-input>
-					<system-response>
-						val ( := ) : 'a ref -&gt; 'a -&gt; unit = &lt;fun&gt;
-					</system-response>
+					<user-input># let (:=) r newval = r.contents &lt;- newval;;</user-input> 
+					<system-response>val ( := ) : 'a ref -&gt; 'a -&gt; unit = &lt;fun&gt;</system-response>
 				</eval-step>
 			</session>
 			<para>
@@ -600,45 +417,24 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						type idref = {mutable id: 'a. 'a -> 'a};;
-					</user-input>
-					<system-response>
-						type idref = { mutable id: 'a. 'a -> 'a; }
-					</system-response>
+					<user-input># type idref = {mutable id: 'a. 'a -> 'a};;</user-input> 
+					<system-response>type idref = { mutable id: 'a. 'a -> 'a; }</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						let r = { id = fun x -&gt; x };;
-					</user-input>
-					<system-response>
-						val r : idref = { id = &lt;fun&gt; }
-					</system-response>
+					<user-input># let r = { id = fun x -&gt; x };;</user-input> 
+					<system-response>val r : idref = { id = &lt;fun&gt; }</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						let g s = (s.id 1, s.id true);;
-					</user-input>
-					<system-response>
-						val g : idref -&gt; int * bool = &lt;fun&gt;
-					</system-response>
+					<user-input># let g s = (s.id 1, s.id true);;</user-input> 
+					<system-response>val g : idref -&gt; int * bool = &lt;fun&gt;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						r.id &lt;- (fun x -&gt; print_string "called id\n"; x);;
-					</user-input>
-					<system-response>
-						- : unit = ()
-					</system-response>
+					<user-input># r.id &lt;- (fun x -&gt; print_string "called id\n"; x);;</user-input> 
+					<system-response>- : unit = ()</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						g r;;
-					</user-input>
-					<system-response>
-						called id<lb/>
-						called id<lb/>
-						- : (int * bool) = (1, true)
+					<user-input># g r;;</user-input> 
+					<system-response>	called id<lb/>called id<lb/>- : (int * bool) = (1, true)
 					</system-response>
 				</eval-step>
 			</session>
@@ -654,39 +450,20 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						exception Empty_list;;
-					</user-input>
-					<system-response>
-						exception Empty_list
-					</system-response>
+					<user-input># exception Empty_list;;</user-input> 
+					<system-response>exception Empty_list</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						let head l =<lb/>
-						<tab/>match l with<lb/>
-						<tab/><tab/>[] -&gt; raise Empty_list<lb/>
-						<tab/>hd :: tl -&gt; hd;;
-					</user-input>
-					<system-response>
-						val head : 'a list -&gt; 'a = &lt;fun&gt;
-					</system-response>
+					<user-input># let head l =<lb/><tab/>match l with<lb/><tab/><tab/>[] -&gt; raise Empty_list<lb/><tab/>hd :: tl -&gt; hd;;</user-input> 
+					<system-response>val head : 'a list -&gt; 'a = &lt;fun&gt;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-					head [1;2];;
-					</user-input>
-					<system-response>
-					- : int = 1
-					</system-response>
+					<user-input># head [1;2];;</user-input> 
+					<system-response>- : int = 1</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						head [];;
-					</user-input>
-					<system-response>
-						Exception: Empty_list
-					</system-response>
+					<user-input># head [];;</user-input> 
+					<system-response>Exception: Empty_list</system-response>
 				</eval-step>
 			</session>
 			<para>
@@ -698,17 +475,12 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						List.assoc 1 [(0, "zero"); (1, "one")];;
-					</user-input>
-					<system-response>
-						- : string = "one"
-					</system-response>
+					<user-input># List.assoc 1 [(0, "zero"); (1, "one")];;
+					</user-input> 
+					<system-response>- : string = "one"</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						List.assoc 2 [(0, "zero"); (1, "one")];;
-					</user-input>
+					<user-input># List.assoc 2 [(0, "zero"); (1, "one")];;</user-input> 
 					<system-response>
 						Exception: Not_found
 					</system-response>
@@ -719,32 +491,16 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						let name_of_binary_digit = <lb/>
-						<tab/>try<lb/>
-						<tab/><tab/>List_assoc digit [(0, "zero"); (1, "one")]<lb/>
-						<tab/>with Not_found -&gt;<lb/>
-						<tab/><tab/>"not a binary digit";;
-					</user-input>
-					<system-response>
-						val name_of_binary_digit : int -&gt; string = &lt;fun&gt;
-					</system-response>
+					<user-input># let name_of_binary_digit = <lb/><tab/>try<lb/><tab/><tab/>List_assoc digit [(0, "zero"); (1, "one")]<lb/><tab/>with Not_found -&gt;<lb/><tab/><tab/>"not a binary digit";;</user-input> 
+					<system-response>val name_of_binary_digit : int -&gt; string = &lt;fun&gt;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						name_of_binary_digit 0;;
-					</user-input>
-					<system-response>
-						- : string = "zero"
-					</system-response>
+					<user-input># name_of_binary_digit 0;;</user-input> 
+					<system-response>- : string = "zero"</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						name_of_binary_digit (-1);;
-					</user-input>
-					<system-response>
-						- : string = "not a binary digit"
-					</system-response>
+					<user-input># name_of_binary_digit (-1);;</user-input> 
+					<system-response>- : string = "not a binary digit"</system-response>
 				</eval-step>
 			</session>
 			<para>
@@ -756,21 +512,8 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						let temporarily_set_reference ref newval funct = <lb/>
-						<tab/>let oldval = !ref in<lb/>
-						<tab/>try<lb/>
-						<tab/><tab/>ref := newval;<lb/>
-						<tab/><tab/>let res = funct() in<lb/>
-						<tab/><tab/>ref := oldval;<lb/>
-						<tab/><tab/>res<lb/>
-						<tab/>with x -&gt;
-						<tab/><tab/>let ref := oldval;<lb/>
-						<tab/><tab/>raise x;;
-					</user-input>
-					<system-response>
-						val temporarily_set_reference : 'a -&gt; 'a -&gt; (unit -&gt; 'b) -&gt; 'b = &lt;fun&gt;
-					</system-response>
+					<user-input># let temporarily_set_reference ref newval funct = <lb/><tab/>let oldval = !ref in<lb/><tab/>try<lb/><tab/><tab/>ref := newval;<lb/><tab/><tab/>let res = funct() in<lb/><tab/><tab/>ref := oldval;<lb/><tab/><tab/>res<lb/><tab/>with x -&gt;<lb/><tab/><tab/>let ref := oldval;<lb/><tab/><tab/>raise x;;</user-input> 
+					<system-response>val temporarily_set_reference : 'a -&gt; 'a -&gt; (unit -&gt; 'b) -&gt; 'b = &lt;fun&gt;</system-response>
 				</eval-step>
 			</session>
 		</section>
@@ -783,25 +526,22 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						type expression = <lb/>
-						<tab/>Const of Float<lb/>
-						<tab/>| Var of String<lb/>
-						<tab/>| Sum of expression * expression (* e1 + e2 *)<lb/>
-						<tab/>| Diff of expression * expression (* e1 - e2 *)<lb/>
-						<tab/>| Prod of expression * expression   (* e1 * e2 *)<lb/>
-   						<tab/>| Quot of expression * expression   (* e1 / e2 *)<lb/>
-   						;;
-					</user-input>
-					<system-response>
-						type expression =<lb/>
-    <tab/>Const of float<lb/>
-  <tab/>| Var of string<lb/>
-  <tab/>| Sum of expression * expression<lb/>
-  <tab/>| Diff of expression * expression<lb/>
-  <tab/>| Prod of expression * expression<lb/>
-  <tab/>| Quot of expression * expression
-					</system-response>
+					<user-input><![CDATA[# type expression = 
+	Const of Float
+	| Var of String
+	| Sum of expression * expression (* e1 + e2 *)
+	| Diff of expression * expression (* e1 - e2 *)
+	| Prod of expression * expression   (* e1 * e2 *)
+	| Quot of expression * expression   (* e1 / e2 *)
+   						;;]]>
+						</user-input> 
+					<system-response><![CDATA[# type expression =
+	Const of float
+	| Var of string
+	| Sum of expression * expression
+	| Diff of expression * expression
+	| Prod of expression * expression
+	| Quot of expression * expression]]></system-response>
 				</eval-step>
 			</session>
 			<para>
@@ -811,36 +551,24 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						exception Unbound_variable of string;;
-					</user-input>
-					<system-response>
-						exception Unbound_variable of string
-					</system-response>
+					<user-input># exception Unbound_variable of string;;</user-input> 
+					<system-response>exception Unbound_variable of string</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						let rec eval env exp = <lb/>
-						<tab/>match exp with<lb/>
-						<tab/><tab/>Const c -&gt; c<lb/>
-						<tab/><tab/>| Var v ->&gt;<lb/>
-						<tab/><tab/><tab/>(try List.assoc v env with Not_found -&gt; raise(Unbound_variable v))<lb/>
-						<tab/><tab/>| Sum(f, g) -&gt; eval env f +. env g<lb/>
-						<tab/><tab/>| Diff(f, g) -&gt; eval env f -. env g<lb/>
-						<tab/><tab/>| Prod(f, g) -&gt; eval env f *. env g<lb/>
-						<tab/><tab/>| Quot(f, g) -&gt; eval env f /. env g;;
-					</user-input>
-					<system-response>
-						var eval : (sting * float) list -&gt; expression -&gt; float = &lt;fun&gt;
-					</system-response>
+					<user-input><![CDATA[# let rec eval env exp =
+	match exp with
+		Const c -> c
+		| Var v ->>
+		(try List.assoc v env with Not_found -> raise(Unbound_variable v))
+		| Sum(f, g) -> eval env f +. env g
+		| Diff(f, g) -> eval env f -. env g
+		| Prod(f, g) -> eval env f *. env g
+		| Quot(f, g) -> eval env f /. env g;;]]></user-input> 
+					<system-response>var eval : (string * float) list -&gt; expression -&gt; float = &lt;fun&gt;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						eval [("x", 1.0); ("y", 3.14)] (Prod(Sum(Var "x", Const 2.0), Var "y"));;
-					</user-input>
-					<system-response>
-						- : float = 9.42
-					</system-response>
+					<user-input># eval [("x", 1.0); ("y", 3.14)] (Prod(Sum(Var "x", Const 2.0), Var "y"));;</user-input> 
+					<system-response>- : float = 9.42</system-response>
 				</eval-step>
 			</session>
 			<para>
@@ -849,31 +577,20 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						let rec deriv exp dv =<lb/>
-   						<tab/>match exp with<lb/>
-     					<tab/><tab/>Const c -&gt; Const 0.0<lb/>
-						<tab/><tab/>| Var v -&gt; if v = dv then Const 1.0 else Const 0.0<lb/>
-   						<tab/><tab/>| Sum(f, g) -&gt; Sum(deriv f dv, deriv g dv)<lb/>
-   						<tab/><tab/>| Diff(f, g) -&gt; Diff(deriv f dv, deriv g dv)<lb/>
-						<tab/><tab/>| Prod(f, g) -&gt; Sum(Prod(f, deriv g dv), Prod(deriv f dv, g))<lb/>
-						<tab/><tab/>| Quot(f, g) -&gt; Quot(Diff(Prod(deriv f dv, g), Prod(f, deriv g dv)),<lb/>
-                        <tab/><tab/><tab/>Prod(g, g))<lb/>
-                        ;;
-					</user-input>
-					<system-response>
-						val deriv : expression -&gt; string -&gt; expression = &lt;fun&gt;
-					</system-response>
+					<user-input><![CDATA[# let rec deriv exp dv =
+	match exp with
+		Const c -> Const 0.0
+		| Var v -> if v = dv then Const 1.0 else Const 0.0
+		| Sum(f, g) -> Sum(deriv f dv, deriv g dv)
+		| Diff(f, g) -> Diff(deriv f dv, deriv g dv)
+		| Prod(f, g) -> Sum(Prod(f, deriv g dv), Prod(deriv f dv, g))
+		| Quot(f, g) -> Quot(Diff(Prod(deriv f dv, g), Prod(f, deriv g dv)),
+			  Prod(g, g));;]]></user-input> 
+					<system-response>val deriv : expression -&gt; string -&gt; expression = &lt;fun&gt;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						deriv (Quot(Const "1.0", Var "x")) "x";; 
-					</user-input>
-					<system-response>
-						- : expression = <lb/>
-						<tab/>Quot(Diff(Prod(Const 0., Var "x"),  Prod (Const 1., Const 1.)),<lb/>
-						<tab/><tab/>Prod (Var "x", Var "x"))
-					</system-response>
+					<user-input># deriv (Quot(Const "1.0", Var "x")) "x";;</user-input> 
+					<system-response>- : expression = <lb/><tab/>Quot(Diff(Prod(Const 0., Var "x"),  Prod (Const 1., Const 1.)),<lb/><tab/><tab/>Prod (Var "x", Var "x"))</system-response>
 				</eval-step>
 			</session>
 			
@@ -896,67 +613,48 @@
 			</para>
 			<session>
 				<eval-step>
-					<user-input>
-						let print_exp exp = <lb/>
-						<tab/>(* Определение локальных функций *)<lb/>
-						<tab/>let open_paren prec op_prec =<lb/>
-     					<tab/><tab/>if prec > op_prec then print_string "(" in<lb/>
-     					<tab/>let close_paren prec op_prec =<lb/>
-     					<tab/><tab/>if prec > op_prec then print_string ")" in<lb/>
-     					<tab/> let rec print prec exp =     (* prec -- приоритет текущего оператора *)<lb/>
-     					<tab/><tab/>match exp with
-       					<tab/><tab/><tab/>Const c -&gt; print_float c
-     					<tab/><tab/><tab/>| Var v -&gt; print_string v
-     					<tab/><tab/><tab/>| Sum(f, g) -&gt;
-         				<tab/><tab/><tab/><tab/>open_paren prec 0;
-        				<tab/><tab/><tab/><tab/>print 0 f; print_string " + "; print 0 g;
-        				<tab/><tab/><tab/><tab/>close_paren prec 0
-     					<tab/><tab/><tab/>| Diff(f, g) -&gt;
-         				<tab/><tab/><tab/><tab/>open_paren prec 0;
-         				<tab/><tab/><tab/><tab/>print 0 f; print_string " - "; print 1 g;
-         				<tab/><tab/><tab/><tab/>close_paren prec 0
-     					<tab/><tab/><tab/>| Prod(f, g) -&gt;
-         				<tab/><tab/><tab/><tab/>open_paren prec 2;
-         				<tab/><tab/><tab/><tab/>print 2 f; print_string " * "; print 2 g;
-         				<tab/><tab/><tab/><tab/>close_paren prec 2
-     					<tab/><tab/><tab/>| Quot(f, g) -&gt;
-         				<tab/><tab/><tab/><tab/>open_paren prec 2;
-         				<tab/><tab/><tab/><tab/>print 2 f; print_string " / "; print 3 g;
-         				<tab/><tab/><tab/><tab/>close_paren prec 2
-   						<tab/><tab/>in print 0 exp;;
-					</user-input>
-					<system-response>
-						val print_expr : expression -&gt; unit = &lt;fun&gt;
-					</system-response>
+					<user-input><![CDATA[# let print_exp exp = 
+	(* Определение локальных функций *)
+	let open_paren prec op_prec =
+		if prec > op_prec then print_string "(" in
+	let close_paren prec op_prec =
+		if prec > op_prec then print_string ")" in
+	let rec print prec exp =     (* prec -- приоритет текущего оператора *)
+		match exp with
+			Const c -> print_float c
+     	| Var v -> print_string v
+     	| Sum(f, g) ->
+				open_paren prec 0;
+        print 0 f; print_string " + "; print 0 g;
+        close_paren prec 0
+     	| Diff(f, g) ->
+        	open_paren prec 0;
+         	print 0 f; print_string " - "; print 1 g;
+         	close_paren prec 0
+     	| Prod(f, g) ->
+         	open_paren prec 2;
+         	print 2 f; print_string " * "; print 2 g;
+         	close_paren prec 2
+     	| Quot(f, g) ->
+         	open_paren prec 2;
+         	print 2 f; print_string " / "; print 3 g;
+         	close_paren prec 2
+   	in print 0 exp;;]]></user-input> 
+					<system-response>val print_expr : expression -&gt; unit = &lt;fun&gt;</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						let e = Sum(Prod(Const 2.0, Var "x"), Const 1.0);;
-					</user-input>
-					<system-response>
-						val e : expression = Sum (Prod (Const 2., Var "x"), Const 1.)
-					</system-response>
+					<user-input># let e = Sum(Prod(Const 2.0, Var "x"), Const 1.0);;</user-input> 
+					<system-response>val e : expression = Sum (Prod (Const 2., Var "x"), Const 1.)</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						print_expr e; print_newline();;
-					</user-input>
-					<system-response>
-						2. * x + 1.<lb/>
-						- : unit = ()
-					</system-response>
+					<user-input># print_expr e; print_newline();;</user-input> 
+					<system-response>2. * x + 1.<lb/>- : unit = ()</system-response>
 				</eval-step>
 				<eval-step>
-					<user-input>
-						print_expr (deriv e "x"); print_newline();;
-					</user-input>
-					<system-response>
-						2. * 1. + 0. * x + 0.<lb/>
-						- : unit = ()
-					</system-response>
+					<user-input># print_expr (deriv e "x"); print_newline();;</user-input> 
+					<system-response>2. * 1. + 0. * x + 0.<lb/>- : unit = ()</system-response>
 				</eval-step>
-				
-				</session>
+			</session>
 				<para>
 					Лексический разбор (преобразование конкретного синтаксиса
 					в абстрактный), как правило, сложнее. Caml включает несколько
@@ -973,26 +671,16 @@
 				</para>
 				<session>
 					<eval-step>
-						<user-input>
-							#load camlp4o.cma;;
-						</user-input>
-						<system-response>
-							<tab/>Camlp4 Parsing version 3.05 (2002-07-22)
-						</system-response>
+						<user-input># #load camlp4o.cma;;</user-input> 
+						<system-response><tab/>Camlp4 Parsing version 3.05 (2002-07-22)</system-response>
 					</eval-step>
 					<eval-step>
-						<user-input>
-							open Genlex;;
-						</user-input>
+						<user-input># open Genlex;;</user-input> 
 						<system-response/>
 					</eval-step>
 					<eval-step>
-						<user-input>
-							let lexer = make_lexer ["("; ")"; "+"; "-"; "*"; "/"];;
-						</user-input>
-						<system-response>
-							val lexer : char Stream.t -&gt; Genlex.token Stream.t = &lt;fun&gt;
-						</system-response>
+						<user-input># let lexer = make_lexer ["("; ")"; "+"; "-"; "*"; "/"];;</user-input> 
+						<system-response>val lexer : char Stream.t -&gt; Genlex.token Stream.t = &lt;fun&gt;</system-response>
 					</eval-step>
 				</session>
 				<para>
@@ -1007,36 +695,20 @@
 				</para>
 				<session>
 					<eval-step>
-						<user-input>
-							let token_stream = lexer(Stream.of_string "1.0 +x");;
-						</user-input>
-						<system-response>
-							val token_stream : Genlex.token Stream.t = &lt;abstr&gt;
-						</system-response>
+						<user-input># let token_stream = lexer(Stream.of_string "1.0 +x");;</user-input> 
+						<system-response>val token_stream : Genlex.token Stream.t = &lt;abstr&gt;</system-response>
 					</eval-step>
 					<eval-step>
-						<user-input>
-							Stream.next token_stream;;
-						</user-input>
-						<system-response>
-							- : Genlex.token = Float 1.
-						</system-response>
+						<user-input># Stream.next token_stream;;</user-input> 
+						<system-response>- : Genlex.token = Float 1.</system-response>
 					</eval-step>
 					<eval-step>
-						<user-input>
-							Stream.next token_stream;;
-						</user-input>
-						<system-response>
-							- : Genlex.token = Kwd "+"
-						</system-response>
+						<user-input># Stream.next token_stream;;</user-input> 
+						<system-response>- : Genlex.token = Kwd "+"</system-response>
 					</eval-step>
 					<eval-step>
-						<user-input>
-							Stream.next token_stream;;
-						</user-input>
-						<system-response>
-							- : Genlex.token = Ident "x"
-						</system-response>
+						<user-input># Stream.next token_stream;;</user-input> 
+						<system-response>- : Genlex.token = Ident "x"</system-response>
 					</eval-step>
 				</session>
 				<para>
@@ -1053,12 +725,9 @@
 				</para>
 				<session>
 					<eval-step>
-						<user-input>
-							#load "camlp4o.cmo";;
-						</user-input>
-						<system-response>
-							<tab/>Camlp4 Parsing version 3.05 (2002-07-22)
-						</system-response>
+						<user-input># #load "camlp4o.cmo";;
+						</user-input> 
+						<system-response><tab/>Camlp4 Parsing version 3.05 (2002-07-22)</system-response>
 					</eval-step>
 				</session>
 				<para>
@@ -1066,42 +735,34 @@
 				</para>
 				<session>
 					<eval-step>
-						<user-input>
-							let rec parse_expr = parser<lb/>
-     						<tab/>[&lt; e1 = parse_mult; e = parse_more_adds e1 &gt;] -&gt; e<lb/>
- 							and parse_more_adds e1 = parser<lb/>
-     						<tab/>[&lt; 'Kwd "+"; e2 = parse_mult; e = parse_more_adds (Sum(e1, e2)) &gt;] -&gt; e<lb/>
-   							<tab/>| [&lt; 'Kwd "-"; e2 = parse_mult; e = parse_more_adds (Diff(e1, e2)) &gt;] -&gt; e<lb/>
-   							<tab/>| [&lt; &gt;] -&gt; e1<lb/>
- 							and parse_mult = parser<lb/>
-     						<tab/>[&lt; e1 = parse_simple; e = parse_more_mults e1 &gt;] -&gt; e<lb/>
- 							and parse_more_mults e1 = parser<lb/>
-     						<tab/>[&lt; 'Kwd "*"; e2 = parse_simple; e = parse_more_mults (Prod(e1, e2)) &gt;] -&gt; e<lb/>
-   							<tab/>| [&lt; 'Kwd "/"; e2 = parse_simple; e = parse_more_mults (Quot(e1, e2)) &gt;] -&gt; e<lb/>
-   							<tab/>| [&lt; &gt;] -&gt; e1<lb/>
- 							and parse_simple = parser<lb/>
-     						<tab/>[&lt; 'Ident s &gt;] -&gt; Var s<lb/>
-   							<tab/>| [&lt; 'Int i &gt;] -&gt; Const(float i)<lb/>
-   							<tab/>| [&lt; 'Float f &gt;] -&gt; Const f<lb/>
-   							<tab/>| [&lt; 'Kwd "("; e = parse_expr; 'Kwd ")" &gt;] -&gt; e;;
-						</user-input>
-						<system-response>
-							val parse_expr : Genlex.token Stream.t -&gt; expression = &lt;fun&gt;<lb/>
-							val parse_more_adds : expression -&gt; Genlex.token Stream.t -&gt; expression =<lb/>
-  							<tab/>&lt;fun&gt;<lb/>
-							val parse_mult : Genlex.token Stream.t -&gt; expression = &lt;fun&gt;<lb/>
-							val parse_more_mults : expression -&gt; Genlex.token Stream.t -&gt; expression =<lb/>
-  							<tab/>&lt;fun&gt;<lb/>
-							val parse_simple : Genlex.token Stream.t -&gt; expression = &lt;fun&gt;
-						</system-response>
+						<user-input><![CDATA[#let rec parse_expr = parser
+     [< e1 = parse_mult; e = parse_more_adds e1 >] -> e
+ and parse_more_adds e1 = parser
+     [< 'Kwd "+"; e2 = parse_mult; e = parse_more_adds (Sum(e1, e2)) >] -> e
+   | [< 'Kwd "-"; e2 = parse_mult; e = parse_more_adds (Diff(e1, e2)) >] -> e
+   | [< >] -> e1
+ and parse_mult = parser
+     [< e1 = parse_simple; e = parse_more_mults e1 >] -> e
+ and parse_more_mults e1 = parser
+     [< 'Kwd "*"; e2 = parse_simple; e = parse_more_mults (Prod(e1, e2)) >] -> e
+   | [< 'Kwd "/"; e2 = parse_simple; e = parse_more_mults (Quot(e1, e2)) >] -> e
+   | [< >] -> e1
+ and parse_simple = parser
+     [< 'Ident s >] -> Var s
+   | [< 'Int i >] -> Const(float i)
+   | [< 'Float f >] -> Const f
+   | [< 'Kwd "("; e = parse_expr; 'Kwd ")" >] -> e;;]]></user-input> 
+						<system-response><![CDATA[val parse_expr : Genlex.token Stream.t -> expression = <fun>
+val parse_more_adds : expression -> Genlex.token Stream.t -> expression =
+  <fun>
+val parse_mult : Genlex.token Stream.t -> expression = <fun>
+val parse_more_mults : expression -> Genlex.token Stream.t -> expression =
+  <fun>
+val parse_simple : Genlex.token Stream.t -> expression = <fun>]]></system-response>
 					</eval-step>
 					<eval-step>
-						<user-input>
-							let parse_expression = parser [&lt; e = parse_expr; _ = Stream.empty &gt;] -&gt; e;;
-						</user-input>
-						<system-response>
-							val parse_expression : Genlex.token Stream.t -&gt; expression = &lt;fun&gt;
-						</system-response>
+						<user-input># let parse_expression = parser [&lt; e = parse_expr; _ = Stream.empty &gt;] -&gt; e;;</user-input> 
+						<system-response>val parse_expression : Genlex.token Stream.t -&gt; expression = &lt;fun&gt;</system-response>
 					</eval-step>
 				</session>
 				<para>
@@ -1110,20 +771,12 @@
 				</para>
 				<session>
 					<eval-step>
-						<user-input>
-							let read_expression s = parse_expression(lexer(Stream.of_string s));;
-						</user-input>
-						<system-response>
-							val read_expression : string -&gt; expression = &lt;fun&gt;
-						</system-response>
+						<user-input># let read_expression s = parse_expression(lexer(Stream.of_string s));;</user-input> 
+						<system-response>val read_expression : string -&gt; expression = &lt;fun&gt;</system-response>
 					</eval-step>
 					<eval-step>
-						<user-input>
-							read_expression "2*(x+y)";;
-						</user-input>
-						<system-response>
-							- : expression = Prod (Const 2., Sum (Var "x", Var "y"))
-						</system-response>
+						<user-input># read_expression "2*(x+y)";;</user-input> 
+						<system-response>- : expression = Prod (Const 2., Sum (Var "x", Var "y"))</system-response>
 					</eval-step>
 				</session>
 				<para>
@@ -1131,20 +784,12 @@
 				</para>
 				<session>
 					<eval-step>
-						<user-input>
-							read_expression "x - 1";;
-						</user-input>
-						<system-response>
-							- : expression = Diff (Var "x", Const 1.)
-						</system-response>
+						<user-input># read_expression "x - 1";;</user-input> 
+						<system-response>- : expression = Diff (Var "x", Const 1.)</system-response>
 					</eval-step>
 					<eval-step>
-						<user-input>
-							read_expression "x-1";;
-						</user-input>
-						<system-response>
-							Exception: Stream.Error "".
-						</system-response>
+						<user-input># read_expression "x-1";;</user-input> 
+						<system-response>Exception: Stream.Error "".</system-response>
 					</eval-step>
 				</session>
 				<para>
@@ -1171,9 +816,7 @@
 					функции вывода, если это необходимо. Следующая программа выводит числа
 					Фибоначчи:
 				</para>
-				<listing>
-					<![CDATA[
-(* Файл fib.ml *)
+				<listing><![CDATA[(* Файл fib.ml *)
 let rec fib n =
 	if n < 2 then 1 else fib(n-1) + fib(n-2);;
 let main () =
@@ -1181,9 +824,7 @@ let main () =
   	print_int(fib arg);
   	print_newline();
 	exit 0;;
-main ();;
-					]]>
-				</listing>
+main ();;]]></listing>
 				<para>
 					<keyword>Sys.argv</keyword> - это массив строк, содержащий аргументы
 					командной строки. Таким образом, <keyword>Sys.argv.(1)</keyword> -
@@ -1192,21 +833,12 @@ main ();;
 				</para>
 				<command-session>
 					<command-line>
-						<input prompt="$">
-							ocamlc -o fib fib.ml
+						<input prompt="$">$ ocamlc -o fib fib.ml
 						</input>
-						<input prompt="$">
-							./fib 10
-						</input>
-						<response>
-							89
-						</response>
-						<input prompt="$">
-							./fib 20
-						</input>
-						<response>
-							10946
-						</response>
+						<input prompt="$">$ ./fib 10</input>
+						<response>89</response>
+						<input prompt="$">$ ./fib 20</input>
+						<response>10946</response>
 					</command-line>
 				</command-session>
 			</section>

@@ -10,13 +10,13 @@
       <fo:table-body>
         <fo:table-row>
           <fo:table-cell>
-            <fo:block text-align-last="end">
+            <fo:block text-align-last="end" font-weight="normal" font-size="10pt">
               <xsl:apply-templates select="term"/>
               <xsl:text>::=</xsl:text>
             </fo:block>
           </fo:table-cell>
           <fo:table-cell>
-            <fo:block>
+            <fo:block font-weight="normal" font-size="10pt" text-align-last="left">
               <xsl:apply-templates select="def"/>
             </fo:block>
           </fo:table-cell>

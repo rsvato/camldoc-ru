@@ -1,5 +1,5 @@
 <!ENTITY % bnf-content "term | value">
-<!ENTITY % para-stuff "#PCDATA|command|keyword|mdash|term|sub|%bnf-content;|power|index">
+<!ENTITY % para-stuff "#PCDATA|command|keyword|mdash|term|sub|%bnf-content;|power|index|emph">
 <!ENTITY % section-stuff "para|session|listing|command-session|list|table|bnf|message|command-option-group|dict">
 <!ENTITY % dict-unit "dict-term,dict-art">
 <!ELEMENT abstract (para)>
@@ -16,6 +16,7 @@
 <!ATTLIST power pow CDATA #REQUIRED>
 <!ELEMENT index (#PCDATA)>
 <!ATTLIST index ind CDATA #REQUIRED>
+<!ELEMENT emph (#PCDATA)>
 <!ELEMENT main-matters (section+)>
 <!ELEMENT mdash EMPTY>
 <!ELEMENT para (%para-stuff;)*>

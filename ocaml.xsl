@@ -255,7 +255,7 @@
 			<br/><br/>
 		</xsl:for-each>
 	</xsl:template>
-	<xsl:template match="term">
+	<xsl:template match="emph">
 		<i><xsl:apply-templates/></i>
 	</xsl:template>
 	<xsl:template match="sub">

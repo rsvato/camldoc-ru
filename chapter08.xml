@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="windows-1251"?>
-<!DOCTYPE chapter SYSTEM "./core.dtd">
+<!-- <!DOCTYPE chapter SYSTEM "./core.dtd"> -->
 <chapter name="Пакетная компиляция (ocamlc)" number="8">
   <abstract>
     <para>В этой главе описывается пакетный компилятор языка Objective

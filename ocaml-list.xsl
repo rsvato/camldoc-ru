@@ -4,15 +4,24 @@
   xmlns:fo="http://www.w3.org/1999/XSL/Format">
 
   <xsl:template match="list">
-    <fo:list-block>
+    <fo:list-block font-weight="normal" font-size="10pt" text-align-last="left" line-height="12pt">
       <xsl:for-each select="item">
         <fo:list-item>
           <fo:list-item-label>
-            <fo:block>
+            <fo:block text-align-last="justify"
+      font-size="10pt"
+			font-weight="normal"
+      line-height="12pt"
+      language="ru">
               <xsl:text>&#x2022;</xsl:text>
             </fo:block>
           </fo:list-item-label>
-          <fo:list-item-body>
+          <fo:list-item-body text-align-last="justify"
+      font-size="10pt"
+			font-weight="normal"
+      font-family="Times"
+      line-height="12pt"
+      language="ru">
                <xsl:apply-templates/>
            </fo:list-item-body>
         </fo:list-item>
@@ -21,20 +30,20 @@
   </xsl:template>
 
   <xsl:template match="dict|command-option-group">
-    <fo:list-block>
+    <fo:list-block font-weight="normal" font-size="10pt" text-align-last="left">
       <xsl:apply-templates/>
     </fo:list-block>
   </xsl:template>
   <xsl:template match="dict-term">
     <fo:list-item-label>
-       <fo:block font-weight="bold">
+       <fo:block font-weight="bold" font-size="10pt"  text-align-last="left" font-family="Times">
          <xsl:apply-templates/>
        </fo:block>
      </fo:list-item-label>
   </xsl:template>
   <xsl:template match="dict-art">
     <fo:list-item-body>
-      <fo:block>
+      <fo:block font-size="10pt"  font-weight="normal">
         <xsl:apply-templates/>
       </fo:block>
     </fo:list-item-body>

@@ -50,7 +50,7 @@
           <system-response><![CDATA[val x0 : int ref = {contents = 0}]]></system-response>
         </eval-step>
         <eval-step>
-          <user-input><![CDATA[class point =
+          <user-input><![CDATA[#class point =
    object 
      val mutable x = incr x0; !x0
      method get_x = x

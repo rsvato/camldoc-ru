@@ -11,8 +11,8 @@
       font-family="sans-serif"
       font-weight="bold"
       line-height="24pt"
-      keep-with-next="true"
       language="ru"
+			text-align-last="left"
       >
       <xsl:value-of select="ancestor::node()/@number"/>.<xsl:call-template name="NumberSection"/>
       <xsl:text>&#160;</xsl:text>
@@ -36,7 +36,8 @@
       font-family="sans-serif"
       font-weight="bold"
       line-height="16pt"
-      keep-with-next="true">
+			text-align-last="left"
+     >
       <xsl:value-of select="ancestor::node()/@number"/>.<xsl:call-template name="NumberSection"/>
       <xsl:text>&#160;</xsl:text>
       <xsl:value-of select="@name"/>
@@ -59,7 +60,8 @@
       font-family="sans-serif"
       font-weight="bold"
       line-height="16pt"
-      keep-with-next="true">
+			text-align-last="left"
+      >
       <xsl:value-of select="@name"/>
     </fo:block>
     <xsl:apply-templates/>
@@ -72,8 +74,35 @@
       font-family="sans-serif"
       font-weight="bold"
       line-height="16pt"
-      keep-with-next="true">
+			text-align-last="left"
+     >
       <xsl:value-of select="@name"/>
+    </fo:block>
+    <xsl:apply-templates/>
+  </xsl:template>
+   <xsl:template match="chapter">
+    <fo:block
+      space-before.optimum="48pt"
+      space-after.optimum="24pt"
+      font-size="18pt"
+      font-family="Helvetica"
+      font-weight="bold"
+      font-style="italic"
+      color="#999999"
+      line-height="24pt"
+			text-align-last="left"
+      break-before="page">
+      Глава<xsl:text>&#160;</xsl:text>
+      <xsl:value-of select="@number"/>.
+      <xsl:value-of select="@name"/>
+       <fotex:bookmark
+        fotex-bookmark-level="1"
+        >
+        <xsl:attribute name="fotex-bookmark-label">
+          <xsl:value-of select="generate-id()"/>
+        </xsl:attribute>
+        <xsl:value-of select="@name"/>
+      </fotex:bookmark>
     </fo:block>
     <xsl:apply-templates/>
   </xsl:template>
