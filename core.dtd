@@ -79,6 +79,6 @@
 <!ELEMENT c-param (#PCDATA)>
 <!ELEMENT option-description (para|listing|list|dict)+>
 <!ELEMENT dict (%dict-unit;)+>
-<!ELEMENT dict-term (%para-stuff;)*>
+<!ELEMENT dict-term (%para-stuff;|lb)*>
 <!ELEMENT dict-art (para|listing|list|dict)+>
 <!-- end options -->

@@ -227,10 +227,335 @@ and ...
 	  </dict-art>
 	  <dict-term><emph>entrypoint</emph> <keyword>lexbuf</keyword></dict-term>
 	  <dict-art>
-	    <para>(Где <emph>entrypoint</emph> - имя другого вхождения в том же определении анализатора.) Рекурсивно вызывает анализатор на заданном вхождении, что бывает полезно, например, для вложенных комментариев.</para>
+	    <para>(Где <emph>entrypoint</emph> - имя другого вхождения
+	      в том же определении анализатора.) Рекурсивно вызывает
+	      анализатор на заданном вхождении, что бывает полезно,
+	      например, для вложенных комментариев.</para>
 	  </dict-art>
-	  </dict>
+	</dict>
       </subsection>
+      <subsection neednumber="1" name="Зарезервированные идентификаторы">
+	<para>Все идентификаторы, начинающиеся с
+	  <keyword>__ocaml_lex</keyword> зарезервированы для
+	  использования <command>ocamllex</command>, поэтому их не
+	  следует использовать в программах.</para>
+      </subsection>
+    </section>
+    <section name="Обзор ocamlyacc">
+      <para>Команда <command>ocamlyacc</command> создает
+	синтаксический анализатор из контекстно независимой
+	грамматической спецификации с соответствующими семантическими
+	действиями в стиле <command>yacc</command>. Если исходный файл
+	называется <command>grammar.mly</command>, то команда</para>
+      <listing>ocamlyacc options grammar.mly</listing>
+      <para>создаст код Caml для синтаксического анализатора, поместив
+	его в файл <command>grammar.ml</command>, а также интерфейс в
+	файле <command>grammar.mli</command>.</para>
+      <para>Сгенерированный модуль определяет по одной функции
+	анализатора на каждое вхождение в грамматике. Функции получают
+	те же имена, что и вхождения. Они принимают в качестве
+	аргумента лексический анализатор (функцию, преобразующую
+	буферы анализатора в токены) и буфр анализатора, а возвращают
+	семантический атрибут соотвествующего вхождения. Функции
+	лексического анализатора обычно генерируются программой
+	<command>ocamllex</command> из соответствующшей спецификации.
+	Буферы - это абстрактный тип данных, реализованный в модуле
+	стандартной библиотеки <keyword>Lexing</keyword>. Токены же
+	представляют собой значения конкретного типа
+	<keyword>token</keyword>, определенного в интерфейсе
+	<command>grammar.mli</command>, создаваемом
+	<command>ocamlyacc</command>.</para>
+    </section>
+    <section name="Синтаксис определения грамматики">
+      <para>Определение грамматики имеет следующий формат:</para>
+      <listing><![CDATA[%{
+  заголовок
+%}
+  объявления
+%%
+  правила
+%%
+  концевик
+]]></listing>
+
+      <para>В разделах объявлений и правил комментарии ограничиваются
+	знаками <keyword>/*</keyword> и <keyword>*/</keyword>, как в
+	С, а в заголовке и концевике - символами <keyword>(*</keyword>
+	и <keyword>*)</keyword> (как в Caml).</para>
+      <subsection neednumber="1" name="Заголовок и концевик">
+	<para>Заголовок и концевик содержат обычный код Caml, который
+	  копируется в неизменном виде в файл
+	  <command>grammar.ml</command>. Оба раздела необязятельны.
+	  Заголовок попадает в начало генерируемого файла и обычно
+	  содержит директивы <keyword>open</keyword>, а также
+	  вспомогательные функции для семантических действий, а
+	  концевик записывается в конец.</para>
+      </subsection>
+      <subsection neednumber="1" name="Объявления">
+	<para>Объявления записываются по одному на строку. Все они начинаются со знака <keyword>%</keyword>.</para>
+	<dict>
+	  <dict-term><term>%token</term> <value>symbol ... symbol</value></dict-term>
+	  <dict-art>
+	    <para>Объявляет данные сиволы как токены (терминальные
+	      символы). Они добавляются как константные конструкторы
+	      для конкретного типа <keyword>token</keyword>.</para>
+	  </dict-art>
+	  <dict-term><term>%token &lt;</term> <value>type</value> <term>&gt;</term> <value>symbol ... symbol</value></dict-term>
+	  <dict-art>
+	    <para>Объявляет данные символы как токены, привязывая к
+	      ним атрибует указанного типа. Они доабляются как
+	      коснтрукторы с аргументом типа <value>type</value> для
+	      конкретного типа <keyword>token</keyword>.
+	      <value>type</value> может быть любым выражением типа
+	      Caml, однако для всех типов, кроме встроенных, имена
+	      должны быть опредедены полностью - например
+	      <keyword>Modname.typename</keyword>, даже если раздел
+	      заголовка включает необходимую директиву <keyword>open
+		Modname</keyword>. Дело в том, что заголовок
+	      копируется только в файл реализации
+	      <command>.ml</command>, а часть <value>type</value> -
+	      еще и в интерфейс <command>.mli</command>.</para>
+	  </dict-art>
+	  <dict-term><term>%start</term> <value>symbol ... symbol</value></dict-term>
+	  <dict-art>
+	    <para>Объявляет указанные симовлы как точки входа для
+	      грамматики. Для каждого такого вхожения в генерируемом
+	      модуле определяется функция анализатора с тем же именем.
+	      Нетерминальные символы, не объявляенные как вхождения,
+	      остаются без подобных функций. Стартовые символы должны
+	      сопровождаться типом, который определяется в директиве
+	      <term>%type</term>.</para>
+	  </dict-art>
+	  <dict-term><term>%type &lt;</term> <value>type</value> <value>&gt;</value> <value>symbol ... symbol</value></dict-term>
+	  <dict-art>
+	    <para>Определяет тип семантических атрибутов для данных
+	      символов. Эта часть обязательна только для стартовых
+	      символов. Типы прочих нетерминальных символов
+	      определяются при прогоне сгенерированных файлов через
+	      компилятор Objective Caml (если не используется параметр
+	      <command>-s</command>). Часть <value>type</value> может
+	      быть любыи выражением типа Caml, гно все конструкторы
+	      типа должны быть определены полностью, как уже
+	      объяснялось выше.</para>
+	  </dict-art>
+	  <dict-term><term>%left</term> <value>symbol ... symbol</value><lb/>
+	    <term>%right</term> <value>symbol ... symbol</value><lb/>
+	    <term>%nonassoc</term> <value>symbol ... symbol</value></dict-term>
+	  <dict-art>
+	    <para>Определяют приоритет и ассоциативность для данных
+	      символов. Указанные в одной строке символы получают
+	      одинаковый приоритет, который считается выше, чем у
+	      символов, объявленных ранее в строке <term>%left</term>,
+	      <term>%right</term> или <term>%nonassoc</term>, но ниже,
+	      чем у символов объявленных в тех же строках позднее. Они
+	      ассоциируюся влево (<term>%left</term>), вправо
+	      (<term>%right</term>) или вовсе не получают
+	      ассоциативности (<term>%nonassoc</term>). Символы, как
+	      правило, являются токенами, но могут быть и обычными
+	      нетерминальными для использования с директивой
+	      <term>%prec</term> в правилах.</para>
+	  </dict-art>
+	</dict>
+      </subsection>
+      <subsection neednumber="1" name="Правила">
+	<para>Синтаксис правил выглдит прмерно так:</para>
+	<listing><![CDATA[нетерминальные : символ ... символ {
+	  семантическое действие } | ... | символ ... символ {
+	  семантическое действие } ;]]></listing>
+	<para>Кроме того, правила могут содержать директиву
+	  <keyword>%prec symbol</keyword>, задающую для данного
+	  символа иные приоритет и ассоциативность, чем по
+	  умолчанию.</para>
+
+	<para>Семантические действия - это любые выражения Caml, в
+	  результате вычисления которых можно получить семантический
+	  атрибут, связанный с указанным нетерминальным символом.
+	  Семантические действия получают доступ к семантическим
+	  атрибутам символов, перечисленных в левой части правила с
+	  помощью нотации через знак <keyword>$</keyword>:
+	  <keyword>$1</keyword> - это атрибут первого (самого левого)
+	  символа, <keyword>$2</keyword> - второго и так далее.</para>
+	<para>Как и в <command>yacc</command> правила могут содержать
+	  специальный символ <keyword>error</keyword>, указывающий на
+	  точки ресинхронизации.</para>
+	<para>Действия в середине правил не поддерживаются.</para>
+	<para>Нетерминальные символы могут быть любыми символами,
+	  допустимыми в Caml, за одним исключеним - не допускается,
+	  чтобы они заканчивались на <keyword>'</keyword> (одиночную
+	  кавычку).</para>
+      </subsection>
+      <subsection neednumber="1" name="Обработка ошибок">
+	<para>Восстановление после ошибок поддерживается следующим
+	  образом: при возникновении состояния ошибки (не найдено
+	  подходящее правило в грамматике) анализатор вызывает функцию
+	  <keyword>parse_error</keyword> с аргументом <keyword>"syntax
+	    error"</keyword>. В реализации по умолчанию она просто
+	  возвращает значение, начиная процесс восстановления (см.
+	  ниже). В заголовке файла грамматики можно определить
+	  собственную функцию <keyword>parse_error</keyword>.</para>
+	<para>В режим восстановления анализатор входит также в том
+	  случае, если одно из действий грамматики возбуждает
+	  исключение <keyword>Parsing.Parse_error</keyword>.</para>
+	<para>В этом режиме анализатор сбрасывает состояния из стека,
+	  пока не достигнет точки, в которой вызвавший обшибку токен
+	  может быть сдвинут. Затем токены ввода сбрасываются до тех
+	  пор, пока не будет найдено три подряд правильных токена, и
+	  начинается обработка первого из них. Если точки сдвига
+	  неверного токена найти не удается, анализатор прерывает
+	  работу, возбуждая исключение
+	  <keyword>Parsing.Parse_error</keyword>.</para>
+	<para>Более подробные инструкции относительно обработки ошибок
+	  содержатся в документации <command>yacc</command>.</para>
+      </subsection>
+    </section>
+    <section name="Параметры">
+      <para>Команда <command>ocamlyacc</command> распознает следующие
+	параметры:</para>
+      <command-option-group>
+	<command-option>
+	  <c-option>
+	    <mc-option>-v</mc-option>
+	    <c-param></c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Создает в файле <command>grammar.ouput</command>
+	      описание таблиц анализатора и отчет о конфликтах,
+	      связанных с неоднозначностями в определении
+	      грамматики.</para>
+	  </option-description>
+	</command-option>
+	<command-option>
+	  <c-option>
+	    <mc-option>-b</mc-option>
+	    <c-param>prefix</c-param>
+	  </c-option>
+	  <option-description>
+	    <para>Файлы создаются с именами
+	      <command>prefix.ml</command>,
+	      <command>prefix.mli</command>,
+	      <command>prefix.output</command>.</para>
+	  </option-description>
+	</command-option>
+      </command-option-group>
+      <para>Во время исполнения генерированный анализатор можно
+	отлажитвать, указав в переменной среды
+	<command>OCAMLRUNPARAM</command> значение <keyword>p</keyword>
+	(см. раздел 10.2). В результате исполняющий анализатор автомат
+	с магазинной памятью трассирует его действия (сдвиг токенов,
+	сокращение правил и т.д.). В трассировке укзываются номера
+	правил и состотяний, которые можно расшифровать, заглянув в
+	файл <command>grammar.output</command>, сгенерированный
+	командой <command>ocamlyacc -v</command>.</para>
+    </section>
+    <section name="Пример">
+      <para>Любимец всех времен и народов: калькулятор. Программа
+	построчно считывает из стандартного ввода арифметические
+	выражения и выводит результат. Это определение
+	грамматики:</para>
+      <listing><![CDATA[/* Файл parser.mly */
+%token <int> INT
+%token PLUS MINUS TIMES DIV
+%token LPAREN RPAREN
+%token EOL
+%left PLUS MINUS        /* низший приоритет */
+%left TIMES DIV         /* средний приоритет */
+%nonassoc UMINUS        /* высший приоритет */
+%start main             /* точка входа */
+%type <int> main
+%%
+main:
+  expr EOL                { $1 }
+;
+expr:
+   INT                     { $1 }
+ | LPAREN expr RPAREN      { $2 }
+ | expr PLUS expr          { $1 + $3 }
+ | expr MINUS expr         { $1 - $3 }
+ | expr TIMES expr         { $1 * $3 }
+ | expr DIV expr           { $1 / $3 }
+ | MINUS expr %prec UMINUS { - $2 }
+;]]></listing>
+      <para>Определение лексического анализатора:</para>
+      <listing><![CDATA[(* Файл lexer.mll *)
+{
+open Parser        (* Тип token определен в parser.mli *)
+exception Eof
+}
+rule token = parse
+   [' ' '\t']     { token lexbuf }     (* пропускаем пробельные символы *)
+ | ['\n' ]        { EOL }
+ | ['0'-'9']+     { INT(int_of_string(Lexing.lexeme lexbuf)) }
+ | '+'            { PLUS }
+ | '-'            { MINUS }
+ | '*'            { TIMES }
+ | '/'            { DIV }
+ | '('            { LPAREN }
+ | ')'            { RPAREN }
+ | eof            { raise Eof }]]></listing>
+
+      <para>Программа, объединяющая синтаксический и лексический
+	анализаторы:</para>
+      <listing><![CDATA[(* Файл calc.ml *)
+let _ =
+  try
+    let lexbuf = Lexing.from_channel stdin in
+    while true do
+      let result = Parser.main Lexer.token lexbuf in
+        print_int result; print_newline(); flush stdout
+    done
+  with Lexer.Eof ->
+   exit 0]]></listing>
+      <para>Компиляция:</para>
+      <listing><![CDATA[ocamllex lexer.mll       # создает lexer.ml
+ocamlyacc parser.mly     # создает parser.ml и parser.mli
+ocamlc -c parser.mli
+ocamlc -c lexer.ml
+ocamlc -c parser.ml
+ocamlc -c calc.ml
+ocamlc -o calc lexer.cmo parser.cmo calc.cmo]]></listing>
+    </section>
+    <section name="Распространенные ошибки">
+      <dict>
+	<dict-term>ocamllex: transition table overflow, automaton is too big</dict-term>
+	<dict-art>
+	  <para>Детерминистические автоматы, генерируемые
+	    <command>ocamllex</command> ограничиваются 32767
+	    переходами. Такое сообщение означает, что определение
+	    лексического анализатора слишком сложное, и не
+	    укладывается в эти рамки. Как правило, причина в том, что
+	    определение разделяет правила для каждого ключевогого
+	    слова алфавита в языке, например, так:</para>
+
+	  <listing><![CDATA[rule token = parse
+  "keyword1"   { KWD1 }
+| "keyword2"   { KWD2 }
+| ...
+| "keyword100" { KWD100 }
+| ['A'-'Z' 'a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_'] *
+               { IDENT(Lexing.lexeme lexbuf) }
+]]></listing>
+	  
+	  <para>Чтобы автоматы сохраняли небольшой размер, подобное
+	    определение можно переписать с одним правилом для общего
+	    "идентификатора" и хэш-таблицей подстановок, позволяющей отличать
+	    ключевые слова от идентификаторов:</para>
+	  <listing><![CDATA[{ let keyword_table = Hashtbl.create 53
+  let _ =
+    List.iter (fun (kwd, tok) -> Hashtbl.add keyword_table kwd tok)
+              [ "keyword1", KWD1;
+                "keyword2", KWD2; ...
+                "keyword100", KWD100 ]
+}
+rule token = parse
+  ['A'-'Z' 'a'-'z'] ['A'-'Z' 'a'-'z' '0'-'9' '_'] *
+               { let id = Lexing.lexeme lexbuf in
+                 try
+                   Hashtbl.find keyword_table s
+                 with Not_found ->
+                   IDENT s }
+]]></listing>
+	</dict-art>
+      </dict>
     </section>
   </main-matters>
 </chapter>
