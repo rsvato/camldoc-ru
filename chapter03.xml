@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="file://localhost/C:/ocaml/ocaml.css" type="text/css"?>
-<!DOCTYPE chapter SYSTEM "core.dtd">
+<!-- <!DOCTYPE chapter SYSTEM "core.dtd"> -->
 <chapter name="Объекты в OCaml" number="3">
   <abstract>
     <para>В этой главе дается обзор объектно-ориентированных возможностей Objective Caml. </para>

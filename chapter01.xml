@@ -1,5 +1,5 @@
-<?xml version="1.0"?>
-<!DOCTYPE chapter SYSTEM "core.dtd">
+<?xml version="1.0" encoding="utf-8"?>
+<!-- <!DOCTYPE chapter SYSTEM "core.dtd"> -->
 <chapter number="1" name="Описание языка">
 	<abstract>
 		<para>В этой части содержится учебное введение в язык Objective Caml.

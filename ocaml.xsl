@@ -8,7 +8,7 @@
 				<meta name="keywords" content="Ocaml functional programming функциональное
 					программирование"/>
 				<style type="text/css">
-					<xsl:text><![CDATA[
+					<xsl:text><![CDATA[<!--
 						body{
 							color:black;
 							background-color:white;
@@ -32,6 +32,9 @@
 							}
 						h3{
 							font-size:14pt;
+							}
+						h4{
+							font-size:12pt;
 							}
 
 						#abstract{
@@ -73,8 +76,8 @@
 						}
 						td{
 							border: black solid thin;
-padding-left:15;
-padding-right:15;
+							padding-left:15;
+							padding-right:15;
 						}
 						table{
 							border:black solid thin;
@@ -99,7 +102,7 @@ padding-right:15;
 							color:navy;
 							font-family:monospace
 				}
-							]]>
+							-->]]>
 					</xsl:text>
 				</style>
 				<title>
@@ -173,6 +176,17 @@ padding-right:15;
 			<xsl:value-of select="@name"/>
 		</h3>
 	</a>
+		<xsl:apply-templates/>
+	</xsl:template>
+	<xsl:template match="subsubsection">
+		<a>
+			<xsl:attribute name="name">
+				<xsl:value-of select="generate-id(.)"/>
+			</xsl:attribute>
+			<h4>
+				<xsl:value-of select="@name"/>
+			</h4>
+		</a>
 		<xsl:apply-templates/>
 	</xsl:template>
 	<xsl:template match="command|keyword">
@@ -269,6 +283,9 @@ padding-right:15;
 		<li>
 			<xsl:apply-templates/>
 		</li>
+	</xsl:template>
+	<xsl:template match="power">
+		<xsl:apply-templates/><sup><span style="font-size:-2"><xsl:value-of select="@pow"/></span></sup>
 	</xsl:template>
 	<xsl:template match="table">
 		<table style="width:80%" align="center">

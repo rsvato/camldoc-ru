@@ -1,0 +1,18 @@
+<!ENTITY chap01 SYSTEM "./chapter01.xml">
+<!ENTITY chap02 SYSTEM "./chapter02.xml">
+<!ENTITY chap03 SYSTEM "./chapter03.xml">
+<!ENTITY chap04 SYSTEM "./chapter04.xml">
+<!ENTITY chap05 SYSTEM "./chapter04.xml">
+<!ENTITY chap06 SYSTEM "./chapter06.xml">
+<!ELEMENT bookinfo (title,subtitle?,authors,legal,part+)>
+<!ELEMENT part (title,chapter+)>
+<!ELEMENT chapter (ENTITIES)>
+<!ATTLIST chapter file CDATA #REQUIRED>
+<!ELEMENT name (#PCDATA)>
+<!ELEMENT authors (main-author,sec-author?)>
+<!ELEMENT title (#PCDATA)>
+<!ELEMENT subtitle (#PCDATA)>
+<!ELEMENT legal (#PCDATA)>
+<!ATTLIST legal year CDATA #IMPLIED>
+<!ELEMENT main-author (#PCDATA)>
+<!ELEMENT sec-author (#PCDATA)>

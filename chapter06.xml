@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE chapter SYSTEM "core.dtd">
+<!-- <!DOCTYPE chapter SYSTEM "core.dtd">-->
 <chapter name="Язык Objective Caml" number="6">
 	<main-matters>
 	<section name="Введение">
@@ -421,8 +421,7 @@
 			<para>Следующие идентификаторы считаются ключевыми словами и не могут использоваться
 			в другом качестве:</para>
 			<listing>
-				<![CDATA[
-			and         as          assert      asr         begin       class
+				<![CDATA[	and         as          assert      asr         begin       class
       closed      constraint  do          done        downto      else
       end         exception   external    false       for         fun
       function    functor     if          in          include     inherit
@@ -441,8 +440,8 @@
     >]    >}    _     `     {     |     }     ~]]></listing>
 		</subsection>
 		<subsection name="Неоднозначности" neednumber="0">
-			<para>Лексические неоднозначтности решаются по правилу "длиннейшего совпадения":
-			если последовательность символов может быть разобрана на два токена несколькими
+			<para>Лексические неоднозначности решаются по правилу "длиннейшего совпадения":
+			если последовательность символов может быть разбита на два токена несколькими
 			способами, используется тот способ, который дает наиболее длинный первый токен.
 			</para>
 		</subsection>
@@ -475,6 +474,22 @@
 				Во время лексического анализа директивы номера строки считаются
 				пробельными символами.
 			</para>
+		</subsection>
+	</section>
+	<section name="Типы данных">
+		<para>В этом разделе описываются типы данных, обрабатываемых в
+		Objective Caml.</para>
+		<subsection name="Базовые типы" neednumber="1">
+			<subsubsection name="Целые числа">
+				<para>Целочисленными значениями считаются целые числа от <power pow="30">-2</power>
+				до <power pow="30">2</power> - 1, то есть от -1073741824 до 1073741823. Реализация
+				может поддерживать больший диапазон значений: в настоящее время
+				на 64-разрядных платформах поддерживаются целые от <power pow="62">-2</power>
+				до <power pow="62">2</power> - 1</para>
+			</subsubsection>
+			<!-- <subsubsection name="Числа с плавающей точкой">
+				<para>Значениями с плавающей точкой считаются числа</para> 
+			</subsubsection>-->
 		</subsection>
 	</section>
 	</main-matters>

@@ -9,15 +9,19 @@
 <!ELEMENT eval-step (user-input,system-response?)>
 <!ELEMENT keyword (#PCDATA)>
 <!ELEMENT lb EMPTY>
+<!ELEMENT power (#PCDATA)>
+<!ATTLIST power pow CDATA #REQUIRED>
 <!ELEMENT main-matters (section+)>
 <!ELEMENT mdash EMPTY>
-<!ELEMENT para (#PCDATA|command|keyword|mdash|term|sub|%bnf-content;)*>
+<!ELEMENT para (#PCDATA|command|keyword|mdash|term|sub|%bnf-content;|power)*>
 <!ELEMENT section (subsection|subsection-nonumber|para|session|listing|command-session|list|table|bnf)*>
 <!ATTLIST section name CDATA #REQUIRED>
-<!ELEMENT subsection (para|session|listing|command-session|list|table|bnf)*>
+<!ELEMENT subsection (para|session|listing|command-session|list|table|bnf|subsubsection)*>
 <!ELEMENT subsection-nonumber (para|session|listing|command-session|list|table|bnf)*>
 <!ATTLIST subsection name CDATA #REQUIRED
 		     neednumber NMTOKEN #REQUIRED>
+<!ELEMENT subsubsection (para|session|listing|command-session|list|table|bnf)*>
+<!ATTLIST subsubsection name CDATA #REQUIRED>
 <!ELEMENT session (eval-step+)>
 <!ELEMENT command-session (command-line+)>
 <!ELEMENT note (para|session)*>

@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE bookinfo SYSTEM "./bookinfo.dtd">
+<bookinfo>
+<title>Система Objective Caml, релиз 3.06</title>
+<subtitle>Документация и руководство пользователя</subtitle>
+<authors>
+<main-author>Ксавье Лерой</main-author>
+<sec-author>Дамье Долигез</sec-author>
+<sec-author>Жак Гарриг</sec-author>
+<sec-author>Дидье Реми</sec-author>
+<sec-author>Жером Вуйон</sec-author>
+</authors>
+<legal year="2002">
+	Национальный Институт Исследований в области Информатики и Автоматики
+</legal>
+<part>
+<title>Введение в Objective Caml</title>
+<chapter file="./chapter01.html">&chap01;</chapter>
+<chapter file="./chapter01.html">&chap02;</chapter>
+<chapter file="./chapter03.html">&chap03;</chapter>
+<chapter file="./chapter04.html">&chap04;</chapter>
+<chapter file="./chapter05.html">&chap05;</chapter>
+</part>
+<part>
+	<title>Язык Оbjective Caml</title>
+	<chapter file="./chapter06.html">&chap06;</chapter>
+</part>
+</bookinfo>

@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?xml-stylesheet href="file://localhost/C:/ocaml/ocaml.css" type="text/css"?>
-<!DOCTYPE chapter SYSTEM "file://localhost/C:/ocaml/core.dtd">
+<!-- <!DOCTYPE chapter SYSTEM "file://localhost/C:/ocaml/core.dtd"> -->
 <chapter name="Дополнительные примеры классов и модулей" number="5">
   <abstract>
     <para>В этой главе приведены более крупные примеры использования классов, объектов и модулей. Многие возможности объектов одновременно используются в одном и том же примере банковского счета. В главе показано, как модули стандартной библиотеки могут использоваться в качестве классов. В конце главы на примере оконных менеджеров описывается шаблон проектирования, известный как <term>виртуальные типы</term>.</para>
