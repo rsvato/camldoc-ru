@@ -1618,7 +1618,139 @@ with ]]></listing>
       <subsection name="Типы конструкторов">
 	<para>Конструктор типа без параметров, как в случае
 	  <term>typeconstr</term>, является выражением типа.</para>
-	<para></para>
+	<para>Выражение типа <term>typexpr typeconstr</term>, где
+	  <term>typeconstr</term> - конструктор типа с одним
+	  параметром, означает применение унарного конструктора типа
+	  <term>typeconstr</term> к типу <term>typexpr</term>.</para>
+	<para>Выражение типа
+	  (<term>typexpr</term><sub>1</sub>,...<term>typexpr</term><sub>n</sub>) 
+	  <term>typeconstr</term>, где <term>typeconstr</term> -
+	  конструктор типа с <emph>n</emph> параметров, означает
+	  применение n-нарного коструктора типа
+	  <term>typeconstr</term> к типам с
+	  <term>typexpr</term><sub>1</sub> по
+	  <term>typexpr</term><sub>n</sub>.</para>
+      </subsection>
+      <subsection neednumber="0" name="Вариантные типы">
+	<bnf>
+	  <term>variant-type</term>
+	  <def>
+	    <or multiline="1">
+	      <choice>
+		<optional>
+		  <value>|</value>
+		</optional>
+		<term>tag-spec</term>
+		<repetitive>
+		  <value>|</value>
+		  <term>tag-spec</term>
+		</repetitive>
+	      </choice>
+	      <choice>
+		<value>&gt;</value>
+		<optional>
+		  <term>tag-spec</term>
+		</optional>
+		<repetitive>
+		  <value>|</value>
+		  <term>tag-spec</term>
+		</repetitive>
+	      </choice>
+	      <choice>
+		<value>&lt;</value>
+		<optional>
+		  <value>|</value>
+		</optional>
+		<term>tag-spec-full</term>
+		<repetitive>
+		  <value>|</value>
+		  <term>tag-spec-full</term>
+		</repetitive>
+		<optional>
+		  <value>&gt;</value>
+		  <repetitive count="1">
+		    <value>`</value>
+		    <term>tag-name</term>
+		  </repetitive>
+		</optional>
+	      </choice>
+	    </or>
+	  </def>
+	</bnf>
+	<bnf>
+	  <term>tag-spec</term>
+	  <def>
+	    <or multiline="1">
+	      <choice>
+		<value>`</value>
+		<term>tag-name</term>
+		<optional>
+		  <value>of</value>
+		  <term>typexpr</term>
+		</optional>
+	      </choice>
+	      <choice>
+		<term>typexpr</term>
+	      </choice>
+	    </or>
+	  </def>
+	</bnf>
+	<bnf>
+	  <term>tag-spec-full</term>
+	  <def>
+	    <or multiline="1">
+	      <choice>
+		<value>`</value>
+		<term>tag-name</term>
+		<optional>
+		  <value>of</value>
+		  <term>typexpr</term>
+		</optional>
+		<repetitive>
+		  <value>&amp;</value>
+		  <term>typexpr</term>
+		</repetitive>
+	      </choice>
+	      <choice>
+		<term>typexpr</term>
+	      </choice>
+	    </or>
+	  </def>
+	</bnf>
+	<para>Вариантные типа описывают возможные значения
+	полиморфного варианта.</para>
+	<para>Первый случай является точным вариантным типом: все
+	  возможные теги известны, как и связанные с ними типа, и все
+	  они могут присутствовать в значении. Структура полностью
+	  известна.</para>
+	<para>Второй случай представляет открытый вариантный тиа,
+	  описывающий полиморыное вариантное значение: здесь дается
+	  список тегов для возможного значения, а также связанные с
+	  ними типы. Такой тип все еще совместим с вариантным типом,
+	  содержащим несколько тегов. Особый случай представляет собой
+	  неизвестный тип, вовсе не определяющий тегов, но совместимый
+	  с любым вариантным типом.</para>
+	<para>В третьем случае описывается закрытый вариантный тип. Он
+	  предоставляет информацию о всех возможных тегах и связанных
+	  с ними типах, а также о том, какие теги могут появиться в
+	  значениях. Точный вариантный тип является на самом деле
+	  сокрашением закрытого вариантного типа, в котором все
+	  возможные теги также уже потенциально присутствуют.</para>
+	<para>Во всех трех случаях теги либо описываются
+	  непосредственно в форме <keyword>`tag-name [...]</keyword>,
+	  либо опосредованно, через выражение типа - тогда оно должно
+	  разворачиваться в точный вариантный тип, причем спецификации
+	  тегов должны помещаться на свое место.</para>
+	<para>Полная спецификация вариантных тегов используется только
+	  для неточных закрытых типов. Их можно считать конъюнктивным
+	  типом для аргумента, перечисляющим все типы в спецификации.</para>
+	<para>
+	  Такое конъюнктивное ограничение может оказаться
+	  недостаточным. В подобных ситуациях соответствующий тег
+	  может не использоваться в значении такого типа, что не
+	  означает ошибки типа: можно ведь использовать и другие
+	  доступные теги.
+	</para>
       </subsection>
     </section>
   </main-matters>
