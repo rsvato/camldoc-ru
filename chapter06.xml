@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- <!DOCTYPE chapter SYSTEM "core.dtd"> -->
+<!DOCTYPE chapter SYSTEM "core.dtd">
 <chapter name="Язык Objective Caml" number="6">
 	<main-matters>
 	<section name="Введение">
@@ -902,6 +902,89 @@
 				локальны в пределах класса.
 			</para>
 		</subsection>
+		</section>
+		<section name="Выражения типа">
+			<bnf>
+				<term>typexpr</term>
+				<def>
+					<or multiline="1">
+						<choice><value>&apos;</value><term>ident</term></choice>
+						<choice><value>_</value></choice>
+						<choice>
+							<value>(</value>
+											<term>typexpr</term>
+							<value>)</value>
+						</choice>
+						<choice>
+							<optional>
+								<optional><value>?</value></optional>
+								<term>ident</term><value>:</value>
+							</optional>
+							<term>typexpr</term>
+							<value>-&gt;</value>
+							<term>typexpr</term>
+						</choice>
+						<choice>
+							<term>typexpr</term>
+							<repetitive count="1">
+								<value>*</value>
+								<term>typexpr</term>
+							</repetitive>
+						</choice>
+						<choice><term>typeconstr</term></choice>
+						<choice><term>typexpr</term> <term>typeconstr</term></choice>
+						<choice>
+							<value>(</value>
+									<term>typexpr</term>
+									<repetitive><value>,</value> <term>typexpr</term></repetitive>
+							<value>)</value>
+							<term>typeconstr</term>
+						</choice>
+						<choice>
+							<term>typexpr</term>
+							<value>as &apos;</value>
+							<term>ident</term>
+						</choice>
+						<choice>
+							<value>[</value>
+							<term>variant-type</term>
+							<value>]</value>
+						</choice>
+						<choice>
+							<value>&lt;</value>
+							<optional><value>..</value></optional>
+							<value>&gt;</value>
+						</choice>
+						<choice>
+							<value>&lt;</value>
+							<term>method-type</term>
+							<repetitive><value>; </value><term>method-type</term></repetitive>
+							<optional><value>; ..</value></optional>
+							<value>&gt;</value>
+						</choice>
+						<choice>
+							<value>#</value>
+							<term>class-path</term>
+						</choice>
+						<choice>
+							<term>typexpr</term>
+							<value>#</value>
+							<term>class-path</term>
+						</choice>
+						<choice>
+							<value>(</value>
+									<term>typexpr</term>
+									<repetitive><value>,</value> <term>typexpr</term></repetitive>
+							<value>)</value>
+							<value>#</value>
+							<term>class-path</term>
+						</choice>
+					</or>
+				</def>
+			</bnf>
+			<bnf>
+				
+			</bnf>
 	</section>
 	</main-matters>
 </chapter>
