@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!DOCTYPE chapter SYSTEM "core.dtd">
+<!-- <!DOCTYPE chapter SYSTEM "core.dtd"> -->
 <chapter name="Язык Objective Caml" number="6">
 	<main-matters>
 	<section name="Введение">
@@ -777,6 +777,130 @@
 			в дюбом регистре, однако ради переносимости и совместимости с 
 			будущими версиями OCaml рекомендуется избегать использовать в качесте
 			первого симовла их имен строчные буквы.</para>
+		</subsection>
+		<subsection name="Ссылки на именованные объекты" neednumber="0">
+			<bnf>
+				<term>value-path</term>
+				<def>
+					<or multiline="1">
+						<choice><term>value-name</term></choice>
+						<choice>
+							<term>module-path</term><value>.</value><term>lowercase-ident</term>
+						</choice>
+					</or>
+				</def>
+			</bnf>
+			<bnf>
+				<term>cconstr</term>
+				<def>
+					<or multiline="1">
+						<choice><term>cconstr-name</term></choice>
+						<choice>
+							<term>module-path</term><value>.</value><term>capitalized-ident</term>
+						</choice>
+					</or>
+				</def>
+			</bnf>
+			<bnf>
+				<term>ncconstr</term>
+				<def>
+					<or multiline="1">
+						<choice><term>ncconstr-name</term></choice>
+						<choice>
+							<term>module-path</term><value>.</value><term>capitalized-ident</term>
+						</choice>
+					</or>
+				</def>
+			</bnf>
+			<bnf>
+				<term>typecontstr</term>
+				<def>
+					<or multiline="1">
+						<choice><term>typeconstr-name</term></choice>
+						<choice>
+							<term>extended-module-path</term><value>.</value><term>lowercase-ident</term>
+						</choice>
+					</or>
+				</def>
+			</bnf>
+			<bnf>
+				<term>field</term>
+				<def>
+					<or multiline="1">
+						<choice><term>field-name</term></choice>
+						<choice>
+							<term>module-path</term><value>.</value><term>lowercase-ident</term>
+						</choice>
+					</or>
+				</def>
+			</bnf>
+			<bnf>
+				<term>module-path</term>
+				<def>
+					<or multiline="1">
+						<choice><term>module-name</term></choice>
+						<choice>
+							<term>module-path</term><value>.</value><term>capitalized-ident</term>
+						</choice>
+					</or>
+				</def>
+			</bnf>
+			<bnf>
+				<term>extended-module-path</term>
+				<def>
+					<or multiline="1">
+						<choice><term>module-name</term></choice>
+						<choice>
+							<term>extended-module-path</term><value>.</value><term>capitalized-ident</term>
+						</choice>
+						<choice>
+							<term>extended-module-path</term>
+							<group><term>extended-module-path</term></group>
+						</choice>
+					</or>
+				</def>
+			</bnf>
+			<bnf>
+				<term>modtype-path</term>
+				<def>
+					<or multiline="1">
+						<choice><term>modtype-name</term></choice>
+						<choice>
+							<term>extended-module-path</term><value>.</value><term>ident</term>
+						</choice>
+					</or>
+				</def>
+			</bnf>
+			<bnf>
+				<term>class-path</term>
+				<def>
+					<or multiline="1">
+						<choice><term>class-name</term></choice>
+						<choice>
+							<term>module-path</term><value>.</value><term>lowercase-ident</term>
+						</choice>
+					</or>
+				</def>
+			</bnf>
+			<para>На именованный объект можно ссылаться либо по имени
+			(учитывая обычные статичные правила области видимости для имен), либо 
+			через путь доступа вида <term>prefix</term><value>.</value><term>name</term>,
+			где <term>prefix</term> означает модуль, а <term>name</term> - имя
+			объекта, определенного в этом модуле. Первый компонент пути
+			<term>prefix</term> записывается либо как простое имя модуля,
+			либо путь доступа вида
+			<term>name1</term><value>.</value><term>name2</term>... в случаях,
+			когда определяющий модуль сам вложен в другие модули. При ссылке на
+			конструкторы типа или типы модуля <term>prefix</term> также может
+			содержать простые вызовы функтора (как в синтаксическом классе
+			<term>extended-module-path</term>), если определяющий модуль
+			сам является результатом вызова функтора.
+			</para>
+			<para>
+				Имена меток, тегов, методов и переменных экземпляров такого уточнения
+				не требуют: метки, теги и методы глобальны, а переменные экземпляра
+				локальны в пределах класса.
+			</para>
 		</subsection>
 	</section>
 	</main-matters>
