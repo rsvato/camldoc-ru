@@ -1,6 +1,6 @@
 <!ENTITY % bnf-content "term | value">
 <!ELEMENT abstract (para)>
-<!ELEMENT chapter (abstract,main-matters)>
+<!ELEMENT chapter (abstract?,main-matters)>
 <!ATTLIST chapter
 	name CDATA #REQUIRED
 	number NMTOKEN #REQUIRED
@@ -11,7 +11,7 @@
 <!ELEMENT lb EMPTY>
 <!ELEMENT main-matters (section+)>
 <!ELEMENT mdash EMPTY>
-<!ELEMENT para (#PCDATA|command|keyword|mdash|term|sub)*>
+<!ELEMENT para (#PCDATA|command|keyword|mdash|term|sub|%bnf-content;)*>
 <!ELEMENT section (subsection|subsection-nonumber|para|session|listing|command-session|list|table|bnf)*>
 <!ATTLIST section name CDATA #REQUIRED>
 <!ELEMENT subsection (para|session|listing|command-session|list|table|bnf)*>
@@ -54,5 +54,6 @@
 <!ELEMENT or (choice)+>
 <!ATTLIST or 
 	multiline (0 | 1) "0">
+<!ATTLIST repetitive count NMTOKEN #IMPLIED>
 <!ELEMENT choice (%bnf-content; | repetitve | optional | group)+>
 <!-- end bnf-stuff -->

@@ -80,6 +80,25 @@ padding-right:15;
 							border:black solid thin;
 							border-collapse:collapse;
 						}
+						table.bnf{
+							width:80%;
+							left=20px;
+							border:	none;																																			
+							}
+						table.bnf td{
+							border:none;
+							padding-left:0;
+							padding-right:0;
+						}
+				#term{
+							color:maroon;
+							font-style:italic;
+							font-family:monospace;
+				}
+				#value{
+							color:navy;
+							font-family:monospace
+				}
 							]]>
 					</xsl:text>
 				</style>
@@ -289,6 +308,58 @@ padding-right:15;
 			</xsl:otherwise>
 		</xsl:choose>
 	</xsl:template>
+	<xsl:template match="bnf">
+	<table class="bnf">
+		<tr>
+			<td valign="top" align="right" width="20%">
+				<xsl:apply-templates select="term"/>
+			</td>
+			<td valign="top" align="center" width="5%">
+				<span style="font-family:monospace">::=</span>
+			</td>
+			<td valign="top" align="left">
+				<xsl:apply-templates select="def"/>
+			</td>
+		</tr>
+	</table>
+</xsl:template>
+<xsl:template match="term">
+	<span id="term"><xsl:apply-templates/></span>
+</xsl:template>
+<xsl:template match="value">
+	<span id="value"><xsl:apply-templates/></span>
+</xsl:template>
+<xsl:template match="def">
+	<xsl:apply-templates/>
+</xsl:template>
+<xsl:template match="group">
+	( <xsl:apply-templates/> )
+</xsl:template>
+<xsl:template match="repetitive">
+	{ <xsl:apply-templates/> }
+</xsl:template>
+<xsl:template match="repetitive[@count &gt; 0]">
+	{ <xsl:apply-templates/> }<sup>+</sup>
+</xsl:template>
+<xsl:template match="or[@multiline=0]">
+	<xsl:for-each select="choice">
+		<xsl:apply-templates/> 
+		<xsl:if test="position() != last()">
+			|
+		</xsl:if>
+	</xsl:for-each>
+</xsl:template>
+<xsl:template match="or[@multiline=1]">
+	<xsl:for-each select="choice">
+		<xsl:apply-templates/> 
+		<xsl:if test="position() != last()">
+			<br/>|
+		</xsl:if>
+	</xsl:for-each>
+</xsl:template>
+<xsl:template match="optional">
+	[ <xsl:apply-templates/> ]
+</xsl:template>
 	<xsl:template name="notes">
 		<xsl:for-each select="//note">
 		<div style="border: black solid thin;padding:10px 10px 10px 10px">

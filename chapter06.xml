@@ -1,7 +1,157 @@
 <?xml version="1.0" encoding="utf-8"?>
 <!DOCTYPE chapter SYSTEM "core.dtd">
 <chapter name="Язык Objective Caml" number="6">
-	<abstract>
-		<para></para>
-	</abstract>
+	<main-matters>
+	<section name="Введение">
+		<para>Эта глава является справочником по языку Objective Caml. Она перечисляет языковые конструкции и дает
+		их точный синтаксис и неформальную семантику. Она никоим образом не может считаться учебником, и в ней нет ни
+		одного примера кода. Ожидается, что читатель хорошо знает Caml.</para>
+		<para>
+			Нет здесь и математической точности. Слова употребляются в их обычном значении. Соотвественно, правила
+			оформления также не соблюдаются в силу отсутсвия математеского аппарата, необходимого для их 
+			формулировки. Тем не менее, они, разумеется, являются частью полного формального определения языка.
+		</para>
+		<subsection name="Нотация" neednumber="0">
+			<para>
+				Синтаксис языка приведен в нотации, напоминающей BNF. Терминальные символы обозначаются
+				<value>таким образом</value>. Нетерминальные символы <term>оформлены так</term>. В квадратных
+				скобках ([...]) перечислены необязательные элементы. Фигурные скобки ({...}) обозначают ноль и
+				более повторяющихся компонентов. Если фигурные скобки сопровождаются знаком плюса ({...}<sub>+</sub>),
+				то это означает, что компонент повторяется один и более раз. Круглые скобки ((...)) означают группировку.
+			</para>
+		</subsection>
+	</section>
+	<section name="Лексические соглашения">
+		<subsection name="Пробельные символы" neednumber="0">
+			<para>
+				Пробельными символами считаются: пробел, символ новой строки, горизонтальная табуляция, перевод строки,
+				возврат каретки, подача страницы. Они игнорируются, но используются для разделения идентификаторов, 
+				литералов и ключевых слов, которые в противном случае считались бы одним идентификатором, литералом
+				или ключевым словом.
+			</para>
+		</subsection>
+		<subsection name="Комментарии" neednumber="0">
+			<para>Комментарии начинаются начинаются знаками (* без пробела между ними и заканчиваются знаками *)
+				без пробела между ними. Они считаются пробельными символами и не могут находится внутри строки или 
+				символьного литерала. Вложенные комментарии обрабатываются правильно.
+			</para>
+		</subsection>
+		<subsection name="Идентификаторы" neednumber="0">
+			<bnf>
+				<term>ident</term>
+				<def>
+					<group>
+						<or multiline="0">
+							<choice><term>letter</term></choice>
+							<choice><value>...</value></choice>
+						</or>
+					</group>
+					<repetitive>
+						<or>
+							<choice><term>letter</term></choice>
+							<choice><value>0...9</value></choice>
+							<choice><value>_</value></choice>
+							<choice><value>&apos;</value></choice>
+						</or>
+					</repetitive>
+				</def>
+			</bnf>
+			<bnf>
+				<term>letter</term>
+				<def>
+					<or multiline="0"><choice><value>A...Z</value></choice><choice><value>a...z</value></choice></or>
+				</def>
+			</bnf>
+			<para>Идентификаторы состоят из последовательности букв, цифр, _ (символов подчеркивания), &apos; (одинарных
+			кавычек), начинающейся с буквы или символа подчеркивания. Буквы включают по крайней мере пятьдесят два
+			символа из набора ASCII в верхнем и нижнем регистрах. Текущая реализация (за исключением платформы MacOS)
+			допускает также симоволы с акцентами из ISO 9959-1 (или ISO Latin 1). Значимы все символы в идентификаторе, и
+			в текущей реализации его длина не ограничивается.
+			</para>
+		</subsection>
+		<subsection name="Целочисленные литералы" neednumber="0">
+			<bnf>
+				<term>integer-literal</term>
+				<def>
+					<or multiline="1">
+						<choice>
+							<optional><value>-</value></optional>
+							<repetitive count="1"><value>0..9</value></repetitive>
+						</choice>
+						<choice>
+							<optional><value>-</value></optional>
+							<group>
+								<or multiline="0"><choice><value>0x</value></choice><choice><value>0X</value></choice></or>
+							</group>
+								<repetitive count="1">
+									<or multiline="0">
+										<choice><value>0...9</value></choice>
+										<choice><value>A...F</value></choice>
+										<choice><value>a..f</value></choice>
+									</or>
+								</repetitive>
+						</choice>
+						<choice>
+							<optional><value>-</value></optional>
+							<group>
+								<or multiline="0"><choice><value>0o</value></choice><choice><value>0O</value></choice></or>
+							</group>
+								<repetitive count="1">
+										<value>0...7</value>
+								</repetitive>
+						</choice>
+						<choice>
+							<optional><value>-</value></optional>
+							<group>
+								<or multiline="0"><choice><value>0b</value></choice><choice><value>0B</value></choice></or>
+							</group>
+								<repetitive count="1">
+										<value>0...1</value>
+								</repetitive>
+						</choice>
+					</or>
+				</def>
+			</bnf>
+			<para>Целочисленный литерал - это последовательность из одной или нескольких цифр, которой может
+			предшествовать знак минус. По умолчанию целочисленные литералы считаются десятичными (основание 10).
+			Основание изменяется следующими префиксами:</para>
+			<table>
+				<thead>
+					<trow>
+						<tcell>Префикс</tcell>
+						<tcell>Основание</tcell>
+					</trow>
+				</thead>
+				<tbody>
+					<trow>
+						<tcell><para><keyword>0x, 0X</keyword></para></tcell>
+						<tcell><para>шестнадцатиричное (основание 16)</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para><keyword>0o, 0O</keyword></para></tcell>
+						<tcell><para>восьмеричное (основание 8)</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para><keyword>0b, 0B</keyword></para></tcell>
+						<tcell><para>двоичное (основание 2)</para></tcell>
+					</trow>
+				</tbody>
+			</table>
+			<para>
+				(Первое <keyword>0</keyword> - цифра ноль, второе <keyword>o</keyword> для двоичных чисел - буква
+				 &quot;O&quot;). Интерпретация целочисленных литералов, не попадающих в приемлемый диапазон
+				 значений для целого числа, не определена.
+			</para>
+		</subsection>
+		<subsection name="Литералы для чисел с плавающей точкой" neednumber="0">
+			<bnf>
+				<term>float-literal</term>
+				<def>
+					<optional><value>-</value></optional>
+					<repetitive count="1"><value>0..9</value></repetitive>
+				</def>
+			</bnf>
+		</subsection>
+	</section>
+	</main-matters>
 </chapter>
