@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE chapter SYSTEM "core.dtd">
+<chapter name="Профилирование (ocamlprof)" number="17">
+  <abstract>
+    <para>В этой главе рассказывает о профилировании исполнения программ Objective Caml путем записи количества вызовов функций, ветвлений условий и т.д.</para>
+  </abstract>
+  <main-matters>
+    <section name="Компиляция для профилирования">
+      <para>Чтобы профилирование выполнение было возможно, программа
+	должна компилироваться в специальном режиме с помощью внешнего
+	интерфейса к <command>ocamlc</command>
+	<command>ocamlp</command> (см. гл. 8). При раздельной
+	компиляции именно <command>ocamlp</command> должен
+	компилировать модули (т.е. создавать файлы
+	<command>.cmo</command>), однако его же можно использовать
+	(хотя это и необязательно) ддя компоновки программы.
+    </section>
+  </main-matters>
+</chapter>
