@@ -1059,7 +1059,22 @@
 				означает то же самое, что и <term>typexpr</term>.</para>
 			</subsection>
 			<subsection name="Типы функций" neednumber="0">
-				
+	<para>Выражение типа <term>typexpr</term><sub>1</sub>
+	  <value>-&gt;</value> <term>typexpr</term><sub>2</sub>
+	  означает тип функций,отображающий аргументы типа
+	  <term>typexpr</term><sub>1</sub>
+	  на результаты типа <term>typexpr</term><sub>2</sub>.
+	</para>
+	<para><term>label typexpr</term><sub>1</sub><value>-&gt;</value>
+	<term>typexpr</term><sub>2</sub> означает тот же тип функции, однако
+	  аргумент помечается меткой <term>label</term>.</para>
+	<para><value>?</value><term>label typexpr</term><sub>1</sub><value>-&gt;</value>
+	<term>typexpr</term><sub>2</sub>  означает тип функций,отображающий
+	необязательные аргументы с меткой типа <term>typexpr</term><sub>1</sub>
+	  на результаты типа <term>typexpr</term><sub>2</sub>. Иными словами,
+	  физический тип функции будет <term>typexpr</term><sub>1</sub>
+	  <value>option -&gt;</value><term>typexpr</term><sub>2</sub>.
+	</para>
 			</subsection>
 	</section>
 	</main-matters>
