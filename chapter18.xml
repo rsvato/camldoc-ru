@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="windows-1251"?>
+<!DOCTYPE chapter SYSTEM "./core.dtd">
+<chapter name="Интерфейс с C" number="18">
+  <abstract>
+    <para>В этой главе рассказывается, как написанные на С пользовательские
+    примитивы компонуются с кодом Caml и вызываются из функций Caml.</para>
+  </abstract>
+  <main-matters>
+    <section name="Обзор и компиляция">
+      <para>Пользовательские примитивы объявляются c помощью ключевого слова
+	<command>external</command> в файле реализации или внутри конструкции
+	<command>start...end</command> выражения модуля.</para>
+      <listing>
+	external name : type = C-function-name
+      </listing>
+      <para>Так определяется имя значения <keyword>name</keyword> типа
+      <keyword>type</keyword>, которое выполняется при вызове данной функции С.
+	Например, в модуле <command>Pervasive</command> стандартной библиотеки
+	примитив <command>input</command> объявлен следующим образом:</para>
+      <listing>
+	external input: in_channel -&gt; string -&gt; int -&gt; int -&gt; int
+	              = "input"
+      </listing>
+      <para>Примитивы с несколькими аргументами всегда 
+    </section>
+  </main-matters>
+</chapter>
