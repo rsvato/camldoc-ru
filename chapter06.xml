@@ -606,5 +606,178 @@
 			</para>
 		</subsection>
 	</section>
+	<section name="Имена">
+		<para>
+			Идентификаторы используются для именования некторых классов 
+			языковых объектов и возмоджности обращения к этим объектам по
+			имени. Это:
+		</para>
+		<list type="plain">
+			<item><para>имена значений (синтаксический класс <term>value-name</term>)</para></item>
+			<item>
+				<para>конструкторы значений (для константных - класс 
+				<term>cconstr-name</term>, для неконстантных - <term>ncconstr-name</term>)</para>
+			</item>
+			<item>
+				<para>метки (<term>label-name</term>)</para>
+			</item>
+			<item><para>теги вариантов (<term>tag-name</term>)</para></item>
+			<item><para>конструкторы типов (<term>typeconstr-name</term>)</para></item>
+			<item><para>поля записей (<term>field-name</term>)</para></item>
+			<item><para>имена классов (<term>class-name</term>)</para></item>
+			<item><para>имена методов (<term>method-name</term>)</para></item>
+			<item><para>имена переменных экземпляра (<term>inst-var-name</term>)</para></item>
+			<item><para>имена модулей (<term>module-name</term>)</para></item>
+			<item><para>имена типов модулей (<term>modtype-name</term>)</para></item>
+		</list>
+		<para>Эти девять пространств имен как по контексту, так и по регистру имени:
+		первая буква идентификатора может быть строчной (ниже <term>lowercace-ident</term>)
+		или заглавной (ниже <term>capitalized-ident</term>). Знак подчеркивания
+		в данном случае считается строчной буквой.
+		</para>
+		<subsection name="Именование объектов" neednumber="0">
+			<bnf>
+				<term>value-name</term>
+				<def>
+					<or multiline="1">
+						<choice><term>lowercase-ident</term></choice>
+						<choice><group><term>operator-name</term></group></choice>
+					</or>
+				</def>
+			</bnf>
+			<bnf>
+				<term>operator-name</term>
+				<def>
+					<or multiline="0">
+						<choice><term>prefix-symbol</term></choice>
+						<choice><term>infix-symbol</term></choice>
+						<choice><value>*</value></choice>
+						<choice><value>=</value></choice>
+						<choice><value>or</value></choice>
+						<choice><value>&amp;</value></choice>
+						<choice><value>:=</value></choice>
+					</or>
+				</def>
+			</bnf>
+			<bnf>
+				<term>cconstr-name</term>
+				<def>
+					<or multiline="1">
+						<choice><term>capitalized-ident</term></choice>
+						<choice><value>false</value></choice>
+						<choice><value>true</value></choice>
+						<choice><value>[ ]</value></choice>
+						<choice><value>( )</value></choice>
+					</or>
+				</def>
+			</bnf>
+			<bnf>
+				<term>ncconstr-name</term>
+				<def>
+					<or multiline="1">
+						<choice><term>capitalized-ident</term></choice>
+						<choice><value>::</value></choice>
+					</or>
+				</def>
+			</bnf>
+			<bnf>
+				<term>label-name</term>
+				<def><term>lowercase-ident</term></def>
+			</bnf>
+			<bnf>
+				<term>tag-name</term>
+				<def><term>capitalized-ident</term></def>
+			</bnf>
+			<bnf>
+				<term>typeconstr-name</term>
+				<def><term>lowercase-ident</term></def>
+			</bnf>
+			<bnf>
+				<term>field-name</term>
+				<def><term>lowercase-ident</term></def>
+			</bnf>
+			<bnf>
+				<term>module-name</term>
+				<def><term>capitalized-ident</term></def>
+			</bnf>
+			<bnf>
+				<term>modtype-name</term>
+				<def><term>ident</term></def>
+			</bnf>
+			<bnf>
+				<term>class-name</term>
+				<def><term>lowercase-ident</term></def>
+			</bnf>
+			<bnf>
+				<term>inst-var-name</term>
+				<def><term>lowercase-ident</term></def>
+			</bnf>
+			<bnf>
+				<term>method-name</term>
+				<def><term>lowercase-ident</term></def>
+			</bnf>
+			<para>
+				Как видно, префиксные и инфиксные символы, а также некторые
+				ключевые слова можно использовать как имена значений, если
+				заключить их в кавычки. Такие ключевые слова как &apos;false&apos;
+				и &apos;::&apos; являются также именами конструкторов. Правила
+				относительно регистра имен подытожены в следующей таблице:
+			</para>
+			<table>
+				<thead>
+					<trow>
+						<tcell><para>Пространство имен</para></tcell>
+						<tcell><para>Первая буква</para></tcell>
+					</trow>
+				</thead>
+				<tbody>
+					<trow>
+						<tcell><para>Значения</para></tcell>
+						<tcell><para>строчная</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para>Конструкторы</para></tcell>
+						<tcell><para>прописная</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para>Метки</para></tcell>
+						<tcell><para>прописная</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para>Теги вариантов</para></tcell>
+						<tcell><para>прописная</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para>Конструкторы типа</para></tcell>
+						<tcell><para>строчная</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para>Поля записей</para></tcell>
+						<tcell><para>строчная</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para>Классы</para></tcell>
+						<tcell><para>строчная</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para>Методы</para></tcell>
+						<tcell><para>строчная</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para>Модули</para></tcell>
+						<tcell><para>прописная</para></tcell>
+					</trow>
+					<trow>
+						<tcell><para>Типы модулей</para></tcell>
+						<tcell><para>любая</para></tcell>
+					</trow>
+				</tbody>
+			</table>
+			<para>Относительно тегов вариантов: текущая реализация принимает их
+			в дюбом регистре, однако ради переносимости и совместимости с 
+			будущими версиями OCaml рекомендуется избегать использовать в качесте
+			первого симовла их имен строчные буквы.</para>
+		</subsection>
+	</section>
 	</main-matters>
 </chapter>
