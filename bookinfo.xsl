@@ -42,6 +42,12 @@
 						}
 					-->]]>
 				</style>
+        <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
+        </script>
+        <script type="text/javascript">
+        _uacct = "UA-1250887-1";
+        urchinTracker();
+        </script>
 			</head>
 			<body>
 				<div style="margin-top:90px;margin-left:15px;margin-right:15px;background-color:#eee;padding-left:10px;">
