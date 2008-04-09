@@ -1,15 +1,15 @@
 <?xml version="1.0" encoding="windows-1251"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.1"
 		xmlns:saxon="http://saxon.sf.net">
-	<xsl:param name="default.encoding" select="'windows-1251'"/>
-	<xsl:param name="htmlhelp.encoding" select="'windows-1251'"/>
+	<!--xsl:param name="default.encoding" select="'windows-1251'"/>
+	<xsl:param name="htmlhelp.encoding" select="'windows-1251'"/-->
 	<xsl:param name="saxon.character.representation" select="'native'"/>
-	<xsl:param name="chunker.output.encoding" select="'windows-1251'"/>
+	<xsl:param name="chunker.output.encoding" select="'utf-8'"/>
 	<xsl:param name="site.build" select="false"/>
 	<xsl:param name="main.site">
 		<xsl:text>./</xsl:text>
 	</xsl:param>
-	<xsl:output encoding="windows-1251" method="html" indent="yes"/>
+	<xsl:output encoding="UTF-8" method="html" indent="yes" saxon:character-representation="native"/>
 		
 	<xsl:template match="/">
 		<xsl:apply-templates select="bookinfo"/>
@@ -20,27 +20,11 @@
 				<title>
 					<xsl:value-of select="//bookinfo/title"/>
 				</title>
+        
 				<style type="text/css">
-					<![CDATA[<!--
-						body{
-							background-color:#fff;
-							font-family:verdana,arial,sans-serif,*;
-							font-size:10px;
-						}
-						li{
-							font-family:verdana,arial,sans-serif,*;
-						}
-						a{
-							color:black;
-							text-decoration:none;
-						}
-						a:visited{
-							color:black;
-						}
-						a:hover{
-							color:#00e;
-						}
-					-->]]>
+					<![CDATA[
+          @import("ocaml-html.css");
+					]]>
 				</style>
         <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
         </script>
@@ -82,6 +66,20 @@ My+="</a>";Md.write(My);//--></script><noscript>
 						
 					</div>
 				</xsl:if>
+<div style="width:auto">
+        <script type="text/javascript"><![CDATA[<!--
+        google_ad_client = "pub-8603895255707690";
+        google_ad_width = 468;
+        google_ad_height = 60;
+        google_ad_format = "468x60_as";
+        google_ad_type = "text";
+        //2007-03-01: http://ocaml.spb.ru
+        google_ad_channel = "9784850754";
+        //-->]]></script>
+        <script type="text/javascript"
+          src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+        </script>
+</div>
 			</body>
 		</html>
 		<xsl:for-each select="//chap">

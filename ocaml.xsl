@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="koi8-r"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
 	version="1.0">
-	<xsl:output encoding="windows-1251" method="html" indent="yes"
+	<xsl:output encoding="utf-8" method="html" indent="yes"
 		doctype-public="-//W3C//DTD HTML 4.01 Transitional//EN"
 		doctype-system="http://www.w3.org/TR/html4/loose.dtd" />
 	<xsl:preserve-space elements="listing user-input system-response" />
@@ -20,7 +20,7 @@
 			<xsl:choose>
 				<xsl:when test="@number - 1 &gt; 0">
 					<xsl:value-of
-						select="concat('http://ocaml.spb.ru/ref/chapter', format-number(@number - 1, '00'), '.html')" />
+						select="concat('http://ocaml.spb.ru/chapter', format-number(@number - 1, '00'), '.html')" />
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="$page.top" />
@@ -31,7 +31,7 @@
 			<xsl:choose>
 				<xsl:when test="@number + 1 &lt; $ch.count">
 					<xsl:value-of
-						select="concat('http://ocaml.spb.ru/ref/chapter', format-number(@number + 1, '00'), '.html')" />
+						select="concat('http://ocaml.spb.ru/chapter', format-number(@number + 1, '00'), '.html')" />
 				</xsl:when>
 				<xsl:otherwise>
 					<xsl:value-of select="$page.top" />
@@ -201,33 +201,31 @@
 				</div>
 				<div id="navigation">
 					<xsl:call-template name="toc" />
+          <script type="text/javascript"><![CDATA[<!--
+          google_ad_client = "pub-8603895255707690";
+          google_ad_width = 160;
+          google_ad_height = 600;
+          google_ad_format = "160x600_as";
+          google_ad_type = "text_image";
+          //2007-03-02: http://ocaml.spb.ru
+          google_ad_channel = "9784850754";
+          //-->]]></script>
+          <script type="text/javascript"
+            src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+           </script>
+           <script type="text/javascript"><![CDATA[<!--
+           google_ad_client = "pub-8603895255707690";
+           google_ad_width = 110;
+           google_ad_height = 32;
+           google_ad_format = "110x32_as_rimg";
+           google_cpa_choice = "CAAQ8dKdnAIaCGh8tAJTeI-lKO2jwXU";
+           google_ad_channel = "1546124054";
+           //-->]]>
+           </script>
+           <script type="text/javascript" src="http://pagead2.googlesyndication.com/pagead/show_ads.js">
+           </script>
 				</div>
-				<div id="counter"
-					style="position:relative;margin-top:15px" align="center">
-					<!--Rating@Mail.ru COUNTER-->
-					<xsl:text disable-output-escaping="yes">
-						<![CDATA[
-        <!-- SpyLOG f:0211 -->
-<script language="javascript"><!--
-Mu="u5437.05.spylog.com";Md=document;Mnv=navigator;Mp=1;
-Mn=(Mnv.appName.substring(0,2)=="Mi")?0:1;Mrn=Math.random();
-Mt=(new Date()).getTimezoneOffset();
-Mz="p="+Mp+"&rn="+Mrn+"&t="+Mt;
-My="";
-My+="<a href='http://"+Mu+"/cnt?cid=543705&f=3&p="+Mp+"&rn="+Mrn+"' target='_blank'>";
-My+="<img src='http://"+Mu+"/cnt?cid=543705&"+Mz+"&r="+escape(Md.referrer)+"&pg="
-+escape(window.location.href)+"' border=0 width=88 height=31 alt='SpyLOG'>";
-My+="</a>";Md.write(My);//--></script><noscript>
-<a href="http://u5437.05.spylog.com/cnt?cid=543705&f=3&p=1" target="_blank">
-<img src="http://u5437.05.spylog.com/cnt?cid=543705&p=1" alt='SpyLOG' border='0' width=88 height=31>
-</a></noscript>
-<!-- SpyLOG -->
-&nbsp;
-        <a target="_top" href="http://top.mail.ru/jump?from=656088">
-          <img src="http://top.list.ru/counter?id=656088;t=217" border="0" height="31" width="88" alt="пЕИРХМЦ@Mail.ru"/>
-        </a><!--/COUNTER-->]]>
-					</xsl:text>
-				</div>
+        <br clear="all"/>
 			</body>
 		</html>
 	</xsl:template>
