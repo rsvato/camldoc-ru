@@ -1,0 +1,8 @@
+*.html
+*~
+*.fo
+*.log
+*.aux
+*.project
+*.out
+*.pdf
