@@ -290,10 +290,10 @@
   end;;]]></user-input>
           <system-response><![CDATA[This expression has type < n : int; register : 'a; .. >
 but is here used with type 'b
-Self type cannot escape its class]]></system-responce>
+Self type cannot escape its class]]></system-response>
         </eval-step>
       </session>
-      <para>В этом сообщении об ошибке важнее последняя строка: размещение self во внешней переменной не позволяет в расширять класс в дальнейшем. В разделе 3.12 рассказывается, как обойти эту проблему. Пока стоит учесть, что она не возникает для одиночных объектов, поскольку их нельзя расширять.</para>
+      <para>В этом сообщении об ошибке важна последняя строка: размещение self во внешней переменной не позволяет в расширять класс в дальнейшем. В разделе 3.12 рассказывается, как обойти эту проблему. Пока стоит учесть, что она не возникает для одиночных объектов, поскольку их нельзя расширять.</para>
       <session>
           <eval-step>
             <user-input><![CDATA[#let my_int =
@@ -413,6 +413,7 @@ val p : printable_point = <obj>]]></system-response>
     method move : int -> unit
   end]]></system-response>
       </eval-step>
+    </session>
     </section>
     <section name="Приватные методы">
       <para> Приватные методы не отображаются в интерфейсах объекта и
