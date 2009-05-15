@@ -1,718 +1,719 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- <!DOCTYPE chapter SYSTEM "core.dtd"> -->
+<!--DOCTYPE chapter SYSTEM "core.dtd"-->
 <chapter name="Язык Objective Caml" number="6">
   <main-matters>
     <section name="Введение">
       <para>Эта глава является справочником по языку
-	Objective Caml. Она перечисляет языковые конструкции и дает их точный
-	синтаксис и неформальную семантику. Она никоим образом не может
-	считаться учебником, и в ней нет ни одного примера кода. Ожидается,
-	что читатель хорошо знает Caml.</para>
+        Objective Caml. Она перечисляет языковые конструкции и дает их точный
+        синтаксис и неформальную семантику. Она никоим образом не может
+        считаться учебником, и в ней нет ни одного примера кода. Ожидается,
+        что читатель хорошо знает Caml.</para>
       <para>
-	Нет здесь и математической точности. Слова употребляются в их
-	обычном значении. Соотвественно, правила оформления также не
-	соблюдаются в силу отсутствия математеского аппарата,
-	необходимого для их формулировки. Тем не менее, они,
-	разумеется, являются частью полного формального определения
-	языка.
+        Нет здесь и математической точности. Слова употребляются в их
+        обычном значении. Соотвественно, правила оформления также не
+        соблюдаются в силу отсутствия математеского аппарата,
+        необходимого для их формулировки. Тем не менее, они,
+        разумеется, являются частью полного формального определения
+        языка.
       </para>
       <subsection name="Нотация" neednumber="0">
-	<para>
-	  Синтаксис языка приведен в нотации, напоминающей BNF.
-	  Терминальные символы обозначаются <value>таким
-	    образом</value>. Нетерминальные символы <term>оформлены
-	    так</term>. В квадратных скобках ([...]) перечислены
-	  необязательные элементы. Фигурные скобки ({...}) обозначают
-	  ноль и более повторяющихся компонентов. Если фигурные скобки
-	  сопровождаются знаком плюса ({...}<sub>+</sub>), то это
-	  означает, что компонент повторяется один и более раз.
-	  Круглые скобки ((...)) означают группировку.
-	</para>
+        <para>
+          Синтаксис языка приведен в нотации, напоминающей BNF.
+          Терминальные символы обозначаются <value>таким
+            образом</value>. Нетерминальные символы <term>оформлены
+            так</term>. В квадратных скобках ([...]) перечислены
+          необязательные элементы. Фигурные скобки ({...}) обозначают
+          ноль и более повторяющихся компонентов. Если фигурные скобки
+          сопровождаются знаком плюса ({...}<sub>+</sub>), то это
+          означает, что компонент повторяется один и более раз.
+          Круглые скобки ((...)) означают группировку.
+        </para>
       </subsection>
     </section>
     <section name="Лексические соглашения">
       <subsection name="Пробельные символы" neednumber="0">
-	<para>
-	  Пробельными символами считаются: пробел, символ новой
-	  строки, горизонтальная табуляция, перевод строки, возврат
-	  каретки, подача страницы. Они игнорируются, но используются
-	  для разделения идентификаторов, литералов и ключевых слов,
-	  которые в противном случае считались бы одним
-	  идентификатором, литералом или ключевым словом.
-	</para>
+        <para>
+          Пробельными символами считаются: пробел, символ новой
+          строки, горизонтальная табуляция, перевод строки, возврат
+          каретки, подача страницы. Они игнорируются, но используются
+          для разделения идентификаторов, литералов и ключевых слов,
+          которые в противном случае считались бы одним
+          идентификатором, литералом или ключевым словом.
+        </para>
       </subsection>
       <subsection name="Комментарии" neednumber="0">
-	<para>Комментарии начинаются начинаются знаками (* без пробела
-	  между ними и заканчиваются знаками *) без пробела между
-	  ними. Они считаются пробельными символами и не могут
-	  находится внутри строки или символьного литерала. Вложенные
-	  комментарии обрабатываются правильно.
-	</para>
+        <para>Комментарии начинаются начинаются знаками (* без пробела
+          между ними и заканчиваются знаками *) без пробела между
+          ними. Они считаются пробельными символами и не могут
+          находится внутри строки или символьного литерала. Вложенные
+          комментарии обрабатываются правильно.
+        </para>
       </subsection>
       <subsection name="Идентификаторы" neednumber="0">
-	<bnf>
-	  <term>ident</term>
-	  <def>
-	    <group>
-	      <or multiline="0">
-		<choice>
-		  <term>letter</term>
-		</choice>
-		<choice>
-		  <value>...</value>
-		</choice>
-	      </or>
-	    </group>
-	    <repetitive>
-	      <or>
-		<choice>
-		  <term>letter</term>
-		</choice>
-		<choice>
-		  <value>0...9</value>
-		</choice>
-		<choice>
-		  <value>_</value>
-		</choice>
-		<choice>
-		  <value>&apos;</value>
-		</choice>
-	      </or>
-	    </repetitive>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>letter</term>
-	  <def>
-	    <or multiline="0">
-	      <choice>
-		<value>A...Z</value>
-	      </choice>
-	      <choice>
-		<value>a...z</value>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<para>Идентификаторы состоят из последовательности букв, цифр,
-	  _ (символов подчеркивания), &apos; (одинарных кавычек),
-	  начинающейся с буквы или символа подчеркивания. Буквы
-	  включают по крайней мере пятьдесят два символа из набора
-	  ASCII в верхнем и нижнем регистрах. Текущая реализация (за
-	  исключением платформы MacOS) допускает также симоволы с
-	  акцентами из ISO 9959-1 (или ISO Latin 1). Значимы все
-	  символы в идентификаторе, и в текущей реализации его длина
-	  не ограничивается.
-	</para>
+        <bnf>
+          <term>ident</term>
+          <def>
+            <group>
+              <or multiline="0">
+                <choice>
+                  <term>letter</term>
+                </choice>
+                <choice>
+                  <value>...</value>
+                </choice>
+              </or>
+            </group>
+            <repetitive>
+              <or>
+                <choice>
+                  <term>letter</term>
+                </choice>
+                <choice>
+                  <value>0...9</value>
+                </choice>
+                <choice>
+                  <value>_</value>
+                </choice>
+                <choice>
+                  <value>&apos;</value>
+                </choice>
+              </or>
+            </repetitive>
+          </def>
+        </bnf>
+        <bnf>
+          <term>letter</term>
+          <def>
+            <or multiline="0">
+              <choice>
+                <value>A...Z</value>
+              </choice>
+              <choice>
+                <value>a...z</value>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <para>Идентификаторы состоят из последовательности букв, цифр,
+          _ (символов подчеркивания), &apos; (одинарных кавычек),
+          начинающейся с буквы или символа подчеркивания. Буквы
+          включают по крайней мере пятьдесят два символа из набора
+          ASCII в верхнем и нижнем регистрах. Текущая реализация (за
+          исключением платформы MacOS) допускает также симоволы с
+          акцентами из ISO 9959-1 (или ISO Latin 1). Значимы все
+          символы в идентификаторе, и в текущей реализации его длина
+          не ограничивается.
+        </para>
       </subsection>
       <subsection name="Целочисленные литералы" neednumber="0">
-	<bnf>
-	  <term>integer-literal</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<optional>
-		  <value>-</value>
-		</optional>
-		<repetitive count="1">
-		  <value>0..9</value>
-		</repetitive>
-	      </choice>
-	      <choice>
-		<optional>
-		  <value>-</value>
-		</optional>
-		<group>
-		  <or multiline="0">
-		    <choice>
-		      <value>0x</value>
-		    </choice>
-		    <choice>
-		      <value>0X</value>
-		    </choice>
-		  </or>
-		</group>
-		<repetitive count="1">
-		  <or multiline="0">
-		    <choice>
-		      <value>0...9</value>
-		    </choice>
-		    <choice>
-		      <value>A...F</value>
-		    </choice>
-		    <choice>
-		      <value>a..f</value>
-		    </choice>
-		  </or>
-		</repetitive>
-	      </choice>
-	      <choice>
-		<optional>
-		  <value>-</value>
-		</optional>
-		<group>
-		  <or multiline="0">
-		    <choice>
-		      <value>0o</value>
-		    </choice>
-		    <choice>
-		      <value>0O</value>
-		    </choice>
-		  </or>
-		</group>
-		<repetitive count="1">
-		  <value>0...7</value>
-		</repetitive>
-	      </choice>
-	      <choice>
-		<optional>
-		  <value>-</value>
-		</optional>
-		<group>
-		  <or multiline="0">
-		    <choice>
-		      <value>0b</value>
-		    </choice>
-		    <choice>
-		      <value>0B</value>
-		    </choice>
-		  </or>
-		</group>
-		<repetitive count="1">
-		  <value>0...1</value>
-		</repetitive>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<para>Целочисленный литерал - это последовательность из одной
-	  или нескольких цифр, которой может предшествовать знак
-	  минус. По умолчанию целочисленные литералы считаются
-	  десятичными (основание 10). Основание изменяется следующими
-	  префиксами:</para>
-	<table cols="2">
-	  <thead>
-	    <trow>
-	      <tcell>
-		<para>Префикс</para>
-	      </tcell>
-	      <tcell>
-		<para>Основание</para>
-	      </tcell>
-	    </trow>
-	  </thead>
-	  <tbody>
-	    <trow>
-	      <tcell>
-		<para>
-		  <keyword>0x, 0X</keyword>
-		</para>
-	      </tcell>
-	      <tcell>
-		<para>шестнадцатиричное (основание 16)</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>
-		  <keyword>0o, 0O</keyword>
-		</para>
-	      </tcell>
-	      <tcell>
-		<para>восьмеричное (основание 8)</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>
-		  <keyword>0b, 0B</keyword>
-		</para>
-	      </tcell>
-	      <tcell>
-		<para>двоичное (основание 2)</para>
-	      </tcell>
-	    </trow>
-	  </tbody>
-	</table>
-	<para>
-	  (Первое <keyword>0</keyword> - цифра ноль, второе
-	  <keyword>o</keyword> для двоичных чисел - буква
-	  &quot;O&quot;). Интерпретация целочисленных литералов, не
-	  попадающих в приемлемый диапазон значений для целого числа,
-	  не определена.
-	</para>
+        <bnf>
+          <term>integer-literal</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <optional>
+                  <value>-</value>
+                </optional>
+                <repetitive count="1">
+                  <value>0..9</value>
+                </repetitive>
+              </choice>
+              <choice>
+                <optional>
+                  <value>-</value>
+                </optional>
+                <group>
+                  <or multiline="0">
+                    <choice>
+                      <value>0x</value>
+                    </choice>
+                    <choice>
+                      <value>0X</value>
+                    </choice>
+                  </or>
+                </group>
+                <repetitive count="1">
+                  <or multiline="0">
+                    <choice>
+                      <value>0...9</value>
+                    </choice>
+                    <choice>
+                      <value>A...F</value>
+                    </choice>
+                    <choice>
+                      <value>a..f</value>
+                    </choice>
+                  </or>
+                </repetitive>
+              </choice>
+              <choice>
+                <optional>
+                  <value>-</value>
+                </optional>
+                <group>
+                  <or multiline="0">
+                    <choice>
+                      <value>0o</value>
+                    </choice>
+                    <choice>
+                      <value>0O</value>
+                    </choice>
+                  </or>
+                </group>
+                <repetitive count="1">
+                  <value>0...7</value>
+                </repetitive>
+              </choice>
+              <choice>
+                <optional>
+                  <value>-</value>
+                </optional>
+                <group>
+                  <or multiline="0">
+                    <choice>
+                      <value>0b</value>
+                    </choice>
+                    <choice>
+                      <value>0B</value>
+                    </choice>
+                  </or>
+                </group>
+                <repetitive count="1">
+                  <value>0...1</value>
+                </repetitive>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <para>Целочисленный литерал - это последовательность из одной
+          или нескольких цифр, которой может предшествовать знак
+          минус. По умолчанию целочисленные литералы считаются
+          десятичными (основание 10). Основание изменяется следующими
+          префиксами:</para>
+        <table cols="2">
+          <thead>
+            <trow>
+              <tcell>
+                <para>Префикс</para>
+              </tcell>
+              <tcell>
+                <para>Основание</para>
+              </tcell>
+            </trow>
+          </thead>
+          <tbody>
+            <trow>
+              <tcell>
+                <para>
+                  <keyword>0x, 0X</keyword>
+                </para>
+              </tcell>
+              <tcell>
+                <para>шестнадцатиричное (основание 16)</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>
+                  <keyword>0o, 0O</keyword>
+                </para>
+              </tcell>
+              <tcell>
+                <para>восьмеричное (основание 8)</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>
+                  <keyword>0b, 0B</keyword>
+                </para>
+              </tcell>
+              <tcell>
+                <para>двоичное (основание 2)</para>
+              </tcell>
+            </trow>
+          </tbody>
+        </table>
+        <para>
+          (Первое <keyword>0</keyword> - цифра ноль, второе
+          <keyword>o</keyword> для двоичных чисел - буква
+          &quot;O&quot;). Интерпретация целочисленных литералов, не
+          попадающих в приемлемый диапазон значений для целого числа,
+          не определена.
+        </para>
       </subsection>
       <subsection name="Литералы для чисел с плавающей точкой" neednumber="0">
-	<bnf>
-	  <term>float-literal</term>
-	  <def>
-	    <optional>
-	      <value>-</value>
-	    </optional>
-	    <repetitive count="1">
-	      <value>0...9</value>
-	    </repetitive>
-	    <optional>
-	      <value>.</value>
-	      <repetitive>
-		<value>0...9</value>
-	      </repetitive>
-	    </optional>
-	    <optional>
-	      <group>
-		<or multiline="0">
-		  <choice>
-		    <value>e</value>
-		  </choice>
-		  <choice>
-		    <value>E</value>
-		  </choice>
-		</or>
-	      </group>
-	      <optional>
-		<or>
-		  <choice>
-		    <value>+</value>
-		  </choice>
-		  <choice>
-		    <value>-</value>
-		  </choice>
-		</or>
-	      </optional>
-	      <repetitive count="1">
-		<value>0...9</value>
-	      </repetitive>
-	    </optional>
-	  </def>
-	</bnf>
-	<para>Литералы для чисел с плавающей точкой состоят из трех
-	  частей - целочисленной, десятичной и экспоненты.
-	  Целочисленная часть - это последовательность из одной или
-	  нескольких цифр с необязательным знаком плюс или минус.
-	  Десятичная - точка, за которой следуют ноль или более цифр.
-	  Экспонента - буква <keyword>e</keyword> или
-	  <keyword>E</keyword>, необязательный знак плюс или минус и
-	  одна или более цифр. Десятичная часть или экспонента могут
-	  быть опущены, однако лучше, чтобы присутствовала хоть одна
-	  из них, чтобы число отличалось от целочисленных литералов.
-	  Интерпретация литералов для чисел с плавающей точкой, не
-	  попадающих в приемлемый диапазон, не определена.</para>
+        <bnf>
+          <term>float-literal</term>
+          <def>
+            <optional>
+              <value>-</value>
+            </optional>
+            <repetitive count="1">
+              <value>0...9</value>
+            </repetitive>
+            <optional>
+              <value>.</value>
+              <repetitive>
+                <value>0...9</value>
+              </repetitive>
+            </optional>
+            <optional>
+              <group>
+                <or multiline="0">
+                  <choice>
+                    <value>e</value>
+                  </choice>
+                  <choice>
+                    <value>E</value>
+                  </choice>
+                </or>
+              </group>
+              <optional>
+                <or>
+                  <choice>
+                    <value>+</value>
+                  </choice>
+                  <choice>
+                    <value>-</value>
+                  </choice>
+                </or>
+              </optional>
+              <repetitive count="1">
+                <value>0...9</value>
+              </repetitive>
+            </optional>
+          </def>
+        </bnf>
+        <para>Литералы для чисел с плавающей точкой состоят из трех
+          частей - целочисленной, десятичной и экспоненты.
+          Целочисленная часть - это последовательность из одной или
+          нескольких цифр с необязательным знаком плюс или минус.
+          Десятичная - точка, за которой следуют ноль или более цифр.
+          Экспонента - буква <keyword>e</keyword> или
+          <keyword>E</keyword>, необязательный знак плюс или минус и
+          одна или более цифр. Десятичная часть или экспонента могут
+          быть опущены, однако лучше, чтобы присутствовала хоть одна
+          из них, чтобы число отличалось от целочисленных литералов.
+          Интерпретация литералов для чисел с плавающей точкой, не
+          попадающих в приемлемый диапазон, не определена.</para>
       </subsection>
       <subsection name="Символьные литералы" neednumber="0">
-	<bnf>
-	  <term>char-literal</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<value>'</value>
-		<term>regular-char</term>
-		<value>'</value>
-	      </choice>
-	      <choice>
-		<value>'</value>
-		<term>escape-sequence</term>
-		<value>'</value>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>escape-sequence</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<value>\</value>
-		<group>
-		  <or multiline="0">
-		    <choice>
-		      <value>\</value>
-		    </choice>
-		    <choice>
-		      <value>"</value>
-		    </choice>
-		    <choice>
-		      <value>'</value>
-		    </choice>
-		    <choice>
-		      <value>n</value>
-		    </choice>
-		    <choice>
-		      <value>t</value>
-		    </choice>
-		    <choice>
-		      <value>b</value>
-		    </choice>
-		    <choice>
-		      <value>r</value>
-		    </choice>
-		  </or>
-		</group>
-	      </choice>
-	      <choice>
-		<value>\</value>
-		<group>
-		  <value>0...9</value>
-		</group>
-		<group>
-		  <value>0...9</value>
-		</group>
-		<group>
-		  <value>0...9</value>
-		</group>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<para>Символьные литералы ограничиваются одинарными кавычками
-	  (<keyword>&apos;</keyword>). Две одинарные кавычки могут
-	  ограничивать либо один символ, отличный от &apos; и \, либо
-	  одну из управляющих последовательностей ниже:</para>
-	<table cols="2">
-	  <thead>
-	    <trow>
-	      <tcell>
-		<para>Последовательность</para>
-	      </tcell>
-	      <tcell>
-		<para>Обозначаемый символ</para>
-	      </tcell>
-	    </trow>
-	  </thead>
-	  <tbody>
-	    <trow>
-	      <tcell>
-		<para>
-		  <keyword>\\</keyword>
-		</para>
-	      </tcell>
-	      <tcell>
-		<para>Обратная косая черта (\)</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>
-		  <keyword>\&quot;</keyword>
-		</para>
-	      </tcell>
-	      <tcell>
-		<para>Двойная кавычка (&quot;)</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>
-		  <keyword>\&apos;</keyword>
-		</para>
-	      </tcell>
-	      <tcell>
-		<para>Одинарная кавычка (&apos;)</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>
-		  <keyword>\n</keyword>
-		</para>
-	      </tcell>
-	      <tcell>
-		<para>Перевод строки (LF)</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>
-		  <keyword>\r</keyword>
-		</para>
-	      </tcell>
-	      <tcell>
-		<para>Возврат каретки (CR)</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>
-		  <keyword>\t</keyword>
-		</para>
-	      </tcell>
-	      <tcell>
-		<para>Горизонтальная табуляция (TAB)</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>
-		  <keyword>\b</keyword>
-		</para>
-	      </tcell>
-	      <tcell>
-		<para>Забой (BS)</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>
-		  <keyword>\ddd</keyword>
-		</para>
-	      </tcell>
-	      <tcell>
-		<para>Символ с десятичным кодом ASCII <keyword>ddd</keyword>
-		</para>
-	      </tcell>
-	    </trow>
-	  </tbody>
-	</table>
+        <bnf>
+          <term>char-literal</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <value>'</value>
+                <term>regular-char</term>
+                <value>'</value>
+              </choice>
+              <choice>
+                <value>'</value>
+                <term>escape-sequence</term>
+                <value>'</value>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <bnf>
+          <term>escape-sequence</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <value>\</value>
+                <group>
+                  <or multiline="0">
+                    <choice>
+                      <value>\</value>
+                    </choice>
+                    <choice>
+                      <value>"</value>
+                    </choice>
+                    <choice>
+                      <value>'</value>
+                    </choice>
+                    <choice>
+                      <value>n</value>
+                    </choice>
+                    <choice>
+                      <value>t</value>
+                    </choice>
+                    <choice>
+                      <value>b</value>
+                    </choice>
+                    <choice>
+                      <value>r</value>
+                    </choice>
+                  </or>
+                </group>
+              </choice>
+              <choice>
+                <value>\</value>
+                <group>
+                  <value>0...9</value>
+                </group>
+                <group>
+                  <value>0...9</value>
+                </group>
+                <group>
+                  <value>0...9</value>
+                </group>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <para>Символьные литералы ограничиваются одинарными кавычками
+          (<keyword>&apos;</keyword>). Две одинарные кавычки могут
+          ограничивать либо один символ, отличный от &apos; и \, либо
+          одну из управляющих последовательностей ниже:</para>
+        <table cols="2">
+          <thead>
+            <trow>
+              <tcell>
+                <para>Последовательность</para>
+              </tcell>
+              <tcell>
+                <para>Обозначаемый символ</para>
+              </tcell>
+            </trow>
+          </thead>
+          <tbody>
+            <trow>
+              <tcell>
+                <para>
+                  <keyword>\\</keyword>
+                </para>
+              </tcell>
+              <tcell>
+                <para>Обратная косая черта (\)</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>
+                  <keyword>\&quot;</keyword>
+                </para>
+              </tcell>
+              <tcell>
+                <para>Двойная кавычка (&quot;)</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>
+                  <keyword>\&apos;</keyword>
+                </para>
+              </tcell>
+              <tcell>
+                <para>Одинарная кавычка (&apos;)</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>
+                  <keyword>\n</keyword>
+                </para>
+              </tcell>
+              <tcell>
+                <para>Перевод строки (LF)</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>
+                  <keyword>\r</keyword>
+                </para>
+              </tcell>
+              <tcell>
+                <para>Возврат каретки (CR)</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>
+                  <keyword>\t</keyword>
+                </para>
+              </tcell>
+              <tcell>
+                <para>Горизонтальная табуляция (TAB)</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>
+                  <keyword>\b</keyword>
+                </para>
+              </tcell>
+              <tcell>
+                <para>Забой (BS)</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>
+                  <keyword>\ddd</keyword>
+                </para>
+              </tcell>
+              <tcell>
+                <para>Символ с десятичным кодом ASCII <keyword>ddd</keyword>
+                </para>
+              </tcell>
+            </trow>
+          </tbody>
+        </table>
       </subsection>
       <subsection name="Строковые литералы" neednumber="0">
-	<bnf>
-	  <term>string-literal</term>
-	  <def>
-	    <value>&quot;</value>
-	    <repetitive>
-	      <term>string-character</term>
-	    </repetitive>
-	    <value>&quot;</value>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>string-character</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<term>regular-char</term>
-	      </choice>
-	      <choice>
-		<term>escape-sequence</term>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<para>
-	  Строковые литералы ограничиваются двойными кавычками
-	  (<keyword>&quot;</keyword>). Двойные кавычки могут
-	  ограничивать либо один символ, отличный от &apos; и \, либо
-	  одну из управляющих последовательностей из таблицы выше.
-	</para>
-	<para>
-	  Чтобы длинные строковые литералы можно было разбивать на
-	  несколько строк, последовательность <term>\newline
-	    blanks</term> (обратная косая черта внутри строки, за
-	  которой следует произвольное число пробельных символов в
-	  начале следующей строки) игнорируется.
-	</para>
-	<para>В текущей реализации длина строковых литералов практически не ограничена</para>
+        <bnf>
+          <term>string-literal</term>
+          <def>
+            <value>&quot;</value>
+            <repetitive>
+              <term>string-character</term>
+            </repetitive>
+            <value>&quot;</value>
+          </def>
+        </bnf>
+        <bnf>
+          <term>string-character</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <term>regular-char</term>
+              </choice>
+              <choice>
+                <term>escape-sequence</term>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <para>
+          Строковые литералы ограничиваются двойными кавычками
+          (<keyword>&quot;</keyword>). Двойные кавычки могут
+          ограничивать либо один символ, отличный от &apos; и \, либо
+          одну из управляющих последовательностей из таблицы выше.
+        </para>
+        <para>
+          Чтобы длинные строковые литералы можно было разбивать на
+          несколько строк, последовательность <term>\newline
+            blanks</term> (обратная косая черта внутри строки, за
+          которой следует произвольное число пробельных символов в
+          начале следующей строки) игнорируется.
+        </para>
+        <para>В текущей реализации длина строковых литералов практически не ограничена</para>
       </subsection>
       <subsection name="Именованные метки" neednumber="0">
-	<para>
-	  Во избежание двусмысленностей именованные метки нельзя
-	  просто определить синтаксически как последовательность трех
-	  токенов <value>~</value>, <term>ident</term> и
-	  <keyword>:</keyword>. Они требуют определения на лексическом
-	  уровне.
-	</para>
-	<bnf>
-	  <term>label</term>
-	  <def>
-	    <value>~</value>
-	    <group>
-	      <value>a...z</value>
-	    </group>
-	    <repetitive count="1">
-	      <or multiline="0">
-		<choice>
-		  <term>letter</term>
-		</choice>
-		<choice>
-		  <value>0...9</value>
-		</choice>
-		<choice>
-		  <value>_</value>
-		</choice>
-		<choice>
-		  <value>&apos;</value>
-		</choice>
-	      </or>
-	    </repetitive>
-	    <value>:</value>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>oplabel</term>
-	  <def>
-	    <value>?</value>
-	    <group>
-	      <value>a...z</value>
-	    </group>
-	    <repetitive count="1">
-	      <or multiline="0">
-		<choice>
-		  <term>letter</term>
-		</choice>
-		<choice>
-		  <value>0...9</value>
-		</choice>
-		<choice>
-		  <value>_</value>
-		</choice>
-		<choice>
-		  <value>&apos;</value>
-		</choice>
-	      </or>
-	    </repetitive>
-	    <value>:</value>
-	  </def>
-	</bnf>
-	<para>
-	  Именованные метки бывают двух видов: <term>label</term> для
-	  обычных аргументов и <term>optlabel</term> для
-	  необязательных. Они отличаются только первым символом -
-	  <keyword>~</keyword> или <keyword>?</keyword>.
-	</para>
+        <para>
+          Во избежание двусмысленностей именованные метки нельзя
+          просто определить синтаксически как последовательность трех
+          токенов <value>~</value>, <term>ident</term> и
+          <keyword>:</keyword>. Они требуют определения на лексическом
+          уровне.
+        </para>
+        <bnf>
+          <term>label</term>
+          <def>
+            <value>~</value>
+            <group>
+              <value>a...z</value>
+            </group>
+            <repetitive count="1">
+              <or multiline="0">
+                <choice>
+                  <term>letter</term>
+                </choice>
+                <choice>
+                  <value>0...9</value>
+                </choice>
+                <choice>
+                  <value>_</value>
+                </choice>
+                <choice>
+                  <value>&apos;</value>
+                </choice>
+              </or>
+            </repetitive>
+            <value>:</value>
+          </def>
+        </bnf>
+        <bnf>
+          <term>oplabel</term>
+          <def>
+            <value>?</value>
+            <group>
+              <value>a...z</value>
+            </group>
+            <repetitive count="1">
+              <or multiline="0">
+                <choice>
+                  <term>letter</term>
+                </choice>
+                <choice>
+                  <value>0...9</value>
+                </choice>
+                <choice>
+                  <value>_</value>
+                </choice>
+                <choice>
+                  <value>&apos;</value>
+                </choice>
+              </or>
+            </repetitive>
+            <value>:</value>
+          </def>
+        </bnf>
+        <para>
+          Именованные метки бывают двух видов: <term>label</term> для
+          обычных аргументов и <term>optlabel</term> для
+          необязательных. Они отличаются только первым символом -
+          <keyword>~</keyword> или <keyword>?</keyword>.
+        </para>
       </subsection>
       <subsection name="Префиксные и инфиксные символы" neednumber="0">
-	<bnf>
-	  <term>infix-symbol</term>
-	  <def>
-	    <group>
-	      <or multiline="0">
-		<choice>
-		  <value>=</value>
-		</choice>
-		<choice>
-		  <value>&lt;</value>
-		</choice>
-		<choice>
-		  <value>&gt;</value>
-		</choice>
-		<choice>
-		  <value>@</value>
-		</choice>
-		<choice>
-		  <value>^</value>
-		</choice>
-		<choice>
-		  <value>|</value>
-		</choice>
-		<choice>
-		  <value>&amp;</value>
-		</choice>
-		<choice>
-		  <value>+</value>
-		</choice>
-		<choice>
-		  <value>-</value>
-		</choice>
-		<choice>
-		  <value>*</value>
-		</choice>
-		<choice>
-		  <value>/</value>
-		</choice>
-		<choice>
-		  <value>$</value>
-		</choice>
-		<choice>
-		  <value>%</value>
-		</choice>
-	      </or>
-	    </group>
-	    <repetitive>
-	      <term>operator-char</term>
-	    </repetitive>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>prefix-symbol</term>
-	  <def>
-	    <group>
-	      <or multiline="0">
-		<choice>
-		  <value>~</value>
-		</choice>
-		<choice>
-		  <value>!</value>
-		</choice>
-		<choice>
-		  <value>?</value>
-		</choice>
-	      </or>
-	    </group>
-	    <repetitive>
-	      <term>operator-char</term>
-	    </repetitive>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>operator-char</term>
-	  <def>
-	    <or multiline="0">
-	      <choice>
-		<value>!</value>
-	      </choice>
-	      <choice>
-		<value>:</value>
-	      </choice>
-	      <choice>
-		<value>.</value>
-	      </choice>
-	      <choice>
-		<value>~</value>
-	      </choice>
-	      <choice>
-		<value>=</value>
-	      </choice>
-	      <choice>
-		<value>&lt;</value>
-	      </choice>
-	      <choice>
-		<value>&gt;</value>
-	      </choice>
-	      <choice>
-		<value>@</value>
-	      </choice>
-	      <choice>
-		<value>^</value>
-	      </choice>
-	      <choice>
-		<value>|</value>
-	      </choice>
-	      <choice>
-		<value>&amp;</value>
-	      </choice>
-	      <choice>
-		<value>+</value>
-	      </choice>
-	      <choice>
-		<value>-</value>
-	      </choice>
-	      <choice>
-		<value>*</value>
-	      </choice>
-	      <choice>
-		<value>/</value>
-	      </choice>
-	      <choice>
-		<value>$</value>
-	      </choice>
-	      <choice>
-		<value>%</value>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<para>
-	  Последовательности &quot;символов операторов&quot; типа
-	  <keyword>&lt;=&gt;</keyword> или <keyword>!!</keyword> читаются как 
-	  один токен из классов <term>infix-char</term> или <term>prefix-char</term>.
-	  Такие символы разбраются как префиксные или инфиксные операторы внутри
-	  выражения или же ведут себя как идентификаторы.
-	</para>
+        <bnf>
+          <term>infix-symbol</term>
+          <def>
+            <group>
+              <or multiline="0">
+                <choice>
+                  <value>=</value>
+                </choice>
+                <choice>
+                  <value>&lt;</value>
+                </choice>
+                <choice>
+                  <value>&gt;</value>
+                </choice>
+                <choice>
+                  <value>@</value>
+                </choice>
+                <choice>
+                  <value>^</value>
+                </choice>
+                <choice>
+                  <value>|</value>
+                </choice>
+                <choice>
+                  <value>&amp;</value>
+                </choice>
+                <choice>
+                  <value>+</value>
+                </choice>
+                <choice>
+                  <value>-</value>
+                </choice>
+                <choice>
+                  <value>*</value>
+                </choice>
+                <choice>
+                  <value>/</value>
+                </choice>
+                <choice>
+                  <value>$</value>
+                </choice>
+                <choice>
+                  <value>%</value>
+                </choice>
+              </or>
+            </group>
+            <repetitive>
+              <term>operator-char</term>
+            </repetitive>
+          </def>
+        </bnf>
+        <bnf>
+          <term>prefix-symbol</term>
+          <def>
+            <group>
+              <or multiline="0">
+                <choice>
+                  <value>~</value>
+                </choice>
+                <choice>
+                  <value>!</value>
+                </choice>
+                <choice>
+                  <value>?</value>
+                </choice>
+              </or>
+            </group>
+            <repetitive>
+              <term>operator-char</term>
+            </repetitive>
+          </def>
+        </bnf>
+        <bnf>
+          <term>operator-char</term>
+          <def>
+            <or multiline="0">
+              <choice>
+                <value>!</value>
+              </choice>
+              <choice>
+                <value>:</value>
+              </choice>
+              <choice>
+                <value>.</value>
+              </choice>
+              <choice>
+                <value>~</value>
+              </choice>
+              <choice>
+                <value>=</value>
+              </choice>
+              <choice>
+                <value>&lt;</value>
+              </choice>
+              <choice>
+                <value>&gt;</value>
+              </choice>
+              <choice>
+                <value>@</value>
+              </choice>
+              <choice>
+                <value>^</value>
+              </choice>
+              <choice>
+                <value>|</value>
+              </choice>
+              <choice>
+                <value>&amp;</value>
+              </choice>
+              <choice>
+                <value>+</value>
+              </choice>
+              <choice>
+                <value>-</value>
+              </choice>
+              <choice>
+                <value>*</value>
+              </choice>
+              <choice>
+                <value>/</value>
+              </choice>
+              <choice>
+                <value>$</value>
+              </choice>
+              <choice>
+                <value>%</value>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <para>
+          Последовательности &quot;символов операторов&quot; типа
+          <keyword>&lt;=&gt;</keyword> или <keyword>!!</keyword> читаются как
+          один токен из классов <term>infix-char</term> или <term>prefix-char</term>.
+          Такие символы разбраются как префиксные или инфиксные операторы внутри
+          выражения или же ведут себя как идентификаторы.
+        </para>
       </subsection>
       <subsection name="Ключевые слова" neednumber="0">
-	<para>Следующие идентификаторы считаются ключевыми словами и
-	  не могут использоваться в другом качестве:</para>
-	<listing>
-	  <![CDATA[and         as          assert      asr         begin       class
+        <para>Следующие идентификаторы считаются ключевыми словами и
+          не могут использоваться в другом качестве:</para>
+        <listing>
+          <![CDATA[
+and         as          assert      asr         begin       class
 closed      constraint  do          done        downto      else
 end         exception   external    false       for         fun
 function    functor     if          in          include     inherit
@@ -722,1969 +723,1970 @@ new         of          open        or          parser      private
 rec         sig         struct      then        to          true
 try         type        val         virtual     when        while
 with ]]></listing>
-				<para>
-	  Следующие последовательности символов также считаются ключевыми словами:
-	</para>
-	<listing><![CDATA[    #     &     '     (     )     *     ,     ->    ?
+                                <para>
+          Следующие последовательности символов также считаются ключевыми словами:
+        </para>
+        <listing><![CDATA[
+#     &     '     (     )     *     ,     ->    ?
 ??    .     ..    .(    .[    :     ::    :=    ;
 ;;    <-    =     [     [|    [<    {<    ]     |]
 >]    >}    _     `     {     |     }     ~]]></listing>
       </subsection>
       <subsection name="Неоднозначности" neednumber="0">
-	<para>Лексические неоднозначности решаются по правилу
-	  "длиннейшего совпадения": если последовательность символов
-	  может быть разбита на два токена несколькими способами,
-	  используется тот способ, который дает наиболее длинный
-	  первый токен.
-	</para>
+        <para>Лексические неоднозначности решаются по правилу
+          "длиннейшего совпадения": если последовательность символов
+          может быть разбита на два токена несколькими способами,
+          используется тот способ, который дает наиболее длинный
+          первый токен.
+        </para>
       </subsection>
       <subsection name="Директивы номера строки" neednumber="0">
-	<bnf>
-	  <term>linenum-directive</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<value>#</value>
-		<repetitive count="1">
-		  <value>0...9</value>
-		</repetitive>
-	      </choice>
-	      <choice>
-		<value>#</value>
-		<repetitive count="1">
-		  <value>0...9</value>
-		</repetitive>
-		<value>&quot;</value>
-		<term>string-character</term>
-		<value>&quot;</value>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<para>
-	  Препроцессоры, генерирующие исходный код на Caml, могут
-	  помещать в свой вывод директивы номера строки, и тогда
-	  компилятор сможет добавлять к сообщениям об ошибках имена
-	  строк и имена файлов до предварительной обработки, а не
-	  после нее. Директива номера строки состит из
-	  <keyword>#</keyword> (знак диеза), за которым следует
-	  положительное целое число (номер строки) и, возможно,
-	  символьная строка (имя файла). Во время лексического анализа
-	  директивы номера строки считаются пробельными символами.
-	</para>
+        <bnf>
+          <term>linenum-directive</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <value>#</value>
+                <repetitive count="1">
+                  <value>0...9</value>
+                </repetitive>
+              </choice>
+              <choice>
+                <value>#</value>
+                <repetitive count="1">
+                  <value>0...9</value>
+                </repetitive>
+                <value>&quot;</value>
+                <term>string-character</term>
+                <value>&quot;</value>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <para>
+          Препроцессоры, генерирующие исходный код на Caml, могут
+          помещать в свой вывод директивы номера строки, и тогда
+          компилятор сможет добавлять к сообщениям об ошибках имена
+          строк и имена файлов до предварительной обработки, а не
+          после нее. Директива номера строки состит из
+          <keyword>#</keyword> (знак диеза), за которым следует
+          положительное целое число (номер строки) и, возможно,
+          символьная строка (имя файла). Во время лексического анализа
+          директивы номера строки считаются пробельными символами.
+        </para>
       </subsection>
     </section>
     <section name="Типы данных">
       <para>В этом разделе описываются типы данных, обрабатываемых в
-	Objective Caml.</para>
+        Objective Caml.</para>
       <subsection name="Базовые типы" neednumber="1">
-	<subsubsection name="Целые числа">
-	  <para>Целочисленными значениями считаются целые числа от
-	    <power pow="30">-2</power> до <power pow="30">2</power> -
-	    1, то есть от -1073741824 до 1073741823. Реализация может
-	    поддерживать больший диапазон значений: в настоящее время
-	    на 64-разрядных платформах поддерживаются целые от <power
-	      pow="62">-2</power> до <power pow="62">2</power> -
-	    1</para>
-	</subsubsection>
-	<subsubsection name="Числа с плавающей точкой">
-	  <para>Значениями с плавающей точкой считаются числа в
-	    одноименном представлении. Текущая реализация использует
-	    числа с плавающей точкой с двойной точностью согласно
-	    стандарту ISO 754 c мантиссой 53 бита и экспонентой от
-	    -1024 до 1024.
-	  </para>
-	</subsubsection>
-	<subsubsection name="Символы">
-	  <para>Символы представлены как 8-битные целые числа от 0 до
-	    255. Коды символов от 0 до 127 интерпретируются по
-	    стандарту ASCII. Текущая реализация интерпретирует коды
-	    символов от 127 до 255 по стандарту ISO 8859-1.</para>
-	</subsubsection>
-	<subsubsection name="Символьные строки">
-	  <para>Символьная строка - это конечная последовательность
-	    символов. Текущая реализация поддерживает строки,
-	    содержащие до <power pow="24">2</power> - 6 (то есть,
-	    16777210) символов.</para>
-	</subsubsection>
+        <subsubsection name="Целые числа">
+          <para>Целочисленными значениями считаются целые числа от
+            <power pow="30">-2</power> до <power pow="30">2</power> -
+            1, то есть от -1073741824 до 1073741823. Реализация может
+            поддерживать больший диапазон значений: в настоящее время
+            на 64-разрядных платформах поддерживаются целые от <power
+              pow="62">-2</power> до <power pow="62">2</power> -
+            1</para>
+        </subsubsection>
+        <subsubsection name="Числа с плавающей точкой">
+          <para>Значениями с плавающей точкой считаются числа в
+            одноименном представлении. Текущая реализация использует
+            числа с плавающей точкой с двойной точностью согласно
+            стандарту ISO 754 c мантиссой 53 бита и экспонентой от
+            -1024 до 1024.
+          </para>
+        </subsubsection>
+        <subsubsection name="Символы">
+          <para>Символы представлены как 8-битные целые числа от 0 до
+            255. Коды символов от 0 до 127 интерпретируются по
+            стандарту ASCII. Текущая реализация интерпретирует коды
+            символов от 127 до 255 по стандарту ISO 8859-1.</para>
+        </subsubsection>
+        <subsubsection name="Символьные строки">
+          <para>Символьная строка - это конечная последовательность
+            символов. Текущая реализация поддерживает строки,
+            содержащие до <power pow="24">2</power> - 6 (то есть,
+            16777210) символов.</para>
+        </subsubsection>
       </subsection>
       <subsection name="Кортежи" neednumber="1">
-	<para>Кортежи значений записываются как <keyword>(<index
-	      ind="1">v</index>, ..., <index
-	      ind="n">v</index>)</keyword>, что соотвествует n-кортежу
-	  из значений от <index ind="1">v</index> до <index
-	    ind="n">v</index>. Текущая реализация поддерживает кортежи
-	  из максимум <power pow="22">2</power> - 1 (то есть 4194303)
-	  элементов.
-	</para>
+        <para>Кортежи значений записываются как <keyword>(<index
+              ind="1">v</index>, ..., <index
+              ind="n">v</index>)</keyword>, что соотвествует n-кортежу
+          из значений от <index ind="1">v</index> до <index
+            ind="n">v</index>. Текущая реализация поддерживает кортежи
+          из максимум <power pow="22">2</power> - 1 (то есть 4194303)
+          элементов.
+        </para>
       </subsection>
       <subsection name="Записи" neednumber="1">
-	<para>Записи являются кортежами именованных значений. Запись
-	  <keyword>{<index ind="1">field</index>=<index
-	      ind="1">v</index>; ... ; <index
-	      ind="n">field</index>=<index
-	      ind="n">v</index>}</keyword> связывает значение <index
-	    ind="i">v</index> с полем записи <index
-	    ind="i">field</index> для i=1 ... n. Текущая реализация
-	  поддерживает записи из максимум <power pow="22">2</power> -
-	  1 (то есть 4194303) элементов.
-	</para>
+        <para>Записи являются кортежами именованных значений. Запись
+          <keyword>{<index ind="1">field</index>=<index
+              ind="1">v</index>; ... ; <index
+              ind="n">field</index>=<index
+              ind="n">v</index>}</keyword> связывает значение <index
+            ind="i">v</index> с полем записи <index
+            ind="i">field</index> для i=1 ... n. Текущая реализация
+          поддерживает записи из максимум <power pow="22">2</power> -
+          1 (то есть 4194303) элементов.
+        </para>
       </subsection>
       <subsection name="Массивы" neednumber="1">
-	<para>Массивы - это конечные, переменного размера
-	  последовательности значений одного типа. Текущая
-	  реализация поддерживает массивы из максимум <power
-	    pow="22">2</power> - 1 (то есть 4194303) элементов.
-	</para>
+        <para>Массивы - это конечные, переменного размера
+          последовательности значений одного типа. Текущая
+          реализация поддерживает массивы из максимум <power
+            pow="22">2</power> - 1 (то есть 4194303) элементов.
+        </para>
       </subsection>
       <subsection name="Вариантные значения" neednumber="1">
-	<para>
-	  Вариантные значения являются либо константными
-	  конструкторами, либо парой из неконстантного конструктора и
-	  значения. Первый случай записывается как
-	  <keyword>cconstr</keyword>, второй - как
-	  <keyword>ncconstr(v)</keyword>, где <keyword>v</keyword> -
-	  аргумент для неконстантного конструктора
-	  <keyword>ncconstr</keyword>.
-	</para>
-	<para>
-	  Следующие константы считаются встроенными константными конструкторами:
-	</para>
-	<table cols="2">
-	  <thead>
-	    <trow>
-	      <tcell>
-		<para>Константа</para>
-	      </tcell>
-	      <tcell>
-		<para>Конструктор</para>
-	      </tcell>
-	    </trow>
-	  </thead>
-	  <tbody>
-	    <trow>
-	      <tcell>
-		<para>
-		  <keyword>false</keyword>
-		</para>
-	      </tcell>
-	      <tcell>
-		<para>булево значение false</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>
-		  <keyword>true</keyword>
-		</para>
-	      </tcell>
-	      <tcell>
-		<para>булево значение true</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>
-		  <keyword>()</keyword>
-		</para>
-	      </tcell>
-	      <tcell>
-		<para>значение "unit"</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>
-		  <keyword>[]</keyword>
-		</para>
-	      </tcell>
-	      <tcell>
-		<para>пустой список</para>
-	      </tcell>
-	    </trow>
-	  </tbody>
-	</table>
-	<para>Текущая реализация ограничивает число конструкторов для
-	  данного вариантного типа числом 249.</para>
+        <para>
+          Вариантные значения являются либо константными
+          конструкторами, либо парой из неконстантного конструктора и
+          значения. Первый случай записывается как
+          <keyword>cconstr</keyword>, второй - как
+          <keyword>ncconstr(v)</keyword>, где <keyword>v</keyword> -
+          аргумент для неконстантного конструктора
+          <keyword>ncconstr</keyword>.
+        </para>
+        <para>
+          Следующие константы считаются встроенными константными конструкторами:
+        </para>
+        <table cols="2">
+          <thead>
+            <trow>
+              <tcell>
+                <para>Константа</para>
+              </tcell>
+              <tcell>
+                <para>Конструктор</para>
+              </tcell>
+            </trow>
+          </thead>
+          <tbody>
+            <trow>
+              <tcell>
+                <para>
+                  <keyword>false</keyword>
+                </para>
+              </tcell>
+              <tcell>
+                <para>булево значение false</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>
+                  <keyword>true</keyword>
+                </para>
+              </tcell>
+              <tcell>
+                <para>булево значение true</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>
+                  <keyword>()</keyword>
+                </para>
+              </tcell>
+              <tcell>
+                <para>значение "unit"</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>
+                  <keyword>[]</keyword>
+                </para>
+              </tcell>
+              <tcell>
+                <para>пустой список</para>
+              </tcell>
+            </trow>
+          </tbody>
+        </table>
+        <para>Текущая реализация ограничивает число конструкторов для
+          данного вариантного типа числом 249.</para>
       </subsection>
       <subsection name="Полиморфные варианты" neednumber="1">
-	<para>Полиморфные варианты - это альтернативная форма
-	  вариантного типа. Они не принадлежат явно к
-	  предопределенному вариантному типу и подчиняются особым
-	  правилам типизации. Они могут записываться либо как
-	  константы - <keyword>`tag-name</keyword>, либо, в случае не
-	  константы, как <keyword>`tag-name(n)</keyword>.</para>
+        <para>Полиморфные варианты - это альтернативная форма
+          вариантного типа. Они не принадлежат явно к
+          предопределенному вариантному типу и подчиняются особым
+          правилам типизации. Они могут записываться либо как
+          константы - <keyword>`tag-name</keyword>, либо, в случае не
+          константы, как <keyword>`tag-name(n)</keyword>.</para>
       </subsection>
       <subsection name="Функции" neednumber="1">
-	<para>Функции являются отображением значений на значения.</para>
+        <para>Функции являются отображением значений на значения.</para>
       </subsection>
       <subsection name="Объекты" neednumber="1">
-	<para>
-	  Объекты включают скрытое внутреннее состояние, выражаемое
-	  как переменные экземпляра, и набор методов, предназначенных
-	  для доступа к этом переменным и их изменения. Структура
-	  объекта описывается в порождающем его классе.
-	</para>
+        <para>
+          Объекты включают скрытое внутреннее состояние, выражаемое
+          как переменные экземпляра, и набор методов, предназначенных
+          для доступа к этом переменным и их изменения. Структура
+          объекта описывается в порождающем его классе.
+        </para>
       </subsection>
     </section>
     <section name="Имена">
       <para>
-	Идентификаторы используются для именования некторых классов 
-	языковых объектов и возмоджности обращения к этим объектам по
-	имени. Это:
+        Идентификаторы используются для именования некторых классов
+        языковых объектов и возмоджности обращения к этим объектам по
+        имени. Это:
       </para>
       <list type="plain">
-	<item>
-	  <para>имена значений (синтаксический класс <term>value-name</term>)</para>
-	</item>
-	<item>
-	  <para>конструкторы значений (для константных - класс
-	    <term>cconstr-name</term>, для неконстантных -
-	    <term>ncconstr-name</term>)</para>
-	</item>
-	<item>
-	  <para>метки (<term>label-name</term>)</para>
-	</item>
-	<item>
-	  <para>теги вариантов (<term>tag-name</term>)</para>
-	</item>
-	<item>
-	  <para>конструкторы типов (<term>typeconstr-name</term>)</para>
-	</item>
-	<item>
-	  <para>поля записей (<term>field-name</term>)</para>
-	</item>
-	<item>
-	  <para>имена классов (<term>class-name</term>)</para>
-	</item>
-	<item>
-	  <para>имена методов (<term>method-name</term>)</para>
-	</item>
-	<item>
-	  <para>имена переменных экземпляра (<term>inst-var-name</term>)</para>
-	</item>
-	<item>
-	  <para>имена модулей (<term>module-name</term>)</para>
-	</item>
-	<item>
-	  <para>имена типов модулей (<term>modtype-name</term>)</para>
-	</item>
+        <item>
+          <para>имена значений (синтаксический класс <term>value-name</term>)</para>
+        </item>
+        <item>
+          <para>конструкторы значений (для константных - класс
+            <term>cconstr-name</term>, для неконстантных -
+            <term>ncconstr-name</term>)</para>
+        </item>
+        <item>
+          <para>метки (<term>label-name</term>)</para>
+        </item>
+        <item>
+          <para>теги вариантов (<term>tag-name</term>)</para>
+        </item>
+        <item>
+          <para>конструкторы типов (<term>typeconstr-name</term>)</para>
+        </item>
+        <item>
+          <para>поля записей (<term>field-name</term>)</para>
+        </item>
+        <item>
+          <para>имена классов (<term>class-name</term>)</para>
+        </item>
+        <item>
+          <para>имена методов (<term>method-name</term>)</para>
+        </item>
+        <item>
+          <para>имена переменных экземпляра (<term>inst-var-name</term>)</para>
+        </item>
+        <item>
+          <para>имена модулей (<term>module-name</term>)</para>
+        </item>
+        <item>
+          <para>имена типов модулей (<term>modtype-name</term>)</para>
+        </item>
       </list>
       <para>Эти девять пространств имен как по контексту, так и по регистру имени:
-	первая буква идентификатора может быть строчной (ниже <term>lowercace-ident</term>)
-	или заглавной (ниже <term>capitalized-ident</term>). Знак подчеркивания
-	в данном случае считается строчной буквой.
+        первая буква идентификатора может быть строчной (ниже <term>lowercace-ident</term>)
+        или заглавной (ниже <term>capitalized-ident</term>). Знак подчеркивания
+        в данном случае считается строчной буквой.
       </para>
       <subsection name="Именование объектов" neednumber="0">
-	<bnf>
-	  <term>value-name</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<term>lowercase-ident</term>
-	      </choice>
-	      <choice>
-		<group>
-		  <term>operator-name</term>
-		</group>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>operator-name</term>
-	  <def>
-	    <or multiline="0">
-	      <choice>
-		<term>prefix-symbol</term>
-	      </choice>
-	      <choice>
-		<term>infix-symbol</term>
-	      </choice>
-	      <choice>
-		<value>*</value>
-	      </choice>
-	      <choice>
-		<value>=</value>
-	      </choice>
-	      <choice>
-		<value>or</value>
-	      </choice>
-	      <choice>
-		<value>&amp;</value>
-	      </choice>
-	      <choice>
-		<value>:=</value>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>cconstr-name</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<term>capitalized-ident</term>
-	      </choice>
-	      <choice>
-		<value>false</value>
-	      </choice>
-	      <choice>
-		<value>true</value>
-	      </choice>
-	      <choice>
-		<value>[ ]</value>
-	      </choice>
-	      <choice>
-		<value>( )</value>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>ncconstr-name</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<term>capitalized-ident</term>
-	      </choice>
-	      <choice>
-		<value>::</value>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>label-name</term>
-	  <def>
-	    <term>lowercase-ident</term>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>tag-name</term>
-	  <def>
-	    <term>capitalized-ident</term>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>typeconstr-name</term>
-	  <def>
-	    <term>lowercase-ident</term>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>field-name</term>
-	  <def>
-	    <term>lowercase-ident</term>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>module-name</term>
-	  <def>
-	    <term>capitalized-ident</term>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>modtype-name</term>
-	  <def>
-	    <term>ident</term>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>class-name</term>
-	  <def>
-	    <term>lowercase-ident</term>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>inst-var-name</term>
-	  <def>
-	    <term>lowercase-ident</term>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>method-name</term>
-	  <def>
-	    <term>lowercase-ident</term>
-	  </def>
-	</bnf>
-	<para>
-	  Как видно, префиксные и инфиксные символы, а также некторые
-	  ключевые слова можно использовать как имена значений, если
-	  заключить их в кавычки. Такие ключевые слова как
-	  &apos;false&apos; и &apos;::&apos; являются также именами
-	  конструкторов. Правила относительно регистра имен подытожены
-	  в следующей таблице:
-	</para>
-	<table cols="2">
-	  <thead>
-	    <trow>
-	      <tcell>
-		<para>Пространство имен</para>
-	      </tcell>
-	      <tcell>
-		<para>Первая буква</para>
-	      </tcell>
-	    </trow>
-	  </thead>
-	  <tbody>
-	    <trow>
-	      <tcell>
-		<para>Значения</para>
-	      </tcell>
-	      <tcell>
-		<para>строчная</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>Конструкторы</para>
-	      </tcell>
-	      <tcell>
-		<para>прописная</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>Метки</para>
-	      </tcell>
-	      <tcell>
-		<para>прописная</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>Теги вариантов</para>
-	      </tcell>
-	      <tcell>
-		<para>прописная</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>Конструкторы типа</para>
-	      </tcell>
-	      <tcell>
-		<para>строчная</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>Поля записей</para>
-	      </tcell>
-	      <tcell>
-		<para>строчная</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>Классы</para>
-	      </tcell>
-	      <tcell>
-		<para>строчная</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>Методы</para>
-	      </tcell>
-	      <tcell>
-		<para>строчная</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>Модули</para>
-	      </tcell>
-	      <tcell>
-		<para>прописная</para>
-	      </tcell>
-	    </trow>
-	    <trow>
-	      <tcell>
-		<para>Типы модулей</para>
-	      </tcell>
-	      <tcell>
-		<para>любая</para>
-	      </tcell>
-	    </trow>
-	  </tbody>
-	</table>
-	<para>Относительно тегов вариантов: текущая реализация
-	  принимает их в дюбом регистре, однако ради переносимости и
-	  совместимости с будущими версиями OCaml рекомендуется
-	  избегать использовать в качесте первого симовла их имен
-	  строчные буквы.</para>
+        <bnf>
+          <term>value-name</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <term>lowercase-ident</term>
+              </choice>
+              <choice>
+                <group>
+                  <term>operator-name</term>
+                </group>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <bnf>
+          <term>operator-name</term>
+          <def>
+            <or multiline="0">
+              <choice>
+                <term>prefix-symbol</term>
+              </choice>
+              <choice>
+                <term>infix-symbol</term>
+              </choice>
+              <choice>
+                <value>*</value>
+              </choice>
+              <choice>
+                <value>=</value>
+              </choice>
+              <choice>
+                <value>or</value>
+              </choice>
+              <choice>
+                <value>&amp;</value>
+              </choice>
+              <choice>
+                <value>:=</value>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <bnf>
+          <term>cconstr-name</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <term>capitalized-ident</term>
+              </choice>
+              <choice>
+                <value>false</value>
+              </choice>
+              <choice>
+                <value>true</value>
+              </choice>
+              <choice>
+                <value>[ ]</value>
+              </choice>
+              <choice>
+                <value>( )</value>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <bnf>
+          <term>ncconstr-name</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <term>capitalized-ident</term>
+              </choice>
+              <choice>
+                <value>::</value>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <bnf>
+          <term>label-name</term>
+          <def>
+            <term>lowercase-ident</term>
+          </def>
+        </bnf>
+        <bnf>
+          <term>tag-name</term>
+          <def>
+            <term>capitalized-ident</term>
+          </def>
+        </bnf>
+        <bnf>
+          <term>typeconstr-name</term>
+          <def>
+            <term>lowercase-ident</term>
+          </def>
+        </bnf>
+        <bnf>
+          <term>field-name</term>
+          <def>
+            <term>lowercase-ident</term>
+          </def>
+        </bnf>
+        <bnf>
+          <term>module-name</term>
+          <def>
+            <term>capitalized-ident</term>
+          </def>
+        </bnf>
+        <bnf>
+          <term>modtype-name</term>
+          <def>
+            <term>ident</term>
+          </def>
+        </bnf>
+        <bnf>
+          <term>class-name</term>
+          <def>
+            <term>lowercase-ident</term>
+          </def>
+        </bnf>
+        <bnf>
+          <term>inst-var-name</term>
+          <def>
+            <term>lowercase-ident</term>
+          </def>
+        </bnf>
+        <bnf>
+          <term>method-name</term>
+          <def>
+            <term>lowercase-ident</term>
+          </def>
+        </bnf>
+        <para>
+          Как видно, префиксные и инфиксные символы, а также некторые
+          ключевые слова можно использовать как имена значений, если
+          заключить их в кавычки. Такие ключевые слова как
+          &apos;false&apos; и &apos;::&apos; являются также именами
+          конструкторов. Правила относительно регистра имен подытожены
+          в следующей таблице:
+        </para>
+        <table cols="2">
+          <thead>
+            <trow>
+              <tcell>
+                <para>Пространство имен</para>
+              </tcell>
+              <tcell>
+                <para>Первая буква</para>
+              </tcell>
+            </trow>
+          </thead>
+          <tbody>
+            <trow>
+              <tcell>
+                <para>Значения</para>
+              </tcell>
+              <tcell>
+                <para>строчная</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>Конструкторы</para>
+              </tcell>
+              <tcell>
+                <para>прописная</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>Метки</para>
+              </tcell>
+              <tcell>
+                <para>прописная</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>Теги вариантов</para>
+              </tcell>
+              <tcell>
+                <para>прописная</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>Конструкторы типа</para>
+              </tcell>
+              <tcell>
+                <para>строчная</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>Поля записей</para>
+              </tcell>
+              <tcell>
+                <para>строчная</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>Классы</para>
+              </tcell>
+              <tcell>
+                <para>строчная</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>Методы</para>
+              </tcell>
+              <tcell>
+                <para>строчная</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>Модули</para>
+              </tcell>
+              <tcell>
+                <para>прописная</para>
+              </tcell>
+            </trow>
+            <trow>
+              <tcell>
+                <para>Типы модулей</para>
+              </tcell>
+              <tcell>
+                <para>любая</para>
+              </tcell>
+            </trow>
+          </tbody>
+        </table>
+        <para>Относительно тегов вариантов: текущая реализация
+          принимает их в дюбом регистре, однако ради переносимости и
+          совместимости с будущими версиями OCaml рекомендуется
+          избегать использовать в качесте первого симовла их имен
+          строчные буквы.</para>
       </subsection>
       <subsection name="Ссылки на именованные объекты" neednumber="0">
-	<bnf>
-	  <term>value-path</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<term>value-name</term>
-	      </choice>
-	      <choice>
-		<term>module-path</term>
-		<value>.</value>
-		<term>lowercase-ident</term>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>cconstr</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<term>cconstr-name</term>
-	      </choice>
-	      <choice>
-		<term>module-path</term>
-		<value>.</value>
-		<term>capitalized-ident</term>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>ncconstr</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<term>ncconstr-name</term>
-	      </choice>
-	      <choice>
-		<term>module-path</term>
-		<value>.</value>
-		<term>capitalized-ident</term>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>typecontstr</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<term>typeconstr-name</term>
-	      </choice>
-	      <choice>
-		<term>extended-module-path</term>
-		<value>.</value>
-		<term>lowercase-ident</term>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>field</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<term>field-name</term>
-	      </choice>
-	      <choice>
-		<term>module-path</term>
-		<value>.</value>
-		<term>lowercase-ident</term>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>module-path</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<term>module-name</term>
-	      </choice>
-	      <choice>
-		<term>module-path</term>
-		<value>.</value>
-		<term>capitalized-ident</term>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>extended-module-path</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<term>module-name</term>
-	      </choice>
-	      <choice>
-		<term>extended-module-path</term>
-		<value>.</value>
-		<term>capitalized-ident</term>
-	      </choice>
-	      <choice>
-		<term>extended-module-path</term>
-		<group>
-		  <term>extended-module-path</term>
-		</group>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>modtype-path</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<term>modtype-name</term>
-	      </choice>
-	      <choice>
-		<term>extended-module-path</term>
-		<value>.</value>
-		<term>ident</term>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>class-path</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<term>class-name</term>
-	      </choice>
-	      <choice>
-		<term>module-path</term>
-		<value>.</value>
-		<term>lowercase-ident</term>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<para>На именованный объект можно ссылаться либо по имени
-	  (учитывая обычные статичные правила области видимости для
-	  имен), либо через путь доступа вида <term>prefix</term>
-	  <value>.</value> <term>name</term>, где <term>prefix</term>
-	  означает модуль, а <term>name</term> - имя объекта,
-	  определенного в этом модуле. Первый компонент пути
-	  <term>prefix</term> записывается либо как простое имя
-	  модуля, либо путь доступа вида <term>name1</term>
-	  <value>.</value> <term>name2</term>... в случаях, когда
-	  определяющий модуль сам вложен в другие модули. При ссылке
-	  на конструкторы типа или типы модуля <term>prefix</term>
-	  также может содержать простые вызовы функтора (как в
-	  синтаксическом классе <term>extended-module-path</term>),
-	  если определяющий модуль сам является результатом вызова
-	  функтора.
-	</para>
-	<para>
-	  Имена меток, тегов, методов и переменных экземпляров такого
-	  уточнения не требуют: метки, теги и методы глобальны, а
-	  переменные экземпляра локальны в пределах класса.
-	</para>
+        <bnf>
+          <term>value-path</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <term>value-name</term>
+              </choice>
+              <choice>
+                <term>module-path</term>
+                <value>.</value>
+                <term>lowercase-ident</term>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <bnf>
+          <term>cconstr</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <term>cconstr-name</term>
+              </choice>
+              <choice>
+                <term>module-path</term>
+                <value>.</value>
+                <term>capitalized-ident</term>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <bnf>
+          <term>ncconstr</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <term>ncconstr-name</term>
+              </choice>
+              <choice>
+                <term>module-path</term>
+                <value>.</value>
+                <term>capitalized-ident</term>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <bnf>
+          <term>typecontstr</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <term>typeconstr-name</term>
+              </choice>
+              <choice>
+                <term>extended-module-path</term>
+                <value>.</value>
+                <term>lowercase-ident</term>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <bnf>
+          <term>field</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <term>field-name</term>
+              </choice>
+              <choice>
+                <term>module-path</term>
+                <value>.</value>
+                <term>lowercase-ident</term>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <bnf>
+          <term>module-path</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <term>module-name</term>
+              </choice>
+              <choice>
+                <term>module-path</term>
+                <value>.</value>
+                <term>capitalized-ident</term>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <bnf>
+          <term>extended-module-path</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <term>module-name</term>
+              </choice>
+              <choice>
+                <term>extended-module-path</term>
+                <value>.</value>
+                <term>capitalized-ident</term>
+              </choice>
+              <choice>
+                <term>extended-module-path</term>
+                <group>
+                  <term>extended-module-path</term>
+                </group>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <bnf>
+          <term>modtype-path</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <term>modtype-name</term>
+              </choice>
+              <choice>
+                <term>extended-module-path</term>
+                <value>.</value>
+                <term>ident</term>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <bnf>
+          <term>class-path</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <term>class-name</term>
+              </choice>
+              <choice>
+                <term>module-path</term>
+                <value>.</value>
+                <term>lowercase-ident</term>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <para>На именованный объект можно ссылаться либо по имени
+          (учитывая обычные статичные правила области видимости для
+          имен), либо через путь доступа вида <term>prefix</term>
+          <value>.</value> <term>name</term>, где <term>prefix</term>
+          означает модуль, а <term>name</term> - имя объекта,
+          определенного в этом модуле. Первый компонент пути
+          <term>prefix</term> записывается либо как простое имя
+          модуля, либо путь доступа вида <term>name1</term>
+          <value>.</value> <term>name2</term>... в случаях, когда
+          определяющий модуль сам вложен в другие модули. При ссылке
+          на конструкторы типа или типы модуля <term>prefix</term>
+          также может содержать простые вызовы функтора (как в
+          синтаксическом классе <term>extended-module-path</term>),
+          если определяющий модуль сам является результатом вызова
+          функтора.
+        </para>
+        <para>
+          Имена меток, тегов, методов и переменных экземпляров такого
+          уточнения не требуют: метки, теги и методы глобальны, а
+          переменные экземпляра локальны в пределах класса.
+        </para>
       </subsection>
     </section>
     <section name="Выражения типа">
       <bnf>
-	<term>typexpr</term>
-	<def>
-	  <or multiline="1">
-	    <choice>
-	      <value>&apos;</value>
-	      <term>ident</term>
-	    </choice>
-	    <choice>
-	      <value>_</value>
-	    </choice>
-	    <choice>
-	      <value>(</value>
-	      <term>typexpr</term>
-	      <value>)</value>
-	    </choice>
-	    <choice>
-	      <optional>
-		<optional>
-		  <value>?</value>
-		</optional>
-		<term>ident</term>
-		<value>:</value>
-	      </optional>
-	      <term>typexpr</term>
-	      <value>-&gt;</value>
-	      <term>typexpr</term>
-	    </choice>
-	    <choice>
-	      <term>typexpr</term>
-	      <repetitive count="1">
-		<value>*</value>
-		<term>typexpr</term>
-	      </repetitive>
-	    </choice>
-	    <choice>
-	      <term>typeconstr</term>
-	    </choice>
-	    <choice>
-	      <term>typexpr</term>
-	      <term>typeconstr</term>
-	    </choice>
-	    <choice>
-	      <value>(</value>
-	      <term>typexpr</term>
-	      <repetitive>
-		<value>,</value>
-		<term>typexpr</term>
-	      </repetitive>
-	      <value>)</value>
-	      <term>typeconstr</term>
-	    </choice>
-	    <choice>
-	      <term>typexpr</term>
-	      <value>as &apos;</value>
-	      <term>ident</term>
-	    </choice>
-	    <choice>
-	      <value>[</value>
-	      <term>variant-type</term>
-	      <value>]</value>
-	    </choice>
-	    <choice>
-	      <value>&lt;</value>
-	      <optional>
-		<value>..</value>
-	      </optional>
-	      <value>&gt;</value>
-	    </choice>
-	    <choice>
-	      <value>&lt;</value>
-	      <term>method-type</term>
-	      <repetitive>
-		<value>; </value>
-		<term>method-type</term>
-	      </repetitive>
-	      <optional>
-		<value>; ..</value>
-	      </optional>
-	      <value>&gt;</value>
-	    </choice>
-	    <choice>
-	      <value>#</value>
-	      <term>class-path</term>
-	    </choice>
-	    <choice>
-	      <term>typexpr</term>
-	      <value>#</value>
-	      <term>class-path</term>
-	    </choice>
-	    <choice>
-	      <value>(</value>
-	      <term>typexpr</term>
-	      <repetitive>
-		<value>,</value>
-		<term>typexpr</term>
-	      </repetitive>
-	      <value>)</value>
-	      <value>#</value>
-	      <term>class-path</term>
-	    </choice>
-	  </or>
-	</def>
+        <term>typexpr</term>
+        <def>
+          <or multiline="1">
+            <choice>
+              <value>&apos;</value>
+              <term>ident</term>
+            </choice>
+            <choice>
+              <value>_</value>
+            </choice>
+            <choice>
+              <value>(</value>
+              <term>typexpr</term>
+              <value>)</value>
+            </choice>
+            <choice>
+              <optional>
+                <optional>
+                  <value>?</value>
+                </optional>
+                <term>ident</term>
+                <value>:</value>
+              </optional>
+              <term>typexpr</term>
+              <value>-&gt;</value>
+              <term>typexpr</term>
+            </choice>
+            <choice>
+              <term>typexpr</term>
+              <repetitive count="1">
+                <value>*</value>
+                <term>typexpr</term>
+              </repetitive>
+            </choice>
+            <choice>
+              <term>typeconstr</term>
+            </choice>
+            <choice>
+              <term>typexpr</term>
+              <term>typeconstr</term>
+            </choice>
+            <choice>
+              <value>(</value>
+              <term>typexpr</term>
+              <repetitive>
+                <value>,</value>
+                <term>typexpr</term>
+              </repetitive>
+              <value>)</value>
+              <term>typeconstr</term>
+            </choice>
+            <choice>
+              <term>typexpr</term>
+              <value>as &apos;</value>
+              <term>ident</term>
+            </choice>
+            <choice>
+              <value>[</value>
+              <term>variant-type</term>
+              <value>]</value>
+            </choice>
+            <choice>
+              <value>&lt;</value>
+              <optional>
+                <value>..</value>
+              </optional>
+              <value>&gt;</value>
+            </choice>
+            <choice>
+              <value>&lt;</value>
+              <term>method-type</term>
+              <repetitive>
+                <value>; </value>
+                <term>method-type</term>
+              </repetitive>
+              <optional>
+                <value>; ..</value>
+              </optional>
+              <value>&gt;</value>
+            </choice>
+            <choice>
+              <value>#</value>
+              <term>class-path</term>
+            </choice>
+            <choice>
+              <term>typexpr</term>
+              <value>#</value>
+              <term>class-path</term>
+            </choice>
+            <choice>
+              <value>(</value>
+              <term>typexpr</term>
+              <repetitive>
+                <value>,</value>
+                <term>typexpr</term>
+              </repetitive>
+              <value>)</value>
+              <value>#</value>
+              <term>class-path</term>
+            </choice>
+          </or>
+        </def>
       </bnf>
       <bnf>
-	<term>poly-typexpr</term>
-	<def>
-	  <or multiline="1">
-	    <choice>
-	      <term>typexpr</term>
-	    </choice>
-	    <choice>
-	      <repetitive count="1">
-		<value>'</value>
-		<term>ident</term>
-	      </repetitive>
-	      <value>.</value>
-	      <term>typexpr</term>
-	    </choice>
-	  </or>
-	</def>
+        <term>poly-typexpr</term>
+        <def>
+          <or multiline="1">
+            <choice>
+              <term>typexpr</term>
+            </choice>
+            <choice>
+              <repetitive count="1">
+                <value>'</value>
+                <term>ident</term>
+              </repetitive>
+              <value>.</value>
+              <term>typexpr</term>
+            </choice>
+          </or>
+        </def>
       </bnf>
       <bnf>
-	<term>method-type</term>
-	<def>
-	  <term>method-name</term>
-	  <value>:</value>
-	  <term>poly-typexpr</term>
-	</def>
+        <term>method-type</term>
+        <def>
+          <term>method-name</term>
+          <value>:</value>
+          <term>poly-typexpr</term>
+        </def>
       </bnf>
       <para>
-	В таблице ниже привены относительные приоритет и
-	ассоциативность операторов и конструкций незакрытых типов.
-	Операторы с высшим приоритетом помещены в таблицу первыми.
+        В таблице ниже привены относительные приоритет и
+        ассоциативность операторов и конструкций незакрытых типов.
+        Операторы с высшим приоритетом помещены в таблицу первыми.
       </para>
       <table cols="2">
-	<thead>
-	  <trow>
-	    <tcell>
-	      <para>Оператор</para>
-	    </tcell>
-	    <tcell>
-	      <para>Ассоциативность</para>
-	    </tcell>
-	  </trow>
-	</thead>
-	<tbody>
-	  <trow>
-	    <tcell>
-	      <para>Вызов конструктора типа</para>
-	    </tcell>
-	    <tcell>
-	      <para>--</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>*</para>
-	    </tcell>
-	    <tcell>
-	      <para>--</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>-&gt;</para>
-	    </tcell>
-	    <tcell>
-	      <para>правая</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>as</para>
-	    </tcell>
-	    <tcell>
-	      <para>--</para>
-	    </tcell>
-	  </trow>
-	</tbody>
+        <thead>
+          <trow>
+            <tcell>
+              <para>Оператор</para>
+            </tcell>
+            <tcell>
+              <para>Ассоциативность</para>
+            </tcell>
+          </trow>
+        </thead>
+        <tbody>
+          <trow>
+            <tcell>
+              <para>Вызов конструктора типа</para>
+            </tcell>
+            <tcell>
+              <para>--</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>*</para>
+            </tcell>
+            <tcell>
+              <para>--</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>-&gt;</para>
+            </tcell>
+            <tcell>
+              <para>правая</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>as</para>
+            </tcell>
+            <tcell>
+              <para>--</para>
+            </tcell>
+          </trow>
+        </tbody>
       </table>
       <para>
-	Выражения типа обозначают типы в определениях типов данных, а
-	также в ограничениях типа в образцах и выражениях.
+        Выражения типа обозначают типы в определениях типов данных, а
+        также в ограничениях типа в образцах и выражениях.
       </para>
       <subsection name="Переменные типа" neednumber="0">
-	<para>
-	  Выражение типа <value>'</value> <term>ident</term> означает
-	  переменную типа с именем <term>ident</term>. Выражение
-	  <value>_</value> означает анонимную переменную типа. В
-	  определениях типов данных переменные являются именами
-	  параметров этих типов. В ограничениях они соответствуют
-	  непредусмотренным типам, которые могут быть созданы любым
-	  типом, чтобы соответствовать ограничению. Область действия
-	  именованной переменной как правило ограничивается типом, в
-	  котором она определена, а за его пределами она может быть
-	  только обобщенной. Анонимые переменные такого ограничения не
-	  имеют.
-	</para>
+        <para>
+          Выражение типа <value>'</value> <term>ident</term> означает
+          переменную типа с именем <term>ident</term>. Выражение
+          <value>_</value> означает анонимную переменную типа. В
+          определениях типов данных переменные являются именами
+          параметров этих типов. В ограничениях они соответствуют
+          непредусмотренным типам, которые могут быть созданы любым
+          типом, чтобы соответствовать ограничению. Область действия
+          именованной переменной как правило ограничивается типом, в
+          котором она определена, а за его пределами она может быть
+          только обобщенной. Анонимые переменные такого ограничения не
+          имеют.
+        </para>
       </subsection>
       <subsection name="Типы в скобках" neednumber="0">
-	<para>Выражение <value>(</value> <term>typexpr</term>
-	  <value>)</value> означает то же самое, что и
-	  <term>typexpr</term>.</para>
+        <para>Выражение <value>(</value> <term>typexpr</term>
+          <value>)</value> означает то же самое, что и
+          <term>typexpr</term>.</para>
       </subsection>
       <subsection name="Типы функций" neednumber="0">
-	<para>Выражение типа <term>typexpr</term> <sub>1</sub>
-	  <value>-&gt;</value> <term>typexpr</term> <sub>2</sub>
-	  означает тип функций,отображающий аргументы типа
-	  <term>typexpr</term> <sub>1</sub> на результаты типа
-	  <term>typexpr</term> <sub>2</sub>.
-	</para>
-	<para>
-	  <term>label typexpr</term> <sub>1</sub> <value>-&gt;</value>
-	  <term>typexpr</term> <sub>2</sub> означает тот же тип
-	  функции, однако аргумент помечается меткой
-	  <term>label</term>.</para>
-	<para>
-	  <value>?</value> <term>label typexpr</term> <sub>1</sub>
-	  <value>-&gt;</value> <term>typexpr</term> <sub>2</sub>
-	  означает тип функций,отображающий необязательные аргументы с
-	  меткой типа <term>typexpr</term> <sub>1</sub> на результаты
-	  типа <term>typexpr</term> <sub>2</sub>. Иными словами,
-	  физический тип функции будет <term>typexpr</term>
-	  <sub>1</sub> <value>option -&gt;</value>
-	  <term>typexpr</term> <sub>2</sub>.
-	</para>
+        <para>Выражение типа <term>typexpr</term> <sub>1</sub>
+          <value>-&gt;</value> <term>typexpr</term> <sub>2</sub>
+          означает тип функций,отображающий аргументы типа
+          <term>typexpr</term> <sub>1</sub> на результаты типа
+          <term>typexpr</term> <sub>2</sub>.
+        </para>
+        <para>
+          <term>label typexpr</term> <sub>1</sub> <value>-&gt;</value>
+          <term>typexpr</term> <sub>2</sub> означает тот же тип
+          функции, однако аргумент помечается меткой
+          <term>label</term>.</para>
+        <para>
+          <value>?</value> <term>label typexpr</term> <sub>1</sub>
+          <value>-&gt;</value> <term>typexpr</term> <sub>2</sub>
+          означает тип функций,отображающий необязательные аргументы с
+          меткой типа <term>typexpr</term> <sub>1</sub> на результаты
+          типа <term>typexpr</term> <sub>2</sub>. Иными словами,
+          физический тип функции будет <term>typexpr</term>
+          <sub>1</sub> <value>option -&gt;</value>
+          <term>typexpr</term> <sub>2</sub>.
+        </para>
       </subsection>
       <subsection name="Типы кортежей" neednumber="0">
-	<para>Выражение типа <term>typexpr</term><sub>1</sub>
-	  <value>*</value><term>...</term><value>*</value>
-	  <term>typexpr</term><sub>n</sub>означает тип кортежа,
-	  элементы которого принадлежат к типам
-	  <term>typexpr</term><sub>1</sub>, ...
-	  <term>typexpr</term><sub>n</sub>, соответственно.</para>
+        <para>Выражение типа <term>typexpr</term><sub>1</sub>
+          <value>*</value><term>...</term><value>*</value>
+          <term>typexpr</term><sub>n</sub>означает тип кортежа,
+          элементы которого принадлежат к типам
+          <term>typexpr</term><sub>1</sub>, ...
+          <term>typexpr</term><sub>n</sub>, соответственно.</para>
       </subsection>
       <subsection name="Типы конструкторов">
-	<para>Конструктор типа без параметров, как в случае
-	  <term>typeconstr</term>, является выражением типа.</para>
-	<para>Выражение типа <term>typexpr typeconstr</term>, где
-	  <term>typeconstr</term> - конструктор типа с одним
-	  параметром, означает применение унарного конструктора типа
-	  <term>typeconstr</term> к типу <term>typexpr</term>.</para>
-	<para>Выражение типа
-	  (<term>typexpr</term><sub>1</sub>,...<term>typexpr</term><sub>n</sub>) 
-	  <term>typeconstr</term>, где <term>typeconstr</term> -
-	  конструктор типа с <emph>n</emph> параметров, означает
-	  применение n-нарного коструктора типа
-	  <term>typeconstr</term> к типам с
-	  <term>typexpr</term><sub>1</sub> по
-	  <term>typexpr</term><sub>n</sub>.</para>
+        <para>Конструктор типа без параметров, как в случае
+          <term>typeconstr</term>, является выражением типа.</para>
+        <para>Выражение типа <term>typexpr typeconstr</term>, где
+          <term>typeconstr</term> - конструктор типа с одним
+          параметром, означает применение унарного конструктора типа
+          <term>typeconstr</term> к типу <term>typexpr</term>.</para>
+        <para>Выражение типа
+          (<term>typexpr</term><sub>1</sub>,...<term>typexpr</term><sub>n</sub>)
+          <term>typeconstr</term>, где <term>typeconstr</term> -
+          конструктор типа с <emph>n</emph> параметров, означает
+          применение n-нарного коструктора типа
+          <term>typeconstr</term> к типам с
+          <term>typexpr</term><sub>1</sub> по
+          <term>typexpr</term><sub>n</sub>.</para>
       </subsection>
       <subsection neednumber="0" name="Вариантные типы">
-	<bnf>
-	  <term>variant-type</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<optional>
-		  <value>|</value>
-		</optional>
-		<term>tag-spec</term>
-		<repetitive>
-		  <value>|</value>
-		  <term>tag-spec</term>
-		</repetitive>
-	      </choice>
-	      <choice>
-		<value>&gt;</value>
-		<optional>
-		  <term>tag-spec</term>
-		</optional>
-		<repetitive>
-		  <value>|</value>
-		  <term>tag-spec</term>
-		</repetitive>
-	      </choice>
-	      <choice>
-		<value>&lt;</value>
-		<optional>
-		  <value>|</value>
-		</optional>
-		<term>tag-spec-full</term>
-		<repetitive>
-		  <value>|</value>
-		  <term>tag-spec-full</term>
-		</repetitive>
-		<optional>
-		  <value>&gt;</value>
-		  <repetitive count="1">
-		    <value>`</value>
-		    <term>tag-name</term>
-		  </repetitive>
-		</optional>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>tag-spec</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<value>`</value>
-		<term>tag-name</term>
-		<optional>
-		  <value>of</value>
-		  <term>typexpr</term>
-		</optional>
-	      </choice>
-	      <choice>
-		<term>typexpr</term>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<bnf>
-	  <term>tag-spec-full</term>
-	  <def>
-	    <or multiline="1">
-	      <choice>
-		<value>`</value>
-		<term>tag-name</term>
-		<optional>
-		  <value>of</value>
-		  <term>typexpr</term>
-		</optional>
-		<repetitive>
-		  <value>&amp;</value>
-		  <term>typexpr</term>
-		</repetitive>
-	      </choice>
-	      <choice>
-		<term>typexpr</term>
-	      </choice>
-	    </or>
-	  </def>
-	</bnf>
-	<para>Вариантные типа описывают возможные значения
-	полиморфного варианта.</para>
-	<para>Первый случай является точным вариантным типом: все
-	  возможные теги известны, как и связанные с ними типа, и все
-	  они могут присутствовать в значении. Структура полностью
-	  известна.</para>
-	<para>Второй случай представляет открытый вариантный тиа,
-	  описывающий полиморыное вариантное значение: здесь дается
-	  список тегов для возможного значения, а также связанные с
-	  ними типы. Такой тип все еще совместим с вариантным типом,
-	  содержащим несколько тегов. Особый случай представляет собой
-	  неизвестный тип, вовсе не определяющий тегов, но совместимый
-	  с любым вариантным типом.</para>
-	<para>В третьем случае описывается закрытый вариантный тип. Он
-	  предоставляет информацию о всех возможных тегах и связанных
-	  с ними типах, а также о том, какие теги могут появиться в
-	  значениях. Точный вариантный тип является на самом деле
-	  сокрашением закрытого вариантного типа, в котором все
-	  возможные теги также уже потенциально присутствуют.</para>
-	<para>Во всех трех случаях теги либо описываются
-	  непосредственно в форме <keyword>`tag-name [...]</keyword>,
-	  либо опосредованно, через выражение типа - тогда оно должно
-	  разворачиваться в точный вариантный тип, причем спецификации
-	  тегов должны помещаться на свое место.</para>
-	<para>Полная спецификация вариантных тегов используется только
-	  для неточных закрытых типов. Их можно считать конъюнктивным
-	  типом для аргумента, перечисляющим все типы в спецификации.</para>
-	<para>
-	  Такое конъюнктивное ограничение может оказаться
-	  недостаточным. В подобных ситуациях соответствующий тег
-	  может не использоваться в значении такого типа, что не
-	  означает ошибки типа: можно ведь использовать и другие
-	  доступные теги.
-	</para>
+        <bnf>
+          <term>variant-type</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <optional>
+                  <value>|</value>
+                </optional>
+                <term>tag-spec</term>
+                <repetitive>
+                  <value>|</value>
+                  <term>tag-spec</term>
+                </repetitive>
+              </choice>
+              <choice>
+                <value>&gt;</value>
+                <optional>
+                  <term>tag-spec</term>
+                </optional>
+                <repetitive>
+                  <value>|</value>
+                  <term>tag-spec</term>
+                </repetitive>
+              </choice>
+              <choice>
+                <value>&lt;</value>
+                <optional>
+                  <value>|</value>
+                </optional>
+                <term>tag-spec-full</term>
+                <repetitive>
+                  <value>|</value>
+                  <term>tag-spec-full</term>
+                </repetitive>
+                <optional>
+                  <value>&gt;</value>
+                  <repetitive count="1">
+                    <value>`</value>
+                    <term>tag-name</term>
+                  </repetitive>
+                </optional>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <bnf>
+          <term>tag-spec</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <value>`</value>
+                <term>tag-name</term>
+                <optional>
+                  <value>of</value>
+                  <term>typexpr</term>
+                </optional>
+              </choice>
+              <choice>
+                <term>typexpr</term>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <bnf>
+          <term>tag-spec-full</term>
+          <def>
+            <or multiline="1">
+              <choice>
+                <value>`</value>
+                <term>tag-name</term>
+                <optional>
+                  <value>of</value>
+                  <term>typexpr</term>
+                </optional>
+                <repetitive>
+                  <value>&amp;</value>
+                  <term>typexpr</term>
+                </repetitive>
+              </choice>
+              <choice>
+                <term>typexpr</term>
+              </choice>
+            </or>
+          </def>
+        </bnf>
+        <para>Вариантные типа описывают возможные значения
+        полиморфного варианта.</para>
+        <para>Первый случай является точным вариантным типом: все
+          возможные теги известны, как и связанные с ними типа, и все
+          они могут присутствовать в значении. Структура полностью
+          известна.</para>
+        <para>Второй случай представляет открытый вариантный тиа,
+          описывающий полиморыное вариантное значение: здесь дается
+          список тегов для возможного значения, а также связанные с
+          ними типы. Такой тип все еще совместим с вариантным типом,
+          содержащим несколько тегов. Особый случай представляет собой
+          неизвестный тип, вовсе не определяющий тегов, но совместимый
+          с любым вариантным типом.</para>
+        <para>В третьем случае описывается закрытый вариантный тип. Он
+          предоставляет информацию о всех возможных тегах и связанных
+          с ними типах, а также о том, какие теги могут появиться в
+          значениях. Точный вариантный тип является на самом деле
+          сокрашением закрытого вариантного типа, в котором все
+          возможные теги также уже потенциально присутствуют.</para>
+        <para>Во всех трех случаях теги либо описываются
+          непосредственно в форме <keyword>`tag-name [...]</keyword>,
+          либо опосредованно, через выражение типа - тогда оно должно
+          разворачиваться в точный вариантный тип, причем спецификации
+          тегов должны помещаться на свое место.</para>
+        <para>Полная спецификация вариантных тегов используется только
+          для неточных закрытых типов. Их можно считать конъюнктивным
+          типом для аргумента, перечисляющим все типы в спецификации.</para>
+        <para>
+          Такое конъюнктивное ограничение может оказаться
+          недостаточным. В подобных ситуациях соответствующий тег
+          может не использоваться в значении такого типа, что не
+          означает ошибки типа: можно ведь использовать и другие
+          доступные теги.
+        </para>
       </subsection>
       <subsection name="Объектные типы" neednumber="0">
-	<para>
-	  Объектный тип <value>&lt;</value> <term>method-type</term>
-	  { <value>;</value> <term>method-type</term> }
-	  <value>;</value> является записью типов метода.</para>
-	<para>Каждый метод может иметь явныей полиморфный тип: {
-	  <value>'</value> <term>ident</term> }<index ind="+"/>
-	  <value>.</value> <term>typexpr</term>. Явные полиморфные
-	  переменные имеют локальную область видимости, кроме того,
-	  явный полиморфный тип может быть унифицирован только со
-	  своим эквивалентом, полиморфные переменные которого стоят на
-	  тех же местах.</para>
-	<para>
-	  Тип <value>&lt;</value> <term>method-type</term> {
-	  <value>;</value> <term>method-type</term> } <value>; .. &gt;
-	  </value> является типом объекта с методами и связанными с
-	  ними типами, описанными в
-	  <term>method-type</term><sub>1</sub>, ...,
-	  <term>method-type</term><sub>n</sub> и вероятно еще
-	  какими-то методами, представленными многоточие, которое на
-	  самом деле считается особым типом перменной (также
-	  называемой <emph>row variable</emph>), заменяющей любое
-	  количество дополнительных типов метода.</para>
+        <para>
+          Объектный тип <value>&lt;</value> <term>method-type</term>
+          { <value>;</value> <term>method-type</term> }
+          <value>;</value> является записью типов метода.</para>
+        <para>Каждый метод может иметь явныей полиморфный тип: {
+          <value>'</value> <term>ident</term> }<index ind="+"/>
+          <value>.</value> <term>typexpr</term>. Явные полиморфные
+          переменные имеют локальную область видимости, кроме того,
+          явный полиморфный тип может быть унифицирован только со
+          своим эквивалентом, полиморфные переменные которого стоят на
+          тех же местах.</para>
+        <para>
+          Тип <value>&lt;</value> <term>method-type</term> {
+          <value>;</value> <term>method-type</term> } <value>; .. &gt;
+          </value> является типом объекта с методами и связанными с
+          ними типами, описанными в
+          <term>method-type</term><sub>1</sub>, ...,
+          <term>method-type</term><sub>n</sub> и вероятно еще
+          какими-то методами, представленными многоточие, которое на
+          самом деле считается особым типом перменной (также
+          называемой <emph>row variable</emph>), заменяющей любое
+          количество дополнительных типов метода.</para>
       </subsection>
       <subsection name="Типы #" neednumber="0">
-	<para>
-	  Тип <value>#</value> <term>class-path</term> - особый случай
-	  сокращения, унифицируемого с типом любого объекта,
-	  принандлежащего к субклассу класса <term>class-path</term>.
-	  Он обрабатывается особым образом, так как обычно скрывает
-	  тип переменной в многоточии, представляющем методы, которые
-	  могут быть добавлены в субкласс. В частности, этот тип
-	  уничтожается при инстанциировании многоточия. Каждое
-	  выражение <value>#</value> <term>class-path</term>
-	  определяет новую переменную, поэтому тип <value>#</value>
-	  <term>class-path</term> <value>-&gt;</value>
-	  <value>#</value> <term>class-path</term>, как правило,
-	  отличается от типа (<value>#</value> <term>class-path</term>
-	  <value>as '</value><term>ident</term>)<value>-&gt;
-	    '</value><term>ident</term>.</para>
-	<para>Использование таких типов для сокращения вариантов не
-	  рекомендуется. Если <command>t</command> - точный вариантный
-	  тип, то <command>#t</command> транслируется в <command>[&lt;
-	    t]</command>, а <value>#t[&gt; `tag</value><sub>1</sub>
-	  ... <value>`tag</value><sub>k</sub><value>]</value> - в
-	  <value>[&lt; t &gt; `tag</value><sub>1</sub> ...
-	  <value>`tag</value><sub>k</sub><value>]</value>.</para>
+        <para>
+          Тип <value>#</value> <term>class-path</term> - особый случай
+          сокращения, унифицируемого с типом любого объекта,
+          принандлежащего к субклассу класса <term>class-path</term>.
+          Он обрабатывается особым образом, так как обычно скрывает
+          тип переменной в многоточии, представляющем методы, которые
+          могут быть добавлены в субкласс. В частности, этот тип
+          уничтожается при инстанциировании многоточия. Каждое
+          выражение <value>#</value> <term>class-path</term>
+          определяет новую переменную, поэтому тип <value>#</value>
+          <term>class-path</term> <value>-&gt;</value>
+          <value>#</value> <term>class-path</term>, как правило,
+          отличается от типа (<value>#</value> <term>class-path</term>
+          <value>as '</value><term>ident</term>)<value>-&gt;
+            '</value><term>ident</term>.</para>
+        <para>Использование таких типов для сокращения вариантов не
+          рекомендуется. Если <command>t</command> - точный вариантный
+          тип, то <command>#t</command> транслируется в <command>[&lt;
+            t]</command>, а <value>#t[&gt; `tag</value><sub>1</sub>
+          ... <value>`tag</value><sub>k</sub><value>]</value> - в
+          <value>[&lt; t &gt; `tag</value><sub>1</sub> ...
+          <value>`tag</value><sub>k</sub><value>]</value>.</para>
       </subsection>
       <subsection name="Типы вариантов и записей" neednumber="0">
-	<para>Выражений типа описывающих определенные типы вариантов
-	  и записей нет, так как они всегда имеют имя, то есть
-	  определяются до использования и ссылки на них. Определения
-	  типов описаны в разделе 6.8.1.</para>
+        <para>Выражений типа описывающих определенные типы вариантов
+          и записей нет, так как они всегда имеют имя, то есть
+          определяются до использования и ссылки на них. Определения
+          типов описаны в разделе 6.8.1.</para>
       </subsection>
     </section>
     <section name="Константы">
       <bnf>
-	<term>constant</term>
-	<def>
-	  <or multiline="1">
-	    <choice>
-	      <term>integer-literal</term>
-	    </choice>
-	    <choice>
-	      <term>float-literal</term>
-	    </choice>
-	    <choice>
-	      <term>char-literal</term>
-	    </choice>
-	    <choice>
-	      <term>string-literal</term>
-	    </choice>
-	    <choice>
-	      <value>`</value><term>tag-name</term>
-	    </choice>
-	  </or>
-	</def>
+        <term>constant</term>
+        <def>
+          <or multiline="1">
+            <choice>
+              <term>integer-literal</term>
+            </choice>
+            <choice>
+              <term>float-literal</term>
+            </choice>
+            <choice>
+              <term>char-literal</term>
+            </choice>
+            <choice>
+              <term>string-literal</term>
+            </choice>
+            <choice>
+              <value>`</value><term>tag-name</term>
+            </choice>
+          </or>
+        </def>
       </bnf>
       <para>Синтаксический класс констант включает литералы четырех
-	базовых типов (целые, числа с плавающей точкой, символы,
-	симовольные строки) и константные конструкторы как нормальных,
-	так и полиморфных вариантов.</para>
+        базовых типов (целые, числа с плавающей точкой, символы,
+        симовольные строки) и константные конструкторы как нормальных,
+        так и полиморфных вариантов.</para>
     </section>
     <section name="Образцы">
       <bnf>
-	<term>pattern</term>
-	<def>
-	  <or multiline="1">
-	    <choice>
-	      <term>value-name</term>
-	    </choice>
-	    <choice>
-	      <value>_</value>
-	    </choice>
-	    <choice>
-	      <term>constant</term>
-	    </choice>
-	    <choice>
-	      <term>pattern</term>
-	      <value>as</value>
-	      <term>value-name</term>
-	    </choice>
-	    <choice>
-	      <value>(</value>
-	      <term>pattern</term>
-	      <value>)</value>
-	    </choice>
-	    <choice>
-	      <value>(</value>
-	      <term>pattern</term>
-	      <value>:</value>
-	      <term>typexpr</term>
-	      <value>)</value>
-	    </choice>
-	    <choice>
-	      <term>pattern</term>
-	      <value>|</value>
-	      <term>pattern</term>
-	    </choice>
-	    <choice>
-	      <term>ncconstr</term>
-	      <term>pattern</term>
-	    </choice>
-	    <choice>
-	      <value>`</value>
-	      <term>tag-name</term>
-	      <term>pattern</term>
-	    </choice>
-	    <choice>
-	      <value>#</value>
-	      <term>typeconstr-name</term>
-	    </choice>
-	    <choice>
-	      <term>pattern</term>
-	      <repetitive>
-		<value>,</value>
-		<term>pattern</term>
-	      </repetitive>
-	    </choice>
-	    <choice>
-	      <value>{</value>
-	      <term>field</term>
-	      <value>=</value>
-	      <term>pattern</term>
-	      <repetitive>
-		<value>;</value>
-		<term>field</term>
-		<value>=</value>
-		<term>pattern</term>
-	      </repetitive>
-	      <value>}</value>
-	    </choice>
-	    <choice>
-	      <value>[</value>
-	      <term>pattern</term>
-	      <repetitive>
-		<value>;</value>
-		<term>pattern</term>
-	      </repetitive>
-	      <value>]</value>
-	    </choice>
-	    <choice>
-	      <term>pattern</term>
-	      <value>::</value>
-	      <term>pattern</term>
-	    </choice>
-	    <choice>
-	      <value>[|</value>
-	      <term>pattern</term>
-	      <repetitive>
-		<value>;</value>
-		<term>pattern</term>
-	      </repetitive>
-	      <value>|]</value>
-	    </choice>
-	  </or>
-	</def>
+        <term>pattern</term>
+        <def>
+          <or multiline="1">
+            <choice>
+              <term>value-name</term>
+            </choice>
+            <choice>
+              <value>_</value>
+            </choice>
+            <choice>
+              <term>constant</term>
+            </choice>
+            <choice>
+              <term>pattern</term>
+              <value>as</value>
+              <term>value-name</term>
+            </choice>
+            <choice>
+              <value>(</value>
+              <term>pattern</term>
+              <value>)</value>
+            </choice>
+            <choice>
+              <value>(</value>
+              <term>pattern</term>
+              <value>:</value>
+              <term>typexpr</term>
+              <value>)</value>
+            </choice>
+            <choice>
+              <term>pattern</term>
+              <value>|</value>
+              <term>pattern</term>
+            </choice>
+            <choice>
+              <term>ncconstr</term>
+              <term>pattern</term>
+            </choice>
+            <choice>
+              <value>`</value>
+              <term>tag-name</term>
+              <term>pattern</term>
+            </choice>
+            <choice>
+              <value>#</value>
+              <term>typeconstr-name</term>
+            </choice>
+            <choice>
+              <term>pattern</term>
+              <repetitive>
+                <value>,</value>
+                <term>pattern</term>
+              </repetitive>
+            </choice>
+            <choice>
+              <value>{</value>
+              <term>field</term>
+              <value>=</value>
+              <term>pattern</term>
+              <repetitive>
+                <value>;</value>
+                <term>field</term>
+                <value>=</value>
+                <term>pattern</term>
+              </repetitive>
+              <value>}</value>
+            </choice>
+            <choice>
+              <value>[</value>
+              <term>pattern</term>
+              <repetitive>
+                <value>;</value>
+                <term>pattern</term>
+              </repetitive>
+              <value>]</value>
+            </choice>
+            <choice>
+              <term>pattern</term>
+              <value>::</value>
+              <term>pattern</term>
+            </choice>
+            <choice>
+              <value>[|</value>
+              <term>pattern</term>
+              <repetitive>
+                <value>;</value>
+                <term>pattern</term>
+              </repetitive>
+              <value>|]</value>
+            </choice>
+          </or>
+        </def>
       </bnf>
       <para>В таблице ниже показан относительный приоритет и
       ассоциативность незакрытых конструкций образцов. Элементы с
       высшим приоритетом помещены в таблицу первыми.</para>
       <table cols="2">
-	<thead>
-	  <trow>
-	    <tcell>
-	      <para>Оператор</para>
-	    </tcell>
-	    <tcell>
-	      <para>Ассоциативность</para>
-	    </tcell>
-	  </trow>
-	</thead>
-	<tbody>
-	  <trow>
-	    <tcell>
-	      <para>Вызов конструктора</para>
-	    </tcell>
-	    <tcell>
-	      <para>--</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>::</para>
-	    </tcell>
-	    <tcell>
-	      <para>правая</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>,</para>
-	    </tcell>
-	    <tcell>
-	      <para>--</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>|</para>
-	    </tcell>
-	    <tcell>
-	      <para>левая</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>as</para>
-	    </tcell>
-	    <tcell>
-	      <para>--</para>
-	    </tcell>
-	  </trow>
-	</tbody>
+        <thead>
+          <trow>
+            <tcell>
+              <para>Оператор</para>
+            </tcell>
+            <tcell>
+              <para>Ассоциативность</para>
+            </tcell>
+          </trow>
+        </thead>
+        <tbody>
+          <trow>
+            <tcell>
+              <para>Вызов конструктора</para>
+            </tcell>
+            <tcell>
+              <para>--</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>::</para>
+            </tcell>
+            <tcell>
+              <para>правая</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>,</para>
+            </tcell>
+            <tcell>
+              <para>--</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>|</para>
+            </tcell>
+            <tcell>
+              <para>левая</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>as</para>
+            </tcell>
+            <tcell>
+              <para>--</para>
+            </tcell>
+          </trow>
+        </tbody>
       </table>
       <para>Образцы - это шаблоны, позволяющие выбирать структуры
-	данных определенной формы и связывать идентификаторы с
-	компонентами структуры данных. Операция выбора называется
-	сопоставлением по образцу; ее результат - либо "это значение
-	не подходит для этого образца", либо "значение подходит для
-	образца, что дает в резулльтате связывание имен со
-	значениями".</para>
+        данных определенной формы и связывать идентификаторы с
+        компонентами структуры данных. Операция выбора называется
+        сопоставлением по образцу; ее результат - либо "это значение
+        не подходит для этого образца", либо "значение подходит для
+        образца, что дает в резулльтате связывание имен со
+        значениями".</para>
       <subsection name="Образцы переменных" neednumber="0">
-	<para>Образец, включающий только имя значения совпадает с
-	  любым значением и связывает последнее с именем. Образец
-	  <value>_</value> также совпадает с любым значением, но не
-	  дает связывания.</para>
-	<para>Образцы <emph>линейны</emph>: переменная может
-	  встречаться в конкретном образцк несколько раз. В частности,
-	  использование только образца не позволяет проверить на
-	  равенство две части структуры данных (впрочем, для этой цели
-	  может быть использована конструкция <value>when</value>).</para>
+        <para>Образец, включающий только имя значения совпадает с
+          любым значением и связывает последнее с именем. Образец
+          <value>_</value> также совпадает с любым значением, но не
+          дает связывания.</para>
+        <para>Образцы <emph>линейны</emph>: переменная может
+          встречаться в конкретном образцк несколько раз. В частности,
+          использование только образца не позволяет проверить на
+          равенство две части структуры данных (впрочем, для этой цели
+          может быть использована конструкция <value>when</value>).</para>
       </subsection>
       <subsection name="Образцы констант" neednumber="0">
-	<para>Образец, включающий лишь константу, совпадает со
-	  значением, равным этой константе.</para>
+        <para>Образец, включающий лишь константу, совпадает со
+          значением, равным этой константе.</para>
       </subsection>
       <subsection name="Образцы псевдонимов" neednumber="0">
-	<para>Образец <term>pattern</term><sub>1</sub>
-	  <value>as</value> <term>value-name</term> совпадает с теми
-	  же значениями, что и <term>pattern</term><sub>1</sub>. Если
-	  сопоставление с <term>pattern</term><sub>1</sub> успешно, то
-	  помимо связывания в результате этой операции имя
-	  <term>name</term> связывается с совпавшим значением.</para>
+        <para>Образец <term>pattern</term><sub>1</sub>
+          <value>as</value> <term>value-name</term> совпадает с теми
+          же значениями, что и <term>pattern</term><sub>1</sub>. Если
+          сопоставление с <term>pattern</term><sub>1</sub> успешно, то
+          помимо связывания в результате этой операции имя
+          <term>name</term> связывается с совпавшим значением.</para>
       </subsection>
       <subsection name="Образцы в скобках" neednumber="0">
-	<para>Образец <value>(</value>
-	  <term>pattern</term><sub>1</sub> <value>)</value> совпадает
-	  с теми же значениями, что и
-	  <term>pattern</term><sub>1</sub>. Кроме того, в такой форме
-	  может присутствовать ограничение типа: <value>(</value>
-	  <term>pattern</term><sub>1</sub> <value>:</value>
-	  <term>typexpr</term> <value>)</value>. Оно требует, чтобы
-	  тип <term>pattern</term><sub>1</sub> был совместим с
-	  <term>type</term>.</para>
+        <para>Образец <value>(</value>
+          <term>pattern</term><sub>1</sub> <value>)</value> совпадает
+          с теми же значениями, что и
+          <term>pattern</term><sub>1</sub>. Кроме того, в такой форме
+          может присутствовать ограничение типа: <value>(</value>
+          <term>pattern</term><sub>1</sub> <value>:</value>
+          <term>typexpr</term> <value>)</value>. Оно требует, чтобы
+          тип <term>pattern</term><sub>1</sub> был совместим с
+          <term>type</term>.</para>
       </subsection>
       <subsection name="Образцы &quot;или&quot;" neednumber="0">
-	<para>Образец  <term>pattern</term><sub>1</sub>
-	  <value>|</value>  <term>pattern</term><sub>2</sub>
-	  представляет собой логическое "или" двух образцов. Значение,
-	  совпадающее с ним, должно совпадать либо с
-	  <term>pattern</term><sub>1</sub>, либо с
-	  <term>pattern</term><sub>2</sub>. Образцы
-	  <term>pattern</term><sub>1</sub> и
-	  <term>pattern</term><sub>2</sub> должны связывать точно одни
-	  и те же идентификаторы с переменными, имеющими такой же тип.
-	  Связывание осущесьтвляется либо при успешном сопоставлении с
-	  <term>pattern</term><sub>1</sub>, либо с
-	  <term>pattern</term><sub>2</sub>. Если успешны оба
-	  сопоставления, конкретный выбор связывания
-	  неопределен.</para>
+        <para>Образец  <term>pattern</term><sub>1</sub>
+          <value>|</value>  <term>pattern</term><sub>2</sub>
+          представляет собой логическое "или" двух образцов. Значение,
+          совпадающее с ним, должно совпадать либо с
+          <term>pattern</term><sub>1</sub>, либо с
+          <term>pattern</term><sub>2</sub>. Образцы
+          <term>pattern</term><sub>1</sub> и
+          <term>pattern</term><sub>2</sub> должны связывать точно одни
+          и те же идентификаторы с переменными, имеющими такой же тип.
+          Связывание осущесьтвляется либо при успешном сопоставлении с
+          <term>pattern</term><sub>1</sub>, либо с
+          <term>pattern</term><sub>2</sub>. Если успешны оба
+          сопоставления, конкретный выбор связывания
+          неопределен.</para>
       </subsection>
       <subsection name="Образцы вариантов" neednumber="0">
-	<para>Образец  <term>ncconstr pattern</term><sub>1</sub>
-	  совпадает со всеми вариантами, конструкторы которых равны
-	  <term>ncconstr</term>, а аргументы совпадают с
-	  <term>pattern</term><sub>1</sub>.</para>
-	<para>Образец  <term>pattern</term><sub>1</sub>
-	  <value>::</value>  <term>pattern</term><sub>2</sub>
-	  совпадает с непустым списком, первый элемент которого
-	  совпадает с  <term>pattern</term><sub>1</sub>, а последний -
-	  с  <term>pattern</term><sub>2</sub>. Этот образец работает
-	  так же, как <value>(::) (</value>
-	  <term>pattern</term><sub>1</sub> <value>,</value>
-	  <term>pattern</term><sub>2</sub> <value>)</value>.</para>
-	<para>Образец <value>[</value>
-	  <term>pattern</term><sub>1</sub> <value>; ... ;</value>
-	  <term>pattern</term><sub>n</sub> <value>]</value> совпадает
-	  со списоком из <emph>n</emph> элементов, совпадающих с
-	  образцами  <term>pattern</term><sub>1</sub> ...
-	  <term>pattern</term><sub>n</sub>, соответственно. Он
-	  работает так же, как и  <term>pattern</term><sub>1</sub>
-	  <value>::</value> ... <value>::</value>
-	  <term>pattern</term><sub>n</sub> <value>[]</value>.</para>
+        <para>Образец  <term>ncconstr pattern</term><sub>1</sub>
+          совпадает со всеми вариантами, конструкторы которых равны
+          <term>ncconstr</term>, а аргументы совпадают с
+          <term>pattern</term><sub>1</sub>.</para>
+        <para>Образец  <term>pattern</term><sub>1</sub>
+          <value>::</value>  <term>pattern</term><sub>2</sub>
+          совпадает с непустым списком, первый элемент которого
+          совпадает с  <term>pattern</term><sub>1</sub>, а последний -
+          с  <term>pattern</term><sub>2</sub>. Этот образец работает
+          так же, как <value>(::) (</value>
+          <term>pattern</term><sub>1</sub> <value>,</value>
+          <term>pattern</term><sub>2</sub> <value>)</value>.</para>
+        <para>Образец <value>[</value>
+          <term>pattern</term><sub>1</sub> <value>; ... ;</value>
+          <term>pattern</term><sub>n</sub> <value>]</value> совпадает
+          со списоком из <emph>n</emph> элементов, совпадающих с
+          образцами  <term>pattern</term><sub>1</sub> ...
+          <term>pattern</term><sub>n</sub>, соответственно. Он
+          работает так же, как и  <term>pattern</term><sub>1</sub>
+          <value>::</value> ... <value>::</value>
+          <term>pattern</term><sub>n</sub> <value>[]</value>.</para>
       </subsection>
       <subsection name="Образцы полиморфных вариантов" neednumber="0">
-	<para>Образец <value>`tag-name</value>
-	  <term>pattern</term><sub>1</sub> совпадает с любым
-	  полиморфным вариантом, тег которого равен
-	  <term>tag-name</term>, а аргумент совпадает с
-	  <term>pattern</term><sub>1</sub>.</para>
+        <para>Образец <value>`tag-name</value>
+          <term>pattern</term><sub>1</sub> совпадает с любым
+          полиморфным вариантом, тег которого равен
+          <term>tag-name</term>, а аргумент совпадает с
+          <term>pattern</term><sub>1</sub>.</para>
       </subsection>
       <subsection name="Образцы сокращений вариантов" neednumber="0">
-	<para>Если определен тип [<value>('a, 'b, ...)</value>]
-	  <term>typeconstr</term> <value>=[ `tag</value><sub>1</sub>
-	  <term>t</term><sub>1</sub> <value>|</value> ...
-	  <value>`tag</value><sub>n</sub> <term>t</term><sub>n</sub>,
-	  то образец #<term>typeconstr</term> является сокращеним для
-	  образца-или
-	  <value>(`tag</value><sub>1</sub><value>(_:</value><term>t</term><sub>1</sub> 
-	  <value>)|</value> ... <value>|</value>
-	  <value>(`tag</value><sub>n</sub><value>(_:</value><term>t</term><sub>n</sub> 
-	  <value>))</value> и совпадает с любым значением типа
-	  #<term>typeconstr</term>.</para>
+        <para>Если определен тип [<value>('a, 'b, ...)</value>]
+          <term>typeconstr</term> <value>=[ `tag</value><sub>1</sub>
+          <term>t</term><sub>1</sub> <value>|</value> ...
+          <value>`tag</value><sub>n</sub> <term>t</term><sub>n</sub>,
+          то образец #<term>typeconstr</term> является сокращеним для
+          образца-или
+          <value>(`tag</value><sub>1</sub><value>(_:</value><term>t</term><sub>1</sub>
+          <value>)|</value> ... <value>|</value>
+          <value>(`tag</value><sub>n</sub><value>(_:</value><term>t</term><sub>n</sub>
+          <value>))</value> и совпадает с любым значением типа
+          #<term>typeconstr</term>.</para>
       </subsection>
       <subsection name="Образцы кортежей" neednumber="0">
-	<para>Образец  <term>pattern</term><sub>1</sub>
-	  <value>,</value> ... <value>,</value>
-	  <term>pattern</term><sub>n</sub> совпадает с
-	  <emph>n</emph>-элементным кортежем, компоненты которого
-	  совпадают с образцами от  <term>pattern</term><sub>1</sub>
-	  до  <term>pattern</term><sub>n</sub>. Иначе говоря, образец
-	  совпадает со значениями кортежа (<term>v</term><sub>1</sub>,
-	  ..., <term>v</term><sub>n</sub>) так, что
-	  <term>pattern</term><sub>i</sub> совпадаетс с
-	  <term>v</term><sub>i</sub> для i = 1, ... , n.</para>
+        <para>Образец  <term>pattern</term><sub>1</sub>
+          <value>,</value> ... <value>,</value>
+          <term>pattern</term><sub>n</sub> совпадает с
+          <emph>n</emph>-элементным кортежем, компоненты которого
+          совпадают с образцами от  <term>pattern</term><sub>1</sub>
+          до  <term>pattern</term><sub>n</sub>. Иначе говоря, образец
+          совпадает со значениями кортежа (<term>v</term><sub>1</sub>,
+          ..., <term>v</term><sub>n</sub>) так, что
+          <term>pattern</term><sub>i</sub> совпадаетс с
+          <term>v</term><sub>i</sub> для i = 1, ... , n.</para>
       </subsection>
       <subsection name="Образцы записей">
-	<para>Образец <value>{</value> <term>field</term><sub>1</sub>
-	  <value>=</value>  <term>pattern</term><sub>1</sub> <value>;
-	    ... ; </value> <term>field</term><sub>n</sub>
-	  <value>=</value>  <term>pattern</term><sub>n</sub>
-	  <value>}</value> совпадает с записью, в которой определены
-	  по крайней мере поля от <term>field</term><sub>1</sub> до
-	  <term>field</term><sub>n</sub> так, чтобы значение,
-	  связанное с полем <term>field</term><sub>i</sub> совпадало с
-	  образцом <term>pattern</term><sub>i</sub> для i = 1, ..., n.
-	  Запись может определять больше полей, но значения, связанные
-	  с ними не учитываются при сопоставлении.</para>
+        <para>Образец <value>{</value> <term>field</term><sub>1</sub>
+          <value>=</value>  <term>pattern</term><sub>1</sub> <value>;
+            ... ; </value> <term>field</term><sub>n</sub>
+          <value>=</value>  <term>pattern</term><sub>n</sub>
+          <value>}</value> совпадает с записью, в которой определены
+          по крайней мере поля от <term>field</term><sub>1</sub> до
+          <term>field</term><sub>n</sub> так, чтобы значение,
+          связанное с полем <term>field</term><sub>i</sub> совпадало с
+          образцом <term>pattern</term><sub>i</sub> для i = 1, ..., n.
+          Запись может определять больше полей, но значения, связанные
+          с ними не учитываются при сопоставлении.</para>
       </subsection>
       <subsection name="Образцы массивов" neednumber="0">
-	<para>Образец <value>[|</value>
-	  <term>pattern</term><sub>1</sub> <value>;</value> ...
-	  <value>;</value> <term>pattern</term><sub>n</sub>
-	  <value>|]</value> совпадает с массивом длины <emph>n</emph>
-	  так, что элемент с индексом <emph>i</emph> совпадает с
-	  образцом <term>pattern</term><sub>i</sub> для i = 1, ...,
-	  n.</para>
+        <para>Образец <value>[|</value>
+          <term>pattern</term><sub>1</sub> <value>;</value> ...
+          <value>;</value> <term>pattern</term><sub>n</sub>
+          <value>|]</value> совпадает с массивом длины <emph>n</emph>
+          так, что элемент с индексом <emph>i</emph> совпадает с
+          образцом <term>pattern</term><sub>i</sub> для i = 1, ...,
+          n.</para>
       </subsection>
     </section>
     <section name="Выражения">
       <bnf>
-	<term>expr</term>
-	<def>
-	  <or multiline="1">
-	    <choice>
-	      <term>value-path</term>
-	    </choice>
-	    <choice>
-	      <term>constant</term>
-	    </choice>
-	    <choice>
-	      <value>(</value>
-	      <term>expr</term>
-	      <value>)</value>
-	    </choice>
-	    <choice>
-	      <value>begin</value>
-	      <term>expr</term>
-	      <value>end</value>
-	    </choice>
-	    <choice>
-	      <value>(</value>
-	      <term>expr</term>
-	      <value>:</value>
-	      <term>typexpr</term>
-	      <value>)</value>
-	    </choice>
-	    <choice>
-	      <term>expr</term>
-	      <value>,</value>
-	      <term>expr</term>
-	      <repetitive>
-		<value>,</value>
-		<term>expr</term>
-	      </repetitive>
-	    </choice>
-	    <choice>
-	      <term>ncconstr expr</term>
-	    </choice>
-	    <choice>
-	      <value>`</value>
-	      <term>tag-name</term>
-	      <term>expr</term>
-	    </choice>
-	    <choice>
-	      <term>expr</term>
-	      <value>::</value>
-	      <term>expr</term>
-	    </choice>
-	    <choice>
-	      <value>[</value>
-	      <term>expr</term>
-	      <repetitive>
-		<value>;</value>
-		<term>expr</term>
-	      </repetitive>
-	      <value>]</value>
-	    </choice>
-	     <choice>
-	      <value>[|</value>
-	      <term>expr</term>
-	      <repetitive>
-		<value>;</value>
-		<term>expr</term>
-	      </repetitive>
-	      <value>|]</value>
-	    </choice>
-	    <choice>
-	      <value>{</value>
-	      <term>field</term>
-	      <value>=</value>
-	      <term>expr</term>
-	      <repetitive>
-		<value>;</value>
-		<term>field</term>
-		<value>=</value>
-		<term>expr</term>
-	      </repetitive>
-	      <value>}</value>
-	    </choice>
-	    <choice>
-	      <value>{</value>
-	      <term>expr</term>
-	      <value>with</value>
-	      <term>field</term>
-	      <value>=</value>
-	      <term>expr</term>
-	      <repetitive>
-		<value>;</value>
-		<term>field</term>
-		<value>=</value>
-		<term>expr</term>
-	      </repetitive>
-	      <value>}</value>
-	    </choice>
-	    <choice>
-	      <term>expr</term>
-	      <repetitive count="1">
-		<term>argument</term>
-	      </repetitive>
-	    </choice>
-	    <choice>
-	      <term>prefix-symbol</term>
-	      <term>expr</term>
-	    </choice>
-	    <choice>
-	      <term>expr</term>
-	      <term>infix-op</term>
-	      <term>expr</term>
-	    </choice>
-	    <choice>
-	      <term>expr</term>
-	      <value>.</value>
-	      <term>field</term>
-	    </choice>
-	    <choice>
-	      <term>expr</term>
-	      <value>.</value>
-	      <term>field</term>
-	      <value>&lt;-</value>
-	      <term>expr</term>
-	    </choice>
-	    <choice>
-	      <term>expr</term>
-	      <value>.(</value>
-	      <term>expr</term>
-	      <value>)</value>
-	    </choice>
-	    <choice>
-	      <term>expr</term>
-	      <value>.(</value>
-	      <term>expr</term>
-	      <value>)</value>
-	      <value>&lt;-</value>
-	      <term>expr</term>
-	    </choice>
-	    <choice>
-	      <term>expr</term>
-	      <value>.[</value>
-	      <term>expr</term>
-	      <value>]</value>
-	    </choice>
-	     <choice>
-	      <term>expr</term>
-	      <value>.[</value>
-	      <term>expr</term>
-	      <value>]</value>
-	      <value>&lt;-</value>
-	      <term>expr</term>
-	    </choice>
-	    <choice>
-	      <value>if</value>
-	      <term>expr</term>
-	      <value>then</value>
-	      <term>expr</term>
-	      <optional>
-		<value>else</value>
-		<term>expr</term>
-	      </optional>
-	    </choice>
-	    <choice>
-	      <value>while</value>
-	      <term>expr</term>
-	      <value>do</value>
-	      <term>expr</term>
-	      <value>done</value>
-	    </choice>
-	    <choice>
-	      <value>for</value>
-	      <term>ident</term>
-	      <value>=</value>
-	      <term>expr</term>
-	      <group>
-		<or>
-		  <choice>
-		    <value>to</value>
-		  </choice>
-		  <choice>
-		    <value>downto</value>
-		  </choice>
-		</or>
-	      </group>
-	      <term>expr</term>
-	      <value>do</value>
-	      <term>expr</term>
-	      <value>done</value>
-	    </choice>
-	    <choice>
-	      <term>expr</term>
-	      <value>;</value>
-	      <term>expr</term>
-	    </choice>
-	    <choice>
-	      <value>match</value>
-	      <term>expr</term>
-	      <value>with</value>
-	      <term>pattern-matching</term>
-	    </choice>
-	    <choice>
-	      <value>function</value>
-	      <term>pattern-matching</term>
-	    </choice>
-	    <choice>
-	      <value>fun</value>
-	      <term>pattern-matching</term>
-	    </choice>
-	    <choice>
-	      <value>try</value>
-	      <term>expr</term>
-	      <value>with</value>
-	      <term>pattern-matching</term>
-	    </choice>
-	    <choice>
-	      <value>let</value>
-	      <optional>
-		<term>rec</term>
-	      </optional>
-	      <term>let-binding</term>
-	      <repetitive>
-		<value>and</value>
-		<term>let-binding</term>
-	      </repetitive>
-	      <value>in</value>
-	      <term>expr</term>
-	    </choice>
-	    <choice>
-	      <value>new</value>
-	      <term>class-path</term>
-	    </choice>
-	    <choice>
-	      <term>expr</term>
-	      <value>#</value>
-	      <term>method-name</term>
-	    </choice>
-	    <choice>
-	      <value>(</value>
-	      <term>expr</term>
-	      <value>:&gt;</value>
-	      <term>typexpr</term>
-	      <value>)</value>
-	    </choice>
-	    <choice>
-	      <value>(</value>
-	      <term>expr</term>
-	      <value>:</value>
-	      <term>typexpr</term>
-	      <value>:&gt;</value>
-	      <term>typexpr</term>
-	      <value>)</value>
-	    </choice>
-	    <choice>
-	      <value>{&lt;</value>
-	      <term>inst-var-name</term>
-	      <value>=</value>
-	      <term>expr</term>
-	      <repetitive>
-		<value>;</value>
-		<term>inst-var-name</term>
-		<value>=</value>
-		<term>expr</term>
-	      </repetitive>
-	      <value>&gt;}</value>
-	    </choice>
-	  </or>
-	</def>
+        <term>expr</term>
+        <def>
+          <or multiline="1">
+            <choice>
+              <term>value-path</term>
+            </choice>
+            <choice>
+              <term>constant</term>
+            </choice>
+            <choice>
+              <value>(</value>
+              <term>expr</term>
+              <value>)</value>
+            </choice>
+            <choice>
+              <value>begin</value>
+              <term>expr</term>
+              <value>end</value>
+            </choice>
+            <choice>
+              <value>(</value>
+              <term>expr</term>
+              <value>:</value>
+              <term>typexpr</term>
+              <value>)</value>
+            </choice>
+            <choice>
+              <term>expr</term>
+              <value>,</value>
+              <term>expr</term>
+              <repetitive>
+                <value>,</value>
+                <term>expr</term>
+              </repetitive>
+            </choice>
+            <choice>
+              <term>ncconstr expr</term>
+            </choice>
+            <choice>
+              <value>`</value>
+              <term>tag-name</term>
+              <term>expr</term>
+            </choice>
+            <choice>
+              <term>expr</term>
+              <value>::</value>
+              <term>expr</term>
+            </choice>
+            <choice>
+              <value>[</value>
+              <term>expr</term>
+              <repetitive>
+                <value>;</value>
+                <term>expr</term>
+              </repetitive>
+              <value>]</value>
+            </choice>
+             <choice>
+              <value>[|</value>
+              <term>expr</term>
+              <repetitive>
+                <value>;</value>
+                <term>expr</term>
+              </repetitive>
+              <value>|]</value>
+            </choice>
+            <choice>
+              <value>{</value>
+              <term>field</term>
+              <value>=</value>
+              <term>expr</term>
+              <repetitive>
+                <value>;</value>
+                <term>field</term>
+                <value>=</value>
+                <term>expr</term>
+              </repetitive>
+              <value>}</value>
+            </choice>
+            <choice>
+              <value>{</value>
+              <term>expr</term>
+              <value>with</value>
+              <term>field</term>
+              <value>=</value>
+              <term>expr</term>
+              <repetitive>
+                <value>;</value>
+                <term>field</term>
+                <value>=</value>
+                <term>expr</term>
+              </repetitive>
+              <value>}</value>
+            </choice>
+            <choice>
+              <term>expr</term>
+              <repetitive count="1">
+                <term>argument</term>
+              </repetitive>
+            </choice>
+            <choice>
+              <term>prefix-symbol</term>
+              <term>expr</term>
+            </choice>
+            <choice>
+              <term>expr</term>
+              <term>infix-op</term>
+              <term>expr</term>
+            </choice>
+            <choice>
+              <term>expr</term>
+              <value>.</value>
+              <term>field</term>
+            </choice>
+            <choice>
+              <term>expr</term>
+              <value>.</value>
+              <term>field</term>
+              <value>&lt;-</value>
+              <term>expr</term>
+            </choice>
+            <choice>
+              <term>expr</term>
+              <value>.(</value>
+              <term>expr</term>
+              <value>)</value>
+            </choice>
+            <choice>
+              <term>expr</term>
+              <value>.(</value>
+              <term>expr</term>
+              <value>)</value>
+              <value>&lt;-</value>
+              <term>expr</term>
+            </choice>
+            <choice>
+              <term>expr</term>
+              <value>.[</value>
+              <term>expr</term>
+              <value>]</value>
+            </choice>
+             <choice>
+              <term>expr</term>
+              <value>.[</value>
+              <term>expr</term>
+              <value>]</value>
+              <value>&lt;-</value>
+              <term>expr</term>
+            </choice>
+            <choice>
+              <value>if</value>
+              <term>expr</term>
+              <value>then</value>
+              <term>expr</term>
+              <optional>
+                <value>else</value>
+                <term>expr</term>
+              </optional>
+            </choice>
+            <choice>
+              <value>while</value>
+              <term>expr</term>
+              <value>do</value>
+              <term>expr</term>
+              <value>done</value>
+            </choice>
+            <choice>
+              <value>for</value>
+              <term>ident</term>
+              <value>=</value>
+              <term>expr</term>
+              <group>
+                <or>
+                  <choice>
+                    <value>to</value>
+                  </choice>
+                  <choice>
+                    <value>downto</value>
+                  </choice>
+                </or>
+              </group>
+              <term>expr</term>
+              <value>do</value>
+              <term>expr</term>
+              <value>done</value>
+            </choice>
+            <choice>
+              <term>expr</term>
+              <value>;</value>
+              <term>expr</term>
+            </choice>
+            <choice>
+              <value>match</value>
+              <term>expr</term>
+              <value>with</value>
+              <term>pattern-matching</term>
+            </choice>
+            <choice>
+              <value>function</value>
+              <term>pattern-matching</term>
+            </choice>
+            <choice>
+              <value>fun</value>
+              <term>pattern-matching</term>
+            </choice>
+            <choice>
+              <value>try</value>
+              <term>expr</term>
+              <value>with</value>
+              <term>pattern-matching</term>
+            </choice>
+            <choice>
+              <value>let</value>
+              <optional>
+                <term>rec</term>
+              </optional>
+              <term>let-binding</term>
+              <repetitive>
+                <value>and</value>
+                <term>let-binding</term>
+              </repetitive>
+              <value>in</value>
+              <term>expr</term>
+            </choice>
+            <choice>
+              <value>new</value>
+              <term>class-path</term>
+            </choice>
+            <choice>
+              <term>expr</term>
+              <value>#</value>
+              <term>method-name</term>
+            </choice>
+            <choice>
+              <value>(</value>
+              <term>expr</term>
+              <value>:&gt;</value>
+              <term>typexpr</term>
+              <value>)</value>
+            </choice>
+            <choice>
+              <value>(</value>
+              <term>expr</term>
+              <value>:</value>
+              <term>typexpr</term>
+              <value>:&gt;</value>
+              <term>typexpr</term>
+              <value>)</value>
+            </choice>
+            <choice>
+              <value>{&lt;</value>
+              <term>inst-var-name</term>
+              <value>=</value>
+              <term>expr</term>
+              <repetitive>
+                <value>;</value>
+                <term>inst-var-name</term>
+                <value>=</value>
+                <term>expr</term>
+              </repetitive>
+              <value>&gt;}</value>
+            </choice>
+          </or>
+        </def>
       </bnf>
       <bnf>
-	<term>argument</term>
-	<def>
-	  <or multiline="1">
-	    <choice>
-	      <term>expr</term>
-	    </choice>
-	    <choice>
-	      <value>~</value>
-	      <term>label-name</term>
-	    </choice>
-	    <choice>
-	      <value>~</value>
-	      <term>label-name</term>
-	      <value>:</value>
-	      <term>pattern</term>
-	    </choice>
-	    <choice>
-	      <value>?</value>
-	      <term>label-name</term>
-	    </choice>
-	    <choice>
-	      <value>? (</value>
-	      <term>label-name</term>
-	      <optional>
-		<value>:</value>
-		<term>typexpr</term>
-	      </optional>
-	      <optional>
-		<value>=</value>
-		<term>expr</term>
-	      </optional>
-	      <value>)</value>
-	    </choice>
-	    <choice>
-	      <value>?</value>
-	      <term>label-name</term>
-	      <value>:</value>
-	      <term>pattern</term>
-	    </choice>
-	    <choice>
-	      <term>label-name</term>
-	      <value>: (</value>
-	      <term>pattern</term>
-	      <optional>
-		<value>:</value>
-		<term>typexpr</term>
-	      </optional>
-	      <optional>
-		<value>=</value>
-		<term>expr</term>
-	      </optional>
-	      <value>)</value>
-	    </choice>
-	  </or>
-	</def>
+        <term>argument</term>
+        <def>
+          <or multiline="1">
+            <choice>
+              <term>expr</term>
+            </choice>
+            <choice>
+              <value>~</value>
+              <term>label-name</term>
+            </choice>
+            <choice>
+              <value>~</value>
+              <term>label-name</term>
+              <value>:</value>
+              <term>pattern</term>
+            </choice>
+            <choice>
+              <value>?</value>
+              <term>label-name</term>
+            </choice>
+            <choice>
+              <value>? (</value>
+              <term>label-name</term>
+              <optional>
+                <value>:</value>
+                <term>typexpr</term>
+              </optional>
+              <optional>
+                <value>=</value>
+                <term>expr</term>
+              </optional>
+              <value>)</value>
+            </choice>
+            <choice>
+              <value>?</value>
+              <term>label-name</term>
+              <value>:</value>
+              <term>pattern</term>
+            </choice>
+            <choice>
+              <term>label-name</term>
+              <value>: (</value>
+              <term>pattern</term>
+              <optional>
+                <value>:</value>
+                <term>typexpr</term>
+              </optional>
+              <optional>
+                <value>=</value>
+                <term>expr</term>
+              </optional>
+              <value>)</value>
+            </choice>
+          </or>
+        </def>
       </bnf>
       <bnf>
-	<term>infix-op</term>
-	<def>
-	  <or multiline="1">
-	    <choice>
-	      <term>infix-symbol</term>
-	    </choice>
-	    <choice>
-	      <or>
-		<choice>
-		  <value>*</value>
-		</choice>
-		<choice>
-		  <value>=</value>
-		</choice>
-		<choice>
-		  <value>or</value>
-		</choice>
-		<choice>
-		  <value>&amp;</value>
-		</choice>
-	      </or>
-	    </choice>
-	  </or>
-	</def>
+        <term>infix-op</term>
+        <def>
+          <or multiline="1">
+            <choice>
+              <term>infix-symbol</term>
+            </choice>
+            <choice>
+              <or>
+                <choice>
+                  <value>*</value>
+                </choice>
+                <choice>
+                  <value>=</value>
+                </choice>
+                <choice>
+                  <value>or</value>
+                </choice>
+                <choice>
+                  <value>&amp;</value>
+                </choice>
+              </or>
+            </choice>
+          </or>
+        </def>
       </bnf>
        <para>В таблице ниже показан относительный приоритет и
-	ассоциативность незакрытых конструкций. Элементы с высшим
-	приоритетом помещены в таблицу первыми. Для инфиксных и
-	префиксных символом значение "*" читается как "любой символ,
-	начинающийся с *".</para>
+        ассоциативность незакрытых конструкций. Элементы с высшим
+        приоритетом помещены в таблицу первыми. Для инфиксных и
+        префиксных символом значение "*" читается как "любой символ,
+        начинающийся с *".</para>
       <table cols="2">
-	<thead>
-	  <trow>
-	    <tcell>
-	      <para>Конструкция или оператор</para>
-	    </tcell>
-	    <tcell>
-	      <para>Ассоциативность</para>
-	    </tcell>
-	  </trow>
-	</thead>
-	<tbody>
-	  <trow>
-	    <tcell>
-	      <para>префиксный символ</para>
-	    </tcell>
-	    <tcell>
-	      <para>--</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>. .( .[</para>
-	    </tcell>
-	    <tcell>
-	      <para>--</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>применение функции</para>
-	    </tcell>
-	    <tcell>
-	      <para>левая</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>применение конструктора</para>
-	    </tcell>
-	    <tcell>
-	      <para>--</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>- -. (префикс)</para>
-	    </tcell>
-	    <tcell>
-	      <para>--</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>**...</para>
-	    </tcell>
-	    <tcell>
-	      <para>правая</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>*... /... %... <keyword>mod</keyword></para>
-	    </tcell>
-	    <tcell>
-	      <para>левая</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>+... -...</para>
-	    </tcell>
-	    <tcell>
-	      <para>левая</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>::</para>
-	    </tcell>
-	    <tcell>
-	      <para>правая</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>@... ^...</para>
-	    </tcell>
-	    <tcell>
-	      <para>правая</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para>сравнения (= == &lt; и т.д), остальные инфиксные симвооы</para>
-	    </tcell>
-	    <tcell>
-	      <para>левая</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para><keyword>not</keyword></para>
-	    </tcell>
-	    <tcell>
-	      <para>--</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para><keyword>&amp;</keyword> <keyword>&amp;&amp;</keyword></para>
-	    </tcell>
-	    <tcell>
-	      <para>левая</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para><keyword>or ||</keyword></para>
-	    </tcell>
-	    <tcell>
-	      <para>левая</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para><keyword>,</keyword></para>
-	    </tcell>
-	    <tcell>
-	      <para>--</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para><keyword>&lt;- :=</keyword></para>
-	    </tcell>
-	    <tcell>
-	      <para>правая</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para><keyword>if</keyword></para>
-	    </tcell>
-	    <tcell>
-	      <para>--</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para><keyword>;</keyword></para>
-	    </tcell>
-	    <tcell>
-	      <para>правая</para>
-	    </tcell>
-	  </trow>
-	  <trow>
-	    <tcell>
-	      <para><keyword>let match fun function try</keyword></para>
-	    </tcell>
-	    <tcell>
-	      <para>--</para>
-	    </tcell>
-	  </trow>
-	</tbody>
+        <thead>
+          <trow>
+            <tcell>
+              <para>Конструкция или оператор</para>
+            </tcell>
+            <tcell>
+              <para>Ассоциативность</para>
+            </tcell>
+          </trow>
+        </thead>
+        <tbody>
+          <trow>
+            <tcell>
+              <para>префиксный символ</para>
+            </tcell>
+            <tcell>
+              <para>--</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>. .( .[</para>
+            </tcell>
+            <tcell>
+              <para>--</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>применение функции</para>
+            </tcell>
+            <tcell>
+              <para>левая</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>применение конструктора</para>
+            </tcell>
+            <tcell>
+              <para>--</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>- -. (префикс)</para>
+            </tcell>
+            <tcell>
+              <para>--</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>**...</para>
+            </tcell>
+            <tcell>
+              <para>правая</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>*... /... %... <keyword>mod</keyword></para>
+            </tcell>
+            <tcell>
+              <para>левая</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>+... -...</para>
+            </tcell>
+            <tcell>
+              <para>левая</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>::</para>
+            </tcell>
+            <tcell>
+              <para>правая</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>@... ^...</para>
+            </tcell>
+            <tcell>
+              <para>правая</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para>сравнения (= == &lt; и т.д), остальные инфиксные симвооы</para>
+            </tcell>
+            <tcell>
+              <para>левая</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para><keyword>not</keyword></para>
+            </tcell>
+            <tcell>
+              <para>--</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para><keyword>&amp;</keyword> <keyword>&amp;&amp;</keyword></para>
+            </tcell>
+            <tcell>
+              <para>левая</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para><keyword>or ||</keyword></para>
+            </tcell>
+            <tcell>
+              <para>левая</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para><keyword>,</keyword></para>
+            </tcell>
+            <tcell>
+              <para>--</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para><keyword>&lt;- :=</keyword></para>
+            </tcell>
+            <tcell>
+              <para>правая</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para><keyword>if</keyword></para>
+            </tcell>
+            <tcell>
+              <para>--</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para><keyword>;</keyword></para>
+            </tcell>
+            <tcell>
+              <para>правая</para>
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <para><keyword>let match fun function try</keyword></para>
+            </tcell>
+            <tcell>
+              <para>--</para>
+            </tcell>
+          </trow>
+        </tbody>
       </table>
       <subsection name="Основные выражения">
-	<subsubsection name="Константы">
-	  <para>Выражения, включающие лишь константы, вычисляются в
-	    эти константы.</para>
-	</subsubsection>
-	<subsubsection name="Путь к значению">
-	  <para>Выражения, включающие путь к значению вычисляются в
-	    значение, связанное с этим путем в текущей среде. Путь
-	    может быть именем значения или путем доступа к значению,
-	    входящему в модуль.</para>
-	</subsubsection>
-	<subsubsection name="Выражения в скобках">
+        <subsubsection name="Константы">
+          <para>Выражения, включающие лишь константы, вычисляются в
+            эти константы.</para>
+        </subsubsection>
+        <subsubsection name="Путь к значению">
+          <para>Выражения, включающие путь к значению вычисляются в
+            значение, связанное с этим путем в текущей среде. Путь
+            может быть именем значения или путем доступа к значению,
+            входящему в модуль.</para>
+        </subsubsection>
+        <subsubsection name="Выражения в скобках">
 
-	  <para>Выражения <value>(</value> <term>expr</term>
-	  <value>)</value> и <value>begin</value> <term>expr</term>
-	  <value>end</value> означают то же, что и
-	  <term>expr</term>. Обе формы семантически экивалентны, но в
-	  контрольных стуктурах считается хорошим стилем использовать
-	  <value>begin ... end</value>:</para>
+          <para>Выражения <value>(</value> <term>expr</term>
+          <value>)</value> и <value>begin</value> <term>expr</term>
+          <value>end</value> означают то же, что и
+          <term>expr</term>. Обе формы семантически экивалентны, но в
+          контрольных стуктурах считается хорошим стилем использовать
+          <value>begin ... end</value>:</para>
 
-	  <listing>
+          <listing>
 if ... then begin ... ; ... end else begin ... ; ... end
-	  </listing>
-	  <para>а во всех остальных ситуациях, требующих группировки,
-	    использовать круглые скобки.</para>
-	  <para>Также скобки позволяют включать в вырежение
-	    ограничение типа - <value>(</value> <term>expr</term>
-	    <value>:</value> <term>type</term> <value>)</value> - в
-	    этм случае тип выражения должен быть совместим с
-	    <term>type</term>.</para>
-	  <para>Наконец, выражения в скобках могут содержать
-	    приведения: <value>(</value> <term>expr</term> [
-	    <value>:</value> <term>type</term> ]  <value>:&gt;</value>
-	    <term>type</term><value>)</value> (см. раздел 6.8.5).
-	  </para>
-	</subsubsection>
-	<subsubsection name="Применение функций">
-	  <para></para>
-	</subsubsection>
+          </listing>
+          <para>а во всех остальных ситуациях, требующих группировки,
+            использовать круглые скобки.</para>
+          <para>Также скобки позволяют включать в вырежение
+            ограничение типа - <value>(</value> <term>expr</term>
+            <value>:</value> <term>type</term> <value>)</value> - в
+            этм случае тип выражения должен быть совместим с
+            <term>type</term>.</para>
+          <para>Наконец, выражения в скобках могут содержать
+            приведения: <value>(</value> <term>expr</term> [
+            <value>:</value> <term>type</term> ]  <value>:&gt;</value>
+            <term>type</term><value>)</value> (см. раздел 6.8.5).
+          </para>
+        </subsubsection>
+        <subsubsection name="Применение функций">
+          <para></para>
+        </subsubsection>
       </subsection>
     </section>
   </main-matters>
