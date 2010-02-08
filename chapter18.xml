@@ -21,7 +21,95 @@
 	external input: in_channel -&gt; string -&gt; int -&gt; int -&gt; int
 	              = "input"
       </listing>
-      <para>Примитивы с несколькими аргументами всегда</para>
+      <para>Примитивы с несколькими аргументами всегда каррируются.
+      Функция С не обязательно совпадает по имени с функцией ML.</para>
+      <para>
+        Определенные таким образом примитивы указываются в файлах интерфейса или
+        сигнатурах <keyword>sig...end</keyword> как обычные значения:
+      </para>
+      <listing>
+        val name : type
+      </listing>
+      <para>
+        Что скрывает их реализацию, либо явно, как внешние функции
+      </para>
+      <listing>
+        external name : type = функция на C
+      </listing>
+      <para>
+        Последний вариант чуть более эффективен, так как клиенты модуля могут напрямую вызывать функцию C, не привлекая 
+        соответсвующую функцию Caml.
+      </para>
+      <para>
+        Арность (число аргументов) примитива автоматически определяется, исходя из типа Caml в декларации external, а именно - подсчитывается колисечтво стрелок. Например, input выше имеет арность 4, поэтому функция C input будет вызвана с четырьмя агрументами. Аналогично,
+      </para>
+      <listing>
+        external input2 : in_channel * string * int * int -&gt; int = "input2"
+      </listing>
+      <para>
+        имеет арность 1, так что функция C input2 получит один аргумент (четверть от значения функция Caml).
+      </para>
+      <para>
+        При определении арности примитива сокращения типа не раскрываются. Например,
+      </para>
+      <listing><![CDATA[
+      type int_endo = int -> int
+      external f : int_endo -> int_endo = "f"
+      external g : (int -> int) -> (int -> int) = "f"
+]]>
+      </listing>
+      <para>
+        Тут f имеет арность 1, а g - 2. В результате f может возвращать функциональное значение, просто его имя надо записать в сокращение типа.
+      </para>
     </section>
+    <section name="Реализация примитивов">
+      <para>
+        Примитивы с арностью n менее пяти реализуются функциями на C, принимающими n аргументов типа value и
+        возвращаюшими результат типа value. Этот тип представляет значения Caml. Он кодирует объекты нескольких
+        базовых типов (целые числа, числа с плавающей запятой, строки и т. д.), а также структуры данных Caml.
+        Например, так объявляется функция C, реализующая примитив <keyword>input</keyword>:
+      </para>
+      <listing><![CDATA[CAMLprim value input(value channel, value buffer, value offset, value length)
+        {
+           ...
+        }
+        ]]></listing>
+      <para>В момент применения в программе Caml примитивной функции вызывается функция на C с 
+      аргументами, которые использовались для вызова примитива. Ее результат возвращается в программу Caml 
+      и считается результатом применения функции.</para>
+      <para>
+        Если арность примитива более 5, то для реализации требуется две функции на C. Первая используется с
+        компилятором байткода <keyword>ocamlc</keyword> и принимает два аргумента - указатель на массив 
+        значений Caml (значения аргументов) и целое, в котором хранится количество аргументов. Вторая функция
+        предназначена для комилятора <keyword>ocamlopt</keyword>. Она принимает аргументы напрямую. Следующий
+        пример показывает функции для семиаргументного примитива <keyword>Native.add_nat</keyword>.
+      </para>
+      <listing><![CDATA[CAMLprim add_native(value nat1, value ofs1, value len1,
+                  value nat2, value ofs2, value len2,
+                  value carry_in)
+       {
+          ...
+       }
+       CAMLprim value add_nat_bytecode(value *argv, int argn)
+       {
+          return add_nat_native(argv[0], argv[1], argv[2], argv[3],
+                                argv[4], argv[5], argv[6]);
+       }
+      ]]></listing>
+      <para>Имена этих функций должны включаться в объявление примитива следующим образом:</para>
+      <listing>
+        <![CDATA[external name : type =
+         функция-C-для-байткода родная-функция-С
+        ]]>
+      </listing>
+      <para>В случае <keyword>add_nat</keyword> объявление выглядит так:</para>
+      <listing><![CDATA[external add_nat : nat -> int -> int -> nat -> int -> int -> int
+                    = "add_nat_bytecode" "add_nat_native"
+                    ]]></listing>
+      <para>
+        
+      </para>
+    </section>
+
   </main-matters>
 </chapter>
