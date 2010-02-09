@@ -6,20 +6,20 @@
     примитивы компонуются с кодом Caml и вызываются из функций Caml.</para>
   </abstract>
   <main-matters>
-    <section name="Обзор и компиляция">
+    <section name="Общие сведения">
+      <subsection name="Объявление примитивов" neednumber="1">
       <para>Пользовательские примитивы объявляются c помощью ключевого слова
-	<command>external</command> в файле реализации или внутри конструкции
-	<command>start...end</command> выражения модуля.</para>
+        <command>external</command> в файле реализации или внутри конструкции
+        <command>start...end</command> выражения модуля.</para>
       <listing>
-	external name : type = C-function-name
+external name : type = C-function-name
       </listing>
       <para>Так определяется имя значения <keyword>name</keyword> типа
       <keyword>type</keyword>, которое выполняется при вызове данной функции С.
-	Например, в модуле <command>Pervasive</command> стандартной библиотеки
-	примитив <command>input</command> объявлен следующим образом:</para>
+        Например, в модуле <command>Pervasive</command> стандартной библиотеки
+        примитив <command>input</command> объявлен следующим образом:</para>
       <listing>
-	external input: in_channel -&gt; string -&gt; int -&gt; int -&gt; int
-	              = "input"
+external input: in_channel -&gt; string -&gt; int -&gt; int -&gt; int = "input"
       </listing>
       <para>Примитивы с несколькими аргументами всегда каррируются.
       Функция С не обязательно совпадает по имени с функцией ML.</para>
@@ -28,88 +28,218 @@
         сигнатурах <keyword>sig...end</keyword> как обычные значения:
       </para>
       <listing>
-        val name : type
+val name : type
       </listing>
       <para>
-        Что скрывает их реализацию, либо явно, как внешние функции
+        что скрывает их реализацию, либо явно, как внешние функции
       </para>
       <listing>
-        external name : type = функция на C
+external name : type = функция на C
       </listing>
       <para>
-        Последний вариант чуть более эффективен, так как клиенты модуля могут напрямую вызывать функцию C, не привлекая 
+        Последний вариант чуть более эффективен, так как клиенты
+        модуля могут напрямую вызывать функцию C, не привлекая
         соответсвующую функцию Caml.
       </para>
       <para>
-        Арность (число аргументов) примитива автоматически определяется, исходя из типа Caml в декларации external, а именно - подсчитывается колисечтво стрелок. Например, input выше имеет арность 4, поэтому функция C input будет вызвана с четырьмя агрументами. Аналогично,
+        Арность (число аргументов) примитива автоматически
+        определяется, исходя из типа Caml в декларации external, а
+        именно - подсчитывается колисечтво стрелок. Например, input
+        выше имеет арность 4, поэтому функция C input будет вызвана с
+        четырьмя агрументами. Аналогично,
       </para>
       <listing>
-        external input2 : in_channel * string * int * int -&gt; int = "input2"
+external input2 : in_channel * string * int * int -&gt; int = "input2"
       </listing>
       <para>
-        имеет арность 1, так что функция C input2 получит один аргумент (четверть от значения функция Caml).
+        имеет арность 1, так что функция C input2 получит один
+        аргумент (четверть от значения функция Caml).
       </para>
       <para>
         При определении арности примитива сокращения типа не раскрываются. Например,
       </para>
-      <listing><![CDATA[
-      type int_endo = int -> int
-      external f : int_endo -> int_endo = "f"
-      external g : (int -> int) -> (int -> int) = "f"
-]]>
-      </listing>
+      <listing><![CDATA[type int_endo = int -> int
+external f : int_endo -> int_endo = "f"
+external g : (int -> int) -> (int -> int) = "f"]]></listing>
       <para>
         Тут f имеет арность 1, а g - 2. В результате f может возвращать функциональное значение, просто его имя надо записать в сокращение типа.
       </para>
-    </section>
-    <section name="Реализация примитивов">
+    </subsection>
+    <subsection name="Реализация примитивов" neednumber="1">
       <para>
-        Примитивы с арностью n менее пяти реализуются функциями на C, принимающими n аргументов типа value и
-        возвращаюшими результат типа value. Этот тип представляет значения Caml. Он кодирует объекты нескольких
-        базовых типов (целые числа, числа с плавающей запятой, строки и т. д.), а также структуры данных Caml.
+        Примитивы с арностью n менее пяти реализуются функциями на C,
+        принимающими n аргументов типа value и
+        возвращаюшими результат типа value. Этот тип представляет
+        значения Caml. Он кодирует объекты нескольких
+        базовых типов (целые числа, числа с плавающей запятой, строки
+        и т. д.), а также структуры данных Caml.
         Например, так объявляется функция C, реализующая примитив <keyword>input</keyword>:
       </para>
       <listing><![CDATA[CAMLprim value input(value channel, value buffer, value offset, value length)
-        {
-           ...
-        }
-        ]]></listing>
-      <para>В момент применения в программе Caml примитивной функции вызывается функция на C с 
-      аргументами, которые использовались для вызова примитива. Ее результат возвращается в программу Caml 
+{
+  ...
+}        ]]></listing>
+      <para>В момент применения в программе Caml примитивной функции вызывается функция на C с
+      аргументами, которые использовались для вызова примитива. Ее результат возвращается в программу Caml
       и считается результатом применения функции.</para>
       <para>
         Если арность примитива более 5, то для реализации требуется две функции на C. Первая используется с
-        компилятором байткода <keyword>ocamlc</keyword> и принимает два аргумента - указатель на массив 
+        компилятором байткода <keyword>ocamlc</keyword> и принимает два аргумента - указатель на массив
         значений Caml (значения аргументов) и целое, в котором хранится количество аргументов. Вторая функция
         предназначена для комилятора <keyword>ocamlopt</keyword>. Она принимает аргументы напрямую. Следующий
         пример показывает функции для семиаргументного примитива <keyword>Native.add_nat</keyword>.
       </para>
       <listing><![CDATA[CAMLprim add_native(value nat1, value ofs1, value len1,
-                  value nat2, value ofs2, value len2,
-                  value carry_in)
-       {
-          ...
-       }
-       CAMLprim value add_nat_bytecode(value *argv, int argn)
-       {
-          return add_nat_native(argv[0], argv[1], argv[2], argv[3],
-                                argv[4], argv[5], argv[6]);
-       }
-      ]]></listing>
-      <para>Имена этих функций должны включаться в объявление примитива следующим образом:</para>
-      <listing>
-        <![CDATA[external name : type =
-         функция-C-для-байткода родная-функция-С
-        ]]>
-      </listing>
-      <para>В случае <keyword>add_nat</keyword> объявление выглядит так:</para>
-      <listing><![CDATA[external add_nat : nat -> int -> int -> nat -> int -> int -> int
-                    = "add_nat_bytecode" "add_nat_native"
-                    ]]></listing>
-      <para>
-        
-      </para>
-    </section>
+          value nat2, value ofs2, value len2,
+          value carry_in)
+{
+   ...
+}
 
-  </main-matters>
+CAMLprim value add_nat_bytecode(value *argv, int argn)
+{
+   return add_nat_native(argv[0], argv[1], argv[2], argv[3],
+                         argv[4], argv[5], argv[6]);
+}
+      ]]></listing>
+      <para>Имена этих функций должны включаться в объявление
+      примитива следующим образом:</para>
+      <listing><![CDATA[external name : type = функция-C-для-байткода родная-функция-С]]></listing>
+      <para>В случае <keyword>add_nat</keyword> объявление выглядит так:</para>
+      <listing><![CDATA[external add_nat : nat -> int -> int -> nat -> int -> int -> int = "add_nat_bytecode" "add_nat_native"]]></listing>
+      <para>
+        Реализация примитива включает решение двух задач: во-первых,
+        аргументы, соответствующие значениям Ocaml, должны быть
+        раскодированы и переведены в значения C; во-вторых, из
+        аргументов должен быть вычислен результат. Как правило, эти
+        задачи удобнее решать разными функциями за исключением совсем
+        простых случаев.  Первая функция обычно как раз и реализует
+        примитив - она принимает родные значения C и возвращает их
+        же. Вторая (ее называют "заглушкой") работает оберткой для
+        первой: она преобразует аргументы из значений Caml в C,
+        вызывает первую функцию и вновь конвертирует результат. Вот,
+        например, заглушка для примитива <keyword>input</keyword>:
+      </para>
+      <listing><![CDATA[CAMLprim value input(value channel, value buffer, value offset, value length)
+{
+   return Val_long(getblock((struct channel *) channel,
+                   &Byte(buffer, Long_val(offset)), Long_val(length)));
+}]]></listing>
+      <para>
+        <keyword>Val_long</keyword>, <keyword>Long_val</keyword> и
+        т. д. - макросы для конвертации типа value. Подробнее о нем
+        рассказывается ниже. Макрос <keyword>CAMLprim</keyword> разворачивается в инструкции
+        компилятора, которые гарантируют, что функция будет
+        экспортирована и к ней можно будет получить доступ из
+        Caml. Вся работа выполянется в функции
+        <keyword>getblock</keyword>:
+      </para>
+      <listing><![CDATA[long getblock(struct channel * channel, char * p, long n)
+{
+   ...
+}]]></listing>
+      <para>
+        Для написания кода на C, работающего со значениями Objective
+        Caml, существуют следующие заголовочные файлы:
+      </para>
+      <table cols="2">
+        <thead>
+          <trow>
+            <tcell>Файл</tcell>
+            <tcell>Содержит</tcell>
+          </trow>
+        </thead>
+        <tbody>
+          <trow>
+            <tcell>
+              <keyword>
+                caml/mlvalues.h
+              </keyword>
+            </tcell>
+            <tcell>
+              Определение типа <keyword>value</keyword> и макросы для конвертации
+            </tcell>
+          </trow>
+          <trow>
+            <tcell><keyword>caml/alloc.h</keyword></tcell>
+            <tcell>Функции выделения памяти для создания
+            структурированных объектов Caml</tcell>
+          </trow>
+          <trow>
+            <tcell><keyword>caml/memory.h</keyword></tcell>
+            <tcell>Различные функции и макросы для работы с памятью
+            (интерфейс к сборщику мусора, изменение структур без
+            копирования и т.д.)</tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <keyword>caml/fail.h</keyword>
+            </tcell>
+            <tcell>
+              Функции для возбуждения исключений
+            </tcell>
+          </trow>
+          <trow>
+            <tcell>
+              <keyword>caml/callback.h</keyword>
+            </tcell>
+            <tcell>
+              Вызовы Caml из C.
+            </tcell>
+          </trow>
+          <trow>
+            <tcell><keyword>caml/custom.h</keyword></tcell>
+            <tcell>Операции с пользовательскими блоками</tcell>
+          </trow>
+          <trow>
+            <tcell><keyword>caml/intext.h</keyword></tcell>
+            <tcell>Операции для написания пользовательских функции
+            сериализации и десериализации для пользовательских блоков</tcell>
+          </trow>
+        </tbody>
+      </table>
+      <para>Все эти файлы находятся в подкаталоге
+      <keyword>caml/</keyword> каталога со стандартной библиотекой
+      Objective Caml (обычно
+      <keyword>/usr/local/lib/ocaml</keyword>).</para>
+    </subsection>
+    <subsection name="Статическая компоновка кода на C с кодом Caml" neednumber="1">
+      <para>
+        Система времени выполнения Objective Caml состоит из трех
+        основных частей - интерпретатора байткода, менеджера памяти и
+        набора функций на C, выполняющих примитивые операции. Некотрые
+        инструкции байткода могут вызывать эти функции по их смещению
+        в таблице функций (таблице примитивов).
+      </para>
+      <para>
+        В обычном режиме компоновщик Caml записывает байткод для
+        стандартной системы времени выполнения со стандартным набором
+        примитивов. Если ссылка на примив не попадает в этот набор,
+        система выбрасывает ошибку "недоступный примитив C" (если не
+        включена динамическая загрузка библиотек C -
+        см. соотвествующий раздел ниже).
+      </para>
+      <para>
+        В режиме "пользовательской среды" компоновщик Caml
+        просматривает объектные файлы и определяет набор необходимых
+        примитивов. Затем он строит новую систему, вызывая родной
+        компоновщик с
+      </para>
+      <list type="plain">
+        <item><para>таблицей примитивов</para></item>
+        <item><para>библиотекой, обеспечивающей интерпретатор
+        байткода, менеджер памяти и стандартные примитивы</para></item>
+        <item><para>библиотеками и объектными файлами (.o) с
+        реализациями дополнительных примитивов. Список этих файлов
+        берется из командной строки.</para></item>
+      </list>
+      <para>В результате создается новая система с пользовательскими
+      примитивами. Компоновщик Caml создает байткод для нее и
+      добавляет его в выходной файл после самой системы, поэтому этот байкод
+      автоматически выполняется при запуске этой системы.
+      </para>
+    </subsection>
+  </section>
+
+</main-matters>
 </chapter>
