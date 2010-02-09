@@ -238,6 +238,65 @@ CAMLprim value add_nat_bytecode(value *argv, int argn)
       добавляет его в выходной файл после самой системы, поэтому этот байкод
       автоматически выполняется при запуске этой системы.
       </para>
+      <para>Для компоновки в этом режиме <keyword>ocamlc</keyword>
+      вызывается со следующими параметрами:</para>
+      <list>
+        <item>
+          <para>ключом <keyword>-custom</keyword></para>
+        </item>
+        <item>
+          <para>именами объектных файлов Caml (файлы .cmo и .cma)</para>
+        </item>
+        <item>
+          <para>именами объектных файлов С (.o и .a), реализующими
+          дополнительные примитивы. В среде Unix и Windows библиотека
+          с именем <keyword>lib<emph>name</emph>.a</keyword> (или .lib,
+          соотвественно), размещенная в одном из стандартных каталогов
+          для библиотек, может быть указана ключами
+          <keyword>-cclib -l<emph>name</emph></keyword>.</para>
+        </item>
+      </list>
+      <para>Для компилятора в машинный код <keyword>ocamlopt</keyword>
+      ключ <keyword>-custom</keyword> не нужен, поскольку на фазе
+      компоновки всегда создается исполняемый файл. Для сборки
+      смешанной программы на Caml/C компилятору ocamlopt передаются
+      следующие аргументы:</para>
+      <list>
+        <item><para>имена объектных файлов Ocaml (.cmx и .cmxa)</para></item>
+        <item><para>имена объетных файлов и библиотек C (.o, .a, .so
+        или .dll), реализующих дополнительные примитивы</para></item>
+      </list>
+      <para>Начиная с OCaml версии 3.00, ключ
+      <keyword>-custom</keyword>, а также имена библиотек C можно
+      записывать в файл библиотеки Ocaml <keyword>.cma</keyword> или
+      <keyword>.cmxa</keyword>. Допустим, библиотека
+      <keyword>mylib.cma</keyword> построена из объектных файлов
+      <keyword>a.cmo</keyword> и <keyword>b.cmo</keyword> и использует
+      код на C из библиотеки <keyword>libmylib.a</keyword>. Если
+      сборка запускается командой
+      </para>
+      <listing><![CDATA[ocamlc -a -o mylib.cma -custom a.cmo b.cmo -cclib -lmylib]]></listing>
+      <para>
+        то пользователи могут просто указать для компоновки библиотеку
+        <keyword>mylib.cma</keyword>
+      </para>
+      <listing><![CDATA[ocamlc -o myprog mylib.cma ...]]></listing>
+      <para>и система автоматически добавит ключи <keyword>-cclib
+      -lmylib</keyword>, что даст тот же эффект, что и </para>
+      <listing><![CDATA[ocamlc -o myprog -custom a.cmo b.cmo ... -cclib -lmylib]]></listing>
+      <para>Хотя, конечно, можно строить библиотеку без
+      дополнительных опций:</para>
+      <listing><![CDATA[ocamlc -a -o mylib.cma a.cmo b.cmo]]></listing>
+      <para>и сообщить пользователям, чтобы они самостоятельно
+      добавили ключи <keyword>-cclib -lmylib</keyword> при компоновке.
+      </para>
+      <para>Однако, первый вариант удобнее.</para>
+    </subsection>
+    <subsection neednumber="1" name="Динамическая компоновка кода на C с кодом Caml">
+      <para>
+      </para>
+      <para>
+      </para>
     </subsection>
   </section>
 
