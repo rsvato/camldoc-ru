@@ -247,7 +247,7 @@
           <system-response>type ratio =  {num: int; denum: int};;</system-response>
         </eval-step>
         <eval-step>
-          <user-input># let add_ratio r1 r2 =<lb/><tab/>{num = r1.num * r2.denum + r2.num * r1.denum;<tab/>{denum = r1.denum * r2.denum};;</user-input>
+          <user-input># let add_ratio r1 r2 =<lb/><tab/>{num = r1.num * r2.denum + r2.num * r1.denum;<tab/>denum = r1.denum * r2.denum};;</user-input>
           <system-response>val add_ratio : ratio -&gt; ratio -&gt; ratio = &lt;fun&gt;</system-response>
         </eval-step>
         <eval-step>
