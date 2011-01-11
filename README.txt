@@ -10,25 +10,17 @@ encoding. KOI8-R support also may occur :)
 
 
 BUILD INSTRUCTIONS
-You should use any XSTL 1.1 compliant transformer to get HTML
-version of book from sources. Saxon 6.5 will be ok. In fact,
-you must be sure that your favorite transformer support
-<xsl:document> instruction. If it is not the case, get ready
-to fix main HTML stylesheet.
 
-Transformation runs as follows:
+Currently xsltproc should work for xml -> html transformation.
+
+Transformation itself runs as follows:
 	
-$ java -jar /path/to/saxon-6.5.jar -o toc.html bookinfo.xml bookinfo.xsl
+$ make
 
 To get PDF version of user documentation you can use any
 XSLT 1.0/1.1/2.0 comliant transformer and some FO processor
-(passiveTeX will be best choice, Apache FOP don't layout document
-well due to several stylesheets bugs).
-
-Instruction to build PDF (though, they're obviuos) you'll find
-at http://www.ocaml.spb.ru (only russian version, sorry).
-
-
+(passiveTeX will be the only choice for now). Stylesheet to use
+ocaml-book-fo.xsl
 
 LAYOUT
 
