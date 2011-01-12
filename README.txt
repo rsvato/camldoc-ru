@@ -20,7 +20,7 @@ $ make
 To get PDF version of user documentation you can use any
 XSLT 1.0/1.1/2.0 comliant transformer and some FO processor
 (passiveTeX will be the only choice for now). Stylesheet to use
-ocaml-book-fo.xsl
+ia ocaml-book-fo.xsl
 
 LAYOUT
 
