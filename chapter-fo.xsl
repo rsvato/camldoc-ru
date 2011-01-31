@@ -16,8 +16,8 @@
         margin-top="1.5cm" margin-bottom="1.5cm" margin-left="2.5cm" margin-right="2.5cm"
         orphans="2" widows="2"
         >
-        <fo:region-before extent="0cm" border-color="black" border-width="2pt"/>
         <fo:region-body margin-top="36pt" margin-bottom="24pt"/>
+        <fo:region-before extent="0cm" border-color="black" border-width="2pt"/>
         <fo:region-after extent="0cm"/>
       </fo:simple-page-master>
     </fo:layout-master-set>
