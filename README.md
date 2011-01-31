@@ -1,49 +1,87 @@
-OVERVIEW
+Overview
 =========
 
 This is russian translation of OCaml User Guide and
 Reference
 
-NOTE
+Note
 ----------
 Files in package can use Windows-1251 and UTF-8 as source
 encoding (but it'unlike). KOI8-R support also may occur :)
 
 
-BUILD INSTRUCTIONS
+Building instructions
 ==================
 
 Currently xsltproc should work for xml -> html transformation.
 
 Transformation itself runs as follows:
-	
+
+<pre>
 $ make
+</pre>
 
 To get PDF version of user documentation you can use any
 XSLT 1.0/1.1/2.0 comliant transformer and some FO processor
 (passiveTeX will be the only choice for now). Stylesheet to use
 is chapter-fo.xsl
 
-LAYOUT
+Files
 ========
+<table>
+<tr>
+<td>core.dtd</td><td>Document type definition for chapter type</td>
+</tr>
+<tr>
+<td>bookinfo.dtd		</td><td> Document type definition for book type</td>
+</tr>
+<tr>
+<td>bookinfo.xml		</td><td> Main xml file</td>
+</tr>
+<tr>
+<td>chapter??.xml		</td><td> Chapters translation</td>
+</tr>
+<tr>
+<td>bookinfo.xsl		</td><td> Main HTML template</td>
+</tr>
+<tr>
+<td>ocaml.xsl			</td><td> Chapter HTML template</td>
+</tr>
+<tr>
+<td>ocaml.css			</td><td> Incomplete CSS file for Morphon editor</td>
+</tr>
+<tr>
+<td>chapter-fo.xsl		</td><td> Mail FO template</td>
+</tr>
+<tr>
+<td>ocaml-book-fo.xsl	</td><td> Book elements level FO template</td>
+</tr>
+<tr>
+<td>ocaml-toc-fo.xsl	        </td><td> FO template generating tabl pof contents</td>
+</tr>
+<tr>
+<td>chapter-section-fo.xsl	</td><td> FO template for section level elements</td>
+</tr>
+<tr>
+<td>chapter-numbering.xsl</td><td> Section numbering</td>
+</tr>
+<tr>
+<td>ocaml-list.xsl	</td><td> List-like elements</td>
+</tr>
+<tr>
+<td>ocaml-bnf-fo.xsl	       </td><td> BNF-like notations</td>
+</tr>
+<tr>
+<td>ocaml-inline-elements-fo.xsl</td><td> Inline formatting</td>
+</tr>
+<tr>
+<td>ocaml-block-elements-fo.xsl</td><td> Block elements</td>
+</tr>
+<tr>
+<td>ocaml-code-fo.xsl</td><td> Code formatting</td>
+</tr>
+</table>
 
-core.dtd			 - Document type definition for chapter type
-bookinfo.dtd		 - Document type definition for book type
-bookinfo.xml		 - Main xml file
-chapter??.xml		 - Chapters translation
-bookinfo.xsl		 - Main HTML template
-ocaml.xsl			 - Chapter HTML template
-ocaml.css			 - Incomplete CSS file for Morphon editor
-chapter-fo.xsl		 - Mail FO template
-ocaml-book-fo.xsl	 - Book elements level FO template
-ocaml-toc-fo.xsl	         - FO template generating tabl pof contents
-chapter-section-fo.xsl	 - FO template for section level elements
-chapter-numbering.xsl - Section numbering
-ocaml-list.xsl		- List-like elements
-ocaml-bnf-fo.xsl	        - BNF-like notations
-ocaml-inline-elements-fo.xsl	- Inline formatting
-ocaml-block-elements-fo.xsl	- Block elements
-ocaml-code-fo.xsl	- Code formatting
 
 Final notes
 -----------------
