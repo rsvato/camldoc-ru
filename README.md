@@ -86,6 +86,6 @@ Files
 Final notes
 -----------------
 
-All your suggestions/blames/bugfixes you can send directly to me, Sviatoslav Reentenko <rsvato@gmail.com> or post directly with github instruments. The only site containing more or less up-to-date html version of this translation is http://ocaml.spb.ru. Hosting costs, so, if you want to support it, don't hesitate to contact me.
+All your suggestions/blames/bugfixes you can send directly to me, Sviatoslav Reentenko <rsvato@gmail.com> or post directly with github instruments. The only site containing more or less up-to-date html version of this translation is http://ocaml.spb.ru. 
 
 If you want to fix my errors, clone this, sent me pull request and I'll say you 'thanks'.
