@@ -10,7 +10,7 @@
       <xsl:value-of select="count(ancestor::*//chap)" />
     </xsl:variable>
     <xsl:variable name="page.top">
-      <xsl:text>http://ocaml.spb.ru/toc.html</xsl:text>
+      <xsl:text>http://ocaml.spb.ru/index.html</xsl:text>
     </xsl:variable>
     <xsl:variable name="page.previous">
       <xsl:choose>
@@ -183,10 +183,7 @@
               <xsl:value-of select="generate-id(.)" />
             </xsl:attribute>
             <h1>
-              Глава
-              <xsl:value-of select="@number" />
-              .
-              <xsl:value-of select="@name" />
+              Глава <xsl:value-of select="@number"/>.  <xsl:value-of select="@name" />
             </h1>
           </a>
           <xsl:if test="abstract">
@@ -230,9 +227,7 @@
           <xsl:value-of select="generate-id(.)" />
         </xsl:attribute>
         <h2>
-          <xsl:value-of select="ancestor::*/chapter/@number" />
-          .
-          <xsl:call-template name="NumberSection" />
+          <xsl:value-of select="ancestor::*/chapter/@number" />.<xsl:call-template name="NumberSection" />
           <xsl:text>&#160;</xsl:text>
           <xsl:value-of select="@name" />
         </h2>

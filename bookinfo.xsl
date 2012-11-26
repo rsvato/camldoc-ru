@@ -20,12 +20,7 @@
                                 <title>
                                         <xsl:value-of select="//bookinfo/title"/>
                                 </title>
-
-                                <style type="text/css">
-                                        <![CDATA[
-                                        @import("assets/css/ocaml-html.css");
-                                        ]]>
-                                </style>
+                                <link rel="stylesheet" type="text/css" href="assets/css/ocaml-html.css"/>
         <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
         </script>
         <script type="text/javascript">
@@ -34,7 +29,7 @@
         </script>
                         </head>
                         <body>
-                                <div style="margin-top:90px;margin-left:15px;margin-right:15px;background-color:#eee;padding-left:10px;">
+                                <div id="maintoc">
                                         <xsl:apply-templates/>
                                 </div>
                         </body>
@@ -53,7 +48,7 @@
         </xsl:template>
         <xsl:include href="ocaml.xsl"/>
         <xsl:template match="//bookinfo/title">
-                <div style="text-align:center;font-size:24px;font-weight:bold">
+                <div class="booktitle">
                         <xsl:apply-templates/>
                 </div>
         </xsl:template>
@@ -92,10 +87,13 @@
                 <xsl:apply-templates select="chap"/>
         </xsl:template>
         <xsl:template match="chap">
-                <xsl:variable name="nf" select="@nf"/>
+          <xsl:variable name="nf" select="@nf"/>
+          <xsl:variable name="chlink">
+            <xsl:value-of select="concat($main.site, @file)"/>
+          </xsl:variable>
                 <a>
                         <xsl:attribute name="href">
-                                <xsl:value-of select="concat($main.site, @file)"/>
+                                <xsl:value-of select="$chlink"/>
                         </xsl:attribute>
                         <h2>Глава <xsl:call-template name="NumberChaps"/>.
                         <xsl:value-of select="chapter/@name"/>
@@ -109,7 +107,12 @@
                 <ul>
                         <xsl:for-each select="./chapter/main-matters/section[@name]">
                                 <li>
-                                        <xsl:value-of select="@name"/>
+                                  <a>
+                                    <xsl:attribute name="href">
+                                      <xsl:value-of select="concat($chlink, '#', generate-id(.))"/>
+                                    </xsl:attribute>
+                                    <xsl:value-of select="@name"/>
+                                  </a>
                                 </li>
                         </xsl:for-each>
                 </ul>
