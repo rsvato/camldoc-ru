@@ -128,7 +128,7 @@
                 <xsl:text>&#160;</xsl:text>
               </td>
               <td width="33%" align="center">
-                <a href="toc.html" title="Содержание">
+                <a href="index.html" title="Содержание">
                   <img alt="navigation"
                        src="img/up-arrow.png" />
                 </a>
