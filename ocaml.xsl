@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="koi8-r"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform"
                 version="1.0">
   <xsl:output encoding="utf-8" method="html" indent="yes"
@@ -9,10 +9,6 @@
     <xsl:variable name="ch.count">
       <xsl:value-of select="count(ancestor::*//chap)" />
     </xsl:variable>
-    <xsl:message>
-      <xsl:value-of
-          select="concat('There are ', $ch.count, ' chapters')" />
-    </xsl:message>
     <xsl:variable name="page.top">
       <xsl:text>http://ocaml.spb.ru/toc.html</xsl:text>
     </xsl:variable>
@@ -41,15 +37,15 @@
     <html>
       <head>
         <meta name="descrition"
-              content="Перевод официальной документации Objective Caml" />
+              content="п÷п╣я─п╣п╡п╬п╢ п╬я└п╦я├п╦п╟п╩я▄п╫п╬п╧ п╢п╬п╨я┐п╪п╣п╫я┌п╟я├п╦п╦ Objective Caml" />
         <meta name="keywords"
-              content="Ocaml, Objective Caml, Caml, functional programming, функциональное программирование" />
+              content="Ocaml, Objective Caml, Caml, functional programming, я└я┐п╫п╨я├п╦п╬п╫п╟п╩я▄п╫п╬п╣ п©я─п╬пЁя─п╟п╪п╪п╦я─п╬п╡п╟п╫п╦п╣" />
         <link rel="up">
           <xsl:attribute name="href">
             <xsl:value-of select="$page.top" />
           </xsl:attribute>
         </link>
-        <link rel="next" title="Следующая глава">
+        <link rel="next" title="п║п╩п╣п╢я┐я▌я┴п╟я▐ пЁп╩п╟п╡п╟">
           <xsl:attribute name="href">
             <xsl:value-of select="$page.next" />
           </xsl:attribute>
@@ -59,19 +55,33 @@
             <xsl:value-of select="$page.previous" />
           </xsl:attribute>
         </link>
-        <link rel="stylesheet" type="text/css"
-              href="./ocaml-html.css" />
+        <link rel="stylesheet" type="text/css" href="assets/css/ocaml-html.css"/>
         <title>
-          <xsl:value-of select="@number" />
-          .
-          <xsl:value-of select="@name" />
+          <xsl:value-of select="concat(@number, '. ', @name)"/>
         </title>
+        <script src="assets/js/jquery-1.8.3.min.js"/>
         <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
         </script>
         <script type="text/javascript">
           _uacct = "UA-1250887-1";
           urchinTracker();
         </script>
+        <script type="text/javascript"><![CDATA[
+          $(document).keydown(function(e) {
+            if (e.keyCode == 39 && e.ctrlKey) {
+            var next = $('link[rel=next]');
+            if (next) {
+              window.location.href = next.attr('href');
+            }
+            }
+            if (e.keyCode == 37 && e.ctrlKey) {
+              var prev = $('link[rel=prev]');
+              if (prev) {
+               window.location.href = prev.attr('href');
+              }
+            }
+        });
+        ]]></script>
       </head>
       <body>
         <div style="width:100%">
@@ -81,9 +91,6 @@
                   width="33%">
                 <xsl:for-each
                     select="preceding::*/chapter">
-                  <xsl:message>
-                    found preceding
-                  </xsl:message>
                   <xsl:variable name="ps">
                     <xsl:value-of select="@number" />
                   </xsl:variable>
@@ -96,21 +103,21 @@
                       <xsl:value-of select="$pch" />
                     </xsl:attribute>
                     <xsl:attribute name="title">
-                      <xsl:text>Глава</xsl:text>
+                      <xsl:text>п⌠п╩п╟п╡п╟</xsl:text>
                       <xsl:value-of select="$ps" />
                     </xsl:attribute>
                     <img src="img/left-arrow.png">
                       <xsl:attribute
                           name="title">
                         <xsl:text>
-                          Глава
+                          п⌠п╩п╟п╡п╟
                         </xsl:text>
                         <xsl:value-of
                             select="$ps" />
                       </xsl:attribute>
                       <xsl:attribute name="alt">
                         <xsl:text>
-                          Глава
+                          п⌠п╩п╟п╡п╟
                         </xsl:text>
                         <xsl:value-of
                             select="$ps" />
@@ -121,7 +128,7 @@
                 <xsl:text>&#160;</xsl:text>
               </td>
               <td width="33%" align="center">
-                <a href="toc.html" title="Содержание">
+                <a href="toc.html" title="п║п╬п╢п╣я─п╤п╟п╫п╦п╣">
                   <img alt="navigation"
                        src="img/up-arrow.png" />
                 </a>
@@ -130,9 +137,6 @@
                   width="33%">
                 <xsl:for-each
                     select="following::*/chapter">
-                  <xsl:message>
-                    found following
-                  </xsl:message>
                   <xsl:variable name="ps">
                     <xsl:value-of select="@number" />
                   </xsl:variable>
@@ -145,7 +149,7 @@
                       <xsl:value-of select="$pch" />
                     </xsl:attribute>
                     <xsl:attribute name="title">
-                      <xsl:text>Глава</xsl:text>
+                      <xsl:text>п⌠п╩п╟п╡п╟</xsl:text>
                       <xsl:value-of select="$ps" />
                     </xsl:attribute>
                     <img
@@ -153,14 +157,14 @@
                       <xsl:attribute
                           name="title">
                         <xsl:text>
-                          Глава
+                          п⌠п╩п╟п╡п╟
                         </xsl:text>
                         <xsl:value-of
                             select="$ps" />
                       </xsl:attribute>
                       <xsl:attribute name="alt">
                         <xsl:text>
-                          Глава
+                          п⌠п╩п╟п╡п╟
                         </xsl:text>
                         <xsl:value-of
                             select="$ps" />
@@ -179,7 +183,7 @@
               <xsl:value-of select="generate-id(.)" />
             </xsl:attribute>
             <h1>
-              Глава
+              п⌠п╩п╟п╡п╟
               <xsl:value-of select="@number" />
               .
               <xsl:value-of select="@name" />
@@ -190,8 +194,7 @@
           </xsl:if>
           <xsl:apply-templates select="main-matters" />
           <xsl:if test="descendant-or-self::*/note">
-            <xsl:message>I FOUND NOTES!!!!</xsl:message>
-            <h3>Примечания</h3>
+            <h3>п÷я─п╦п╪п╣я┤п╟п╫п╦я▐</h3>
             <xsl:call-template name="notes">
               <xsl:with-param name="notes">
                 <xsl:value-of select="./note" />
@@ -321,7 +324,6 @@
     </div>
   </xsl:template>
   <xsl:template name="toc">
-    <xsl:message>I'm here</xsl:message>
     <ul class="chapnav">
       <xsl:for-each select="node()/section">
         <xsl:if test="@name">
@@ -545,14 +547,13 @@
   <xsl:template name="notes">
     <xsl:param name="notes" />
     <xsl:for-each select="descendant-or-self::*/note">
-      <xsl:message>Note found</xsl:message>
       <div class="note">
         <a>
           <xsl:attribute name="name">
             <xsl:value-of select="generate-id()" />
           </xsl:attribute>
           <p style="font-weight:bold">
-            Примечание
+            п÷я─п╦п╪п╣я┤п╟п╫п╦п╣
             <xsl:call-template name="NumberNote" />
           </p>
           <xsl:apply-templates />
@@ -587,7 +588,7 @@
                   <xsl:value-of select="$pch" />
                 </xsl:attribute>
                 <img src="img/left-arrow.png"
-                     title="Назад" alt="Назад" style="border:none" />
+                     title="п²п╟п╥п╟п╢" alt="п²п╟п╥п╟п╢" style="border:none" />
               </a>
             </xsl:if>
             <xsl:text>&#160;</xsl:text>

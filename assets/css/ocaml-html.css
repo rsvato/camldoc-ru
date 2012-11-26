@@ -1,0 +1,184 @@
+body{
+color:#333333;
+background-color:#ffe;
+font: 12px/1.5em Verdana,Helvetica,sans-serif;
+margin:0px;
+}
+#maintoc{
+	margin: 10px 15px;
+	padding: 10px 20px;
+	background-color: #99CCFF;
+}
+
+.booktitle,.subtitle,.authors,.legal{
+	text-align:center;font-weight:bold;line-height: 3em;
+}
+.booktitle{
+	font-size:24px;
+}
+.subtitle{
+	font-size:18px;
+}
+.authors{
+	font-size:18px;
+}
+.legal{
+	font-size:12px;
+	padding-bottom:24px;
+}
+.chaplink{
+	font-weight:bold;font-size:12px;
+}
+.part{
+	background: transparent;
+	padding-top: 24px;
+	border-bottom: 1px solid black;
+	letter-spacing: .8em;
+}
+.part-content{
+	width:100%;
+	padding:5px 20px;
+}
+
+.part-content ul li{
+	list-style: none;
+}
+
+.codeContent{
+    text-align: left;
+    background-color: #f0f0f0;
+    padding: 3px;
+}
+.command-session, .listing{
+    border: 1px dotted #999955;
+    font-size: 11px;
+    font: 12px/13px Courier,monospaced;
+    margin: 10px 15px;
+
+}
+pre{
+    padding: 0px;
+    margin-top: 5px;
+    margin-left: 15px;
+    margin-bottom: 5px;
+    margin-right: 5px;
+    text-align: left;
+}
+a.chaplink:link,a.chaplink:visited{
+	text-decoration: none;
+	color:black;
+}
+a.chaplink:hover{
+	color:red;
+}
+a img { 
+	border: none;
+}
+
+h1{
+font-size:18px;
+}
+h2{
+font-size:16px;
+}
+h3{
+font-size:14px;
+}
+h4{
+font-size:12px;
+}
+
+#abstract{
+padding: 12px 20px;
+}
+#code{
+text-align:left;
+font-family:Courier New,Courier,monospaced,*;
+}
+#navigation{
+position: absolute;
+top:40px;
+width:170px;
+padding-left:5px;
+line-height:17px;
+voice-family: "\"}\"";
+voice-family:inherit;
+width:10em;
+}
+#main-matters{
+margin:10px 0 20px 180px;
+padding:10px;
+border:none;
+top:40px;
+}
+a.toc{
+text-decoration: none;
+font-size:10px;
+font-weight:bold;
+font-family:Verdana,Helvetica,sans-serif;
+color:#999;
+}
+th{
+background-color:#ccc;
+border:black solid thin;
+}
+td{
+border: black solid thin;
+padding-left:15;
+padding-right:15;
+}
+table{
+border:black solid thin;
+border-collapse:collapse;
+}
+table.bnf{
+width:80%;
+left:20px;
+border:	none;
+}
+table.bnf td{
+border:none;
+padding-left:0;
+padding-right:0;
+}
+table.cnt{
+	border:none;
+	width:100%;
+	padding:0px;
+}
+table.cnt td{
+border:none;
+padding-left:0;
+padding-right:0;
+}
+#term{
+color:maroon;
+font-style:italic;
+font-family:monospace;
+}
+.term{
+color:maroon;
+font-style:italic;
+font-family:monospace;
+}
+#value{
+color:navy;
+font-family:monospace
+}
+.value{
+color:navy;
+font-family:monospace
+}
+.note{
+	border: black solid thin;padding:10px;
+}
+ul.chapnav{
+	margin:0px;
+	padding: 0px;
+}
+ul.chapnav li {
+	list-style: none;
+	margin:0px;
+	padding:5px 0px;
+	
+}
