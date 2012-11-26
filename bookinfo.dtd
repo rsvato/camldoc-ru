@@ -1,6 +1,6 @@
 <!ENTITY % core SYSTEM "./core.dtd">
 %core;
-<!ELEMENT bookinfo (title,subtitle?,authors,legal,part+)>
+<!ELEMENT bookinfo (title,subtitle?,authors,legal,part+,advice)>
 <!ELEMENT part (title,chap+)>
 <!ELEMENT chap (chapter)>
 <!ATTLIST chap file CDATA #REQUIRED
@@ -14,3 +14,4 @@
 <!ATTLIST legal year CDATA #IMPLIED>
 <!ELEMENT main-author (#PCDATA)>
 <!ELEMENT sec-author (#PCDATA)>
+<!ELEMENT advice (#PCDATA)>

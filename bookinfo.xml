@@ -51,4 +51,7 @@
     <chap file="chapter13.html">&char13;</chap>
     <chap file="chapter14.html">&char14;</chap>
   </part>
+  <advice>
+    <p>Исходники перевода находятся <a href="https://github.com/rsvato/camldoc-ru">тут</a>.</p>
+  </advice>
 </bookinfo>

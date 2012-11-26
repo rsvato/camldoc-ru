@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="windows-1251"?>
+<?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.1"
                 xmlns:saxon="http://saxon.sf.net">
         <!--xsl:param name="default.encoding" select="'windows-1251'"/>
@@ -66,10 +66,10 @@
                 <div style="text-align:center;font-size:18px;font-weight:bold">
                         <xsl:apply-templates select="main-author"/>
                         <br/>
-                        (а также
+                        (Р° С‚Р°РєР¶Рµ
                                 <xsl:for-each select="sec-author">
                                         <xsl:if test="position() = last()">
-                                        и
+                                        Рё
                                         </xsl:if>
                                 <xsl:apply-templates/>
                                 <xsl:if test="position() &lt; last() - 1">,<xsl:text>&#0160;</xsl:text>
@@ -86,7 +86,7 @@
         </xsl:template>
         <xsl:template match="part">
                 <h1>
-                        Часть <xsl:call-template name="NumberParts"/>.
+                        Р§Р°СЃС‚СЊ <xsl:call-template name="NumberParts"/>.
                         <xsl:value-of select="title"/>
                 </h1>
                 <xsl:apply-templates select="chap"/>
@@ -97,11 +97,11 @@
                         <xsl:attribute name="href">
                                 <xsl:value-of select="concat($main.site, @file)"/>
                         </xsl:attribute>
-                        <h2>Глава <xsl:call-template name="NumberChaps"/>.
+                        <h2>Р“Р»Р°РІР° <xsl:call-template name="NumberChaps"/>.
                         <xsl:value-of select="chapter/@name"/>
                                 <xsl:if test="$nf &gt; 0">
                                         <span style="color:red">
-                                        не закончено
+                                        РЅРµ Р·Р°РєРѕРЅС‡РµРЅРѕ
                                 </span>
                                 </xsl:if>
                         </h2>
@@ -114,6 +114,13 @@
                         </xsl:for-each>
                 </ul>
 
+        </xsl:template>
+        <xsl:template match="advice">
+          <div class="advice">
+            <xsl:for-each select="child::*">
+              <xsl:copy-of select="."/>
+            </xsl:for-each>
+          </div>
         </xsl:template>
         <xsl:template name="NumberParts">
                 <xsl:number count="part"/>
