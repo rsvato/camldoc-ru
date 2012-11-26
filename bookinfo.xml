@@ -16,16 +16,17 @@
         <!ENTITY char14 SYSTEM "./chapter14.xml">
 ]>
 <bookinfo>
-  <title>Система Objective Caml, релиз 3.10</title>
+  <title>Система Objective Caml, релиз 4.00</title>
   <subtitle>Документация и руководство пользователя</subtitle>
   <authors>
-    <main-author>Ксавье Лерой</main-author>
+    <main-author>Ксавье Леруа</main-author>
     <sec-author>Дамье Долигеc</sec-author>
+    <sec-author>Ален Фриш</sec-author>
     <sec-author>Жак Гарриг</sec-author>
     <sec-author>Дидье Реми</sec-author>
     <sec-author>Жером Вуйон</sec-author>
   </authors>
-  <legal year="2008">
+  <legal year="2012">
     Национальный Институт Исследований в области Информатики и Автоматики
   </legal>
   <part>
