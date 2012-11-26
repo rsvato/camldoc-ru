@@ -66,10 +66,10 @@ module PrioQueue :
       <para>
         Вне структуры на ее компоненты можно ссылаться, предваряя имя
         компонента именем структуры и точкой. Например,
-        <keyword>PrioQueue.insert</keyword> в контексте значения
+        <keyword>PrioQueue.insert</keyword>
         является функцией <keyword>insert</keyword>, определенной в
         структуре <keyword>PrioQueue</keyword>. Аналогично,
-        <keyword>PrioQueue.queue</keyword> в контексте типа является
+        <keyword>PrioQueue.queue</keyword> является
         типом <keyword>queue</keyword>, определенным в
         <keyword>PrioQueue</keyword>.
       </para>
@@ -259,7 +259,7 @@ module PrioQueue :
 
     <section name="Функторы и абстрагирование от типа">
       <para>
-        Как и в примере с <keyword>PrioQueue</keyword> хорошим стилем
+        Как и в примере с <keyword>PrioQueue</keyword>, хорошим стилем
         будет скрыть реализацию типа <keyword>set</keyword>, чтобы
         пользователи структуры не основывались на том, что она
         представлена как список, а мы могли бы при необходимости
@@ -349,7 +349,7 @@ module PrioQueue :
         </eval-step>
         <eval-step>
           <user-input>#WrongStringSet.add "gee" WrongStringSet.empty;;</user-input>
-          <system-response><![CDATA[This expression has type string but is here used with type
+          <system-response><![CDATA[Error: This expression has type string but is here used with type
   WrongStringSet.element = WrongSet(OrderedString).element]]></system-response>
         </eval-step>
       </session>
@@ -421,7 +421,7 @@ module PrioQueue :
         </eval-step>
         <eval-step>
           <user-input><![CDATA[#NoCaseStringSet.add "FOO" AbstractStringSet.empty;;]]></user-input>
-          <system-response><![CDATA[This expression has type
+          <system-response><![CDATA[Error: This expression has type
   AbstractStringSet.set = AbstractSet(OrderedString).set
 but is here used with type
   NoCaseStringSet.set = AbstractSet(NoCaseString).set]]></system-response>
@@ -432,7 +432,7 @@ but is here used with type
         <keyword>NoCaseStringSet.set</keyword> не совместимы, и их
         значения не равны. Это правильное поведение: несмотря на то,
         что оба содержат элементы одного типа (строки), в них
-        используются разные функции сортировки, соотвественно,
+        используются разные функции сортировки, соответственно,
         операции должны поддерживать разные инварианты. Использование
         операций <keyword>AbstractStringSet</keyword> для значений
         типа <keyword>NoCaseStringSet.set</keyword> приведет к
@@ -452,7 +452,7 @@ but is here used with type
         к минимуму.
       </para>
       <para>
-        В Objective Caml единицы компиляции - особый случай
+        В OCaml единицы компиляции - особый случай
         структур и сигнатур, причем отношения между этими единицами
         легко описываются в терминах системы модулей. Единица
         компиляции <keyword>a</keyword> включает в себя два файла:
@@ -460,20 +460,19 @@ but is here used with type
       <list type="plain">
         <item>
           <para>
-            Реализация <command>a.ml</command>, включающая определения, как в
+            Реализация <command>A.ml</command>, включающая определения, как в
             блоке <keyword>struct...end</keyword>.
           </para>
         </item>
         <item>
           <para>
-            Интерфейс <command>a.mli</command>, содержащий спецификации, как
+            Интерфейс <command>A.mli</command>, содержащий спецификации, как
             в блоке <keyword>sig...end</keyword>.
           </para>
         </item>
       </list>
       <para>
-        Оба файла описывают структуру <keyword>А</keyword> (то же
-        имя, что и <keyword>a</keyword>, но с первой заглавной буквой),
+        Оба файла описывают структуру <keyword>А</keyword>,
         как если бы было введено следующее определение:
       </para>
       <listing><![CDATA[module A: sig (* содержимое файла a.mli *) end
@@ -485,18 +484,18 @@ but is here used with type
         означает "компиляция без компоновки"), что дает файлы с
         расширениями <command>.cmi</command> для интерфейса и
         <command>.cmo</command> для объектного кода. По окончании
-        единиц объектные файлы компонуются командой
+        компиляции единиц объектные файлы компонуются командой
         <command>ocamlc</command>. Следующие команды компилируют и
-        компонуют программу из единиц <command>aux</command> и
-        <command>main</command>.
+        компонуют программу из единиц <command>Aux</command> и
+        <command>Main</command>.
       </para>
       <command-session>
         <command-line>
           <input prompt="$"><![CDATA[
-$ ocamlc -c aux.mli                     # создает aux.cmi
-$ ocamlc -c aux.ml                      # создает aux.cmo
-$ ocamlc -c main.mli                    # создает main.cmi
-$ ocamlc -c main.ml                     # создает main.cmo
+$ ocamlc -c Aux.mli                     # создает aux.cmi
+$ ocamlc -c Aux.ml                      # создает aux.cmo
+$ ocamlc -c Main.mli                    # создает main.cmi
+$ ocamlc -c Main.ml                     # создает main.cmo
 $ ocamlc -o theprogram aux.cmo main.cmo]]>
           </input>
         </command-line>
@@ -504,10 +503,10 @@ $ ocamlc -o theprogram aux.cmo main.cmo]]>
       <para>
         Программа будет работать так, будто были введены следующие определения:
       </para>
-      <listing><![CDATA[module Aux: sig (* contents of aux.mli *) end
-      = struct (* contents of aux.ml *) end;;
-module Main: sig (* contents of main.mli *) end
-      = struct (* contents of main.ml *) end;;]]></listing>
+      <listing><![CDATA[module Aux: sig (* contents of Aux.mli *) end
+      = struct (* contents of Aux.ml *) end;;
+module Main: sig (* contents of Main.mli *) end
+      = struct (* contents of Main.ml *) end;;]]></listing>
       <para>
         <keyword>Main</keyword> может ссылаться на
         <keyword>Aux</keyword>: определения и объявления в
