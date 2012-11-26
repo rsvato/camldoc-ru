@@ -23,7 +23,7 @@
 
                                 <style type="text/css">
                                         <![CDATA[
-          @import("ocaml-html.css");
+                                        @import("assets/css/ocaml-html.css");
                                         ]]>
                                 </style>
         <script src="http://www.google-analytics.com/urchin.js" type="text/javascript">
