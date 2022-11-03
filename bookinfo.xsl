@@ -1,8 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <xsl:stylesheet xmlns:xsl="http://www.w3.org/1999/XSL/Transform" version="1.1"
                 xmlns:saxon="http://saxon.sf.net">
-        <!--xsl:param name="default.encoding" select="'windows-1251'"/>
-        <xsl:param name="htmlhelp.encoding" select="'windows-1251'"/-->
         <xsl:param name="saxon.character.representation" select="'native'"/>
         <xsl:param name="chunker.output.encoding" select="'utf-8'"/>
         <xsl:param name="site.build" select="false"/>

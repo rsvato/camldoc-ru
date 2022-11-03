@@ -98,7 +98,7 @@
                     <xsl:value-of
                         select="concat('chapter', format-number($ps, '00'), '.html')" />
                   </xsl:variable>
-                  <a>
+                  <a class="arrow left">
                     <xsl:attribute name="href">
                       <xsl:value-of select="$pch" />
                     </xsl:attribute>
@@ -106,31 +106,13 @@
                       <xsl:text>Глава</xsl:text>
                       <xsl:value-of select="$ps" />
                     </xsl:attribute>
-                    <img src="img/left-arrow.png">
-                      <xsl:attribute
-                          name="title">
-                        <xsl:text>
-                          Глава
-                        </xsl:text>
-                        <xsl:value-of
-                            select="$ps" />
-                      </xsl:attribute>
-                      <xsl:attribute name="alt">
-                        <xsl:text>
-                          Глава
-                        </xsl:text>
-                        <xsl:value-of
-                            select="$ps" />
-                      </xsl:attribute>
-                    </img>
                   </a>
                 </xsl:for-each>
                 <xsl:text>&#160;</xsl:text>
               </td>
               <td width="33%" align="center">
-                <a href="index.html" title="Содержание">
-                  <img alt="navigation"
-                       src="img/up-arrow.png" />
+                <a href="index.html" title="Содержание" class="arrow up">
+                  
                 </a>
               </td>
               <td align="right" style="padding-right:40px"
@@ -144,7 +126,7 @@
                     <xsl:value-of
                         select="concat('chapter', format-number($ps, '00'), '.html')" />
                   </xsl:variable>
-                  <a>
+                  <a class="arrow right">
                     <xsl:attribute name="href">
                       <xsl:value-of select="$pch" />
                     </xsl:attribute>
@@ -152,24 +134,6 @@
                       <xsl:text>Глава</xsl:text>
                       <xsl:value-of select="$ps" />
                     </xsl:attribute>
-                    <img
-                        src="img/right-arrow.png">
-                      <xsl:attribute
-                          name="title">
-                        <xsl:text>
-                          Глава
-                        </xsl:text>
-                        <xsl:value-of
-                            select="$ps" />
-                      </xsl:attribute>
-                      <xsl:attribute name="alt">
-                        <xsl:text>
-                          Глава
-                        </xsl:text>
-                        <xsl:value-of
-                            select="$ps" />
-                      </xsl:attribute>
-                    </img>
                   </a>
                 </xsl:for-each>
                 <xsl:text>&#160;</xsl:text>
@@ -578,12 +542,10 @@
                 <xsl:value-of
                     select="concat('chapter', $ps)" />
               </xsl:variable>
-              <a>
+              <a class="arrow left">
                 <xsl:attribute name="href">
                   <xsl:value-of select="$pch" />
                 </xsl:attribute>
-                <img src="img/left-arrow.png"
-                     title="Назад" alt="Назад" style="border:none" />
               </a>
             </xsl:if>
             <xsl:text>&#160;</xsl:text>

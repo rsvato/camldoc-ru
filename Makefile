@@ -11,5 +11,5 @@ pdf:
 clean:
 	rm *.html
 
-all:	html
+all: html
 
