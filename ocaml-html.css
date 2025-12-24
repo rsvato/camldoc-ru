@@ -1,8 +1,8 @@
 body{
-color:#333333;
-background-color:#ffe;
-font: 12px/1.5em Verdana,Helvetica,sans-serif;
-margin:0px;
+	color:#333333;
+	background-color:#ffe;
+	font: 1rem/1.6 system-ui, sans-serif;
+	margin:0px;
 }
 #maintoc{
 	margin: 10px 15px;
