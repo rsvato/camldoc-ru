@@ -1,61 +1,74 @@
-body{
-color:#333333;
-background-color:#ffe;
-font: 12px/1.5em Verdana,Helvetica,sans-serif;
-margin:0px;
-}
-#maintoc{
-	margin: 10px 15px;
-	padding: 10px 20px;
-}
-
-.booktitle,.subtitle,.authors,.legal{
-	text-align:center;font-weight:bold;line-height: 3em;
-}
-.booktitle{
-	font-size:24px;
-}
-.subtitle{
-	font-size:18px;
-}
-.authors{
-	font-size:18px;
-}
-.legal{
-	font-size:12px;
-	padding-bottom:24px;
-}
-.chaplink{
-	font-weight:bold;font-size:12px;
-}
-.part{
-	background: transparent;
-	padding-top: 24px;
-	border-bottom: 1px solid black;
-	letter-spacing: .8em;
-}
-.part-content{
-	width:100%;
-	padding:5px 20px;
+body {
+    font-family:
+        -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue",
+        Arial, sans-serif;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #222;
+    background: #fafafa;
+    max-width: 90%;
+    margin: 0 auto;
+    padding: 1.5rem;
 }
 
-.part-content ul li{
-	list-style: none;
+#maintoc {
+    margin: 10px 15px;
+    padding: 10px 20px;
 }
 
-.codeContent{
+.booktitle,
+.subtitle,
+.authors,
+.legal {
+    text-align: center;
+    font-weight: bold;
+    line-height: 3em;
+}
+.booktitle {
+    font-size: 24px;
+}
+.subtitle {
+    font-size: 18px;
+}
+.authors {
+    font-size: 18px;
+}
+.legal {
+    font-size: 12px;
+    padding-bottom: 24px;
+}
+.chaplink {
+    font-weight: bold;
+    font-size: 12px;
+}
+.part {
+    background: transparent;
+    padding-top: 24px;
+    border-bottom: 1px solid black;
+    letter-spacing: 0.8em;
+}
+.part-content {
+    width: 100%;
+    padding: 5px 20px;
+}
+
+.part-content ul li {
+    list-style: none;
+}
+
+.codeContent {
     text-align: left;
     background-color: #f0f0f0;
     padding: 3px;
 }
-.command-session, .listing{
-    border: 1px dotted #999955;
-    font-size: 11px;
-    font: 12px/13px Courier,monospaced;
-    margin: 10px 15px;
-
+.command-session,
+.listing {
+    font-family:
+        ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono",
+        monospace;
+    font-size: 0.95em;
 }
-pre{
+pre {
     padding: 0px;
     margin-top: 5px;
     margin-left: 15px;
@@ -63,144 +76,147 @@ pre{
     margin-right: 5px;
     text-align: left;
 }
-a.chaplink:link,a.chaplink:visited{
-	text-decoration: none;
-	color:black;
+a.chaplink:link,
+a.chaplink:visited {
+    text-decoration: none;
+    color: black;
 }
-a.chaplink:hover{
-	color:red;
+a.chaplink:hover {
+    color: red;
 }
-a img { 
-	border: none;
-}
-
-h1{
-font-size:18px;
-}
-h2{
-font-size:16px;
-}
-h3{
-font-size:14px;
-}
-h4{
-font-size:12px;
+a img {
+    border: none;
 }
 
-#abstract{
-padding: 12px 20px;
+h1 {
+    font-size: 18px;
 }
-#code{
-text-align:left;
-font-family:Courier New,Courier,monospaced,*;
+h2 {
+    font-size: 16px;
 }
-#navigation{
-position: absolute;
-top:40px;
-width:170px;
-padding-left:5px;
-line-height:17px;
-voice-family: "\"}\"";
-voice-family:inherit;
-width:10em;
+h3 {
+    font-size: 14px;
 }
-#main-matters{
-margin:10px 0 20px 180px;
-padding:10px;
-border:none;
-top:40px;
+h4 {
+    font-size: 12px;
 }
-a.toc{
-text-decoration: none;
-font-size:10px;
-font-weight:bold;
-font-family:Verdana,Helvetica,sans-serif;
-color:#999;
+
+#abstract {
+    padding: 12px 20px;
 }
-th{
-background-color:#ccc;
-border:black solid thin;
+#code {
+    text-align: left;
+    font-family:
+        Courier New,
+        Courier,
+        monospaced,
+        *;
 }
-td{
-border: black solid thin;
-padding-left:15;
-padding-right:15;
+#navigation {
+    position: absolute;
+    top: 40px;
+    width: 170px;
+    padding-left: 5px;
+    line-height: 17px;
+    voice-family: '"}"';
+    voice-family: inherit;
+    width: 10em;
 }
-table{
-border:black solid thin;
-border-collapse:collapse;
+#main-matters {
+    margin: 10px 0 20px 180px;
+    padding: 10px;
+    border: none;
+    top: 40px;
 }
-table.bnf{
-width:80%;
-left:20px;
-border:	none;
+a.toc {
+    text-decoration: none;
+    font-size: 0.8rem;
+    font-weight: bold;
+    color: #999;
 }
-table.bnf td{
-border:none;
-padding-left:0;
-padding-right:0;
+th {
+    background-color: #ccc;
+    border: black solid thin;
 }
-table.cnt{
-	border:none;
-	width:100%;
-	padding:0px;
+td {
+    border: black solid thin;
+    padding-left: 15;
+    padding-right: 15;
 }
-table.cnt td{
-border:none;
-padding-left:0;
-padding-right:0;
+table {
+    border: black solid thin;
+    border-collapse: collapse;
 }
-#term{
-color:maroon;
-font-style:italic;
-font-family:monospace;
+table.bnf {
+    width: 80%;
+    left: 20px;
+    border: none;
 }
-.term{
-color:maroon;
-font-style:italic;
-font-family:monospace;
+table.bnf td {
+    border: none;
+    padding-left: 0;
+    padding-right: 0;
 }
-#value{
-color:navy;
-font-family:monospace
+table.cnt {
+    border: none;
+    width: 100%;
+    padding: 0px;
 }
-.value{
-color:navy;
-font-family:monospace
+table.cnt td {
+    border: none;
+    padding-left: 0;
+    padding-right: 0;
 }
-.note{
-	border: black solid thin;padding:10px;
+#term {
+    color: maroon;
+    font-style: italic;
+    font-family: monospace;
 }
-ul.chapnav{
-	margin:0px;
-	padding: 0px;
+.term {
+    color: maroon;
+    font-style: italic;
+    font-family: monospace;
+}
+#value {
+    color: navy;
+    font-family: monospace;
+}
+.value {
+    color: navy;
+    font-family: monospace;
+}
+.note {
+    border: black solid thin;
+    padding: 10px;
+}
+ul.chapnav {
+    margin: 0px;
+    padding: 0px;
 }
 ul.chapnav li {
-	list-style: none;
-	margin:0px;
-	padding:5px 0px;
-	
+    list-style: none;
+    margin: 0px;
+    padding: 5px 0px;
 }
 
 .arrow {
-	border: solid black;
-  	border-width: 0 3px 3px 0;
-  	display: inline-block;
-  	padding: 3px;
+    border: solid black;
+    border-width: 0 3px 3px 0;
+    display: inline-block;
+    padding: 3px;
 }
 
 .up {
     transform: rotate(-135deg);
-  	-webkit-transform: rotate(-135deg);
+    -webkit-transform: rotate(-135deg);
 }
 
 .right {
-	transform: rotate(-45deg);
-	-webkit-transform: rotate(-45deg);
+    transform: rotate(-45deg);
+    -webkit-transform: rotate(-45deg);
 }
-  
+
 .left {
-	transform: rotate(135deg);
-	-webkit-transform: rotate(135deg);
+    transform: rotate(135deg);
+    -webkit-transform: rotate(135deg);
 }
-  
